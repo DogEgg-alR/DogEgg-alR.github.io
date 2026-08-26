@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>DE_alR的博客</title>
+    <title>自介 | DE_alR的博客</title>
     <meta name="author" content="DE_alR" />
     <meta name="description" content="记录一下自己做过的工作和一些碎碎念" />
     <meta name="keywords" content="" />
@@ -42,7 +42,9 @@
 
 
 
-<script src="/js/lib/home.js"></script>
+
+
+
 
 <link rel="stylesheet" href="/css/main.css" />
 
@@ -152,39 +154,17 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="home-head">
-    <div
-        id="home-background"
-        ref="homeBackground"
-        data-images="/images/background.jpg"
-    ></div>
-    <div id="home-info" @click="homeClick">
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="info">
-            <div class="wrap">
-                <h1>DE_alR的博客</h1>
-                <h3>喵喵喵</h3>
-                <h5>记录一下自己做过的工作和一些碎碎念</h5>
-            </div>
-        </span>
+            <div class="article">
+    <div>
+        <h1>自介</h1>
     </div>
-</div>
-<div
-    id="home-posts-wrap"
-    ref="homePostsWrap"
-    true
->
-    <div id="home-posts">
-        
-
-<div class="post">
-    <a href="/2026/08/26/%E8%87%AA%E4%BB%8B/">
-        <h2 class="post-title">自介</h2>
-    </a>
-    <div class="category-and-date">
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/8/26
+        </span>
         
         <span class="category">
             <a href="/categories/%E5%BE%88%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%9C%E8%A5%BF/">
@@ -195,19 +175,26 @@
             </a>
         </span>
         
-        <span class="date">
+        
+        <span class="tags">
             <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
+                <i class="fa-solid fa-tags fa-fw"></i>
             </span>
-            2026/8/26
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #00a596">
+                    关于自己
+                </a>
+            </span>
+            
         </span>
         
-        
     </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <p>大家好！这里<a target="_blank" rel="noopener" href="https://space.bilibili.com/1858785390">狗蛋</a>，开了个博客但是好久也没光顾过，所以今天抽空来写一写。</p>
+    
+    <div class="content" v-pre>
+        <p>大家好！这里<a target="_blank" rel="noopener" href="https://space.bilibili.com/1858785390">狗蛋</a>，开了个博客但是好久也没光顾过，所以今天抽空来写一写。</p>
 <h2 id="超级超级重要的人！"><a href="#超级超级重要的人！" class="headerlink" title="超级超级重要的人！"></a>超级超级重要的人！</h2><p><a target="_blank" rel="noopener" href="https://space.bilibili.com/472307072">幻蓝！</a></p>
 <h2 id="关于我的马甲"><a href="#关于我的马甲" class="headerlink" title="关于我的马甲"></a>关于我的马甲</h2><p>这里狗蛋，常用马甲DogEgg_，也用过DE_、D_E等为马甲，之前用的名字“DogEgg_狗蛋”是受很喜欢的up主GoldenEggs的影响。<br>这个头像<img src="/images/old_avatar1.jpg" alt="头像">是我除b站，网易云音乐外大多平台的常用头像。高一生。<br>忘了啥时候改的马甲叫DE_alR，DE是什么不必多说，alR是accelerator的简写，R大写感觉会很酷所以写的alR（）</p>
 <h2 id="我玩的游戏"><a href="#我玩的游戏" class="headerlink" title="我玩的游戏"></a>我玩的游戏</h2><p>主要是玩音游的，<br>Phigros rks16.80+<img src="/images/Phigros_ranking.jpg" alt="Phigros rks16.80+">，金51，arc双星（但是7.0后就没了qaq），orz不到12，之前更新后次方全要重推，因时间原因没再推过。<br>其他的例如riz，范式，md，cytus，osu!，malody（4k5dan通过），spin rhythm等也有涉猎，街机音游没有太多空玩；<br>其他类型游戏例如沙盒类主玩麦块，泰拉瑞亚曾在移动端玩过一两天，然后就淡坑了；<br>平台跳跃类的游戏比较喜欢玩celeste，目前全成就，酱五绿水平，这是我的无冲金！<img src="/images/Celeste-the-no-rushing-strawberry.jpg" alt="无冲金awa">；<br>IC（I Wanna Be The Creator）Give Up，Abnegate，NANG复刻通过；<br>fps等玩过hl，hl2（ep1，ep2）等，主要是v社的游戏；<br>解密玩过portal系列和熵中心（没玩完），baba is you（没玩完）以及patrick’s parabox（主线全通）等；<br>一些游戏在steam库里，但还没玩，比如l4d2。无人深空等也没怎么玩。</p>
@@ -236,63 +223,13 @@
 <p>还有一个小说企划，叫做Aphrodite，B站官号没有了，所以暂不引用QAQ。</p>
 <h2 id="应该没什么要写的了，不过我还有最后一些想说的"><a href="#应该没什么要写的了，不过我还有最后一些想说的" class="headerlink" title="应该没什么要写的了，不过我还有最后一些想说的"></a>应该没什么要写的了，不过我还有最后一些想说的</h2><p>祝自己明年高考能考上自己预期中的大学，或者甚至超出其的大学！<br>我一定可以的！<br>我在互联网上的生活很愉快！很希望以后的日子里还能投入到项目中去和大家一起合作！</p>
 
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #03a9f4">关于自己</a>
-        </span>
-        
-    </div>
-    <a href="/2026/08/26/%E8%87%AA%E4%BB%8B/" class="go-post">阅读全文</a>
-</div>
-
-
-        <div class="page-current">
-    
-    <span class="current">1</span>
-    
-    
-    
-    
-</div>
-
     </div>
     
-    <div id="home-card">
-        <div id="card-style">
-    <div id="card-div">
-        <div class="avatar">
-            <img src="/images/avatar.jpg" alt="avatar" />
-        </div>
-        <div class="name">DE_alR</div>
-        <div class="description">
-            <p>这里狗蛋，常用马甲DogEgg_，也用过DE_、D_E等为马甲，<br>之前用的名字“DogEgg_狗蛋”是受很喜欢的up主GoldenEggs的影响。<br>忘了啥时候改的马甲叫DE_alR，DE是什么不必多说，alR是accelerator的简写，R大写感觉会很酷所以写的alR（）<br>主要是玩音游的，<br>沙盒、平台跳跃、解密、fps等等游戏类型也有所涉猎。<br>其他方面：<br>比较喜欢看backrooms的文章，主要喜欢看wikidot站的，但fandom有的也看，比如Level ZH -197，<br>喜欢看刘慈欣写的小说，<br>喜欢怪核与梦核，伤核很少看，<br>喜欢听speedcore、extratone、psy、hardcore、breakcore、color、artcore、dubstep、neurofunk、house等。<br>没看过什么番。<br>在部分企划（音游企划为主）负责文案（剧情），有的同时担任策划（副）。<br>更详细的介绍在b站（同名）</p>
-
-        </div>
-        
-        
-        <div class="friend-links">
-            
-            <div class="friend-link">
-                <a target="_blank" rel="noopener" href="https://argvchs.github.io">Argvchs</a>
-            </div>
-            
-        </div>
-        
-    </div>
-</div>
-
-    </div>
+    
+    
+    
+    
+    
     
 </div>
 
@@ -324,6 +261,12 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+
+
+
+
     
 </body>
 </html>
