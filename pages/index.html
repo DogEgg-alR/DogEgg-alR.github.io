@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>Archives | DE_alR的博客</title>
+    <title>我的Pages | DE_alR的博客</title>
     <meta name="author" content="DE_alR" />
     <meta name="description" content="记录一下自己做过的工作和一些碎碎念" />
     <meta name="keywords" content="" />
@@ -37,6 +37,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -183,50 +187,73 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            
-<div id="archives">
-    
-    <div id="timeline-wrap" ref="timeline">
+            <div class="article">
+    <div>
+        <h1>我的Pages</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/8/29
+        </span>
         
-        <div class="timeline" data-title="自介">
-            <div class="timeline-tail"></div>
-            <div class="timeline-content">
-                <div class="item-time">2026/8/26</div>
-                <a href="/2026/08/26/%E8%87%AA%E4%BB%8B/">
-                    <h3>自介</h3>
-                </a>
-                <div class="info">
-                    
-                    <span class="category">
-                        <a href="/categories/%E5%BE%88%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%9C%E8%A5%BF/">
-                            <span class="icon">
-                                <i class="fa-solid fa-bookmark fa-fw"></i>
-                            </span>
-                            很重要的东西
-                        </a>
-                    </span>
-                    
-                    
-                    <span class="tags">
-                        <span class="icon">
-                            <i class="fa-solid fa-tags fa-fw"></i>
-                        </span>
-                        
-                        
-                        <span class="tag">
-                            
-                            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #ffa2c4">
-                                关于自己
-                            </a>
-                        </span>
-                        
-                    </span>
-                    
-                </div>
-            </div>
-        </div>
         
     </div>
+    
+    <div class="content" v-pre>
+        <p>这里列出我在 GitHub 上所有公开的 Pages 站点，<strong>每次打开本页都会实时从 GitHub 拉取最新列表</strong>（新建了站点会自动出现，私有仓库不会显示）。</p>
+<div id="my-pages-list">正在从 GitHub 加载……</div>
+
+<script>
+(function () {
+    var USER = "DogEgg-alR";
+    var box = document.getElementById("my-pages-list");
+    function esc(s) {
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function (ch) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+        });
+    }
+    fetch("https://api.github.com/users/" + USER + "/repos?per_page=100&sort=updated")
+        .then(function (r) { return r.json(); })
+        .then(function (repos) {
+            if (!Array.isArray(repos)) throw new Error("API返回异常");
+            var pages = repos.filter(function (x) { return x.has_pages; });
+            if (!pages.length) {
+                box.innerHTML = "<p>暂时没有公开的 Pages 站点。</p>";
+                return;
+            }
+            var html = "";
+            pages.forEach(function (x) {
+                var url = x.name === USER + ".github.io"
+                    ? "https://" + USER.toLowerCase() + ".github.io/"
+                    : "https://" + USER.toLowerCase() + ".github.io/" + encodeURIComponent(x.name) + "/";
+                var d = new Date(x.updated_at);
+                var dateStr = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+                html += '<div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;margin:12px 0;background:#fff;">'
+                    + '<a href="' + url + '" target="_blank" rel="noopener" style="font-size:17px;font-weight:600;color:#2563eb;text-decoration:none;">'
+                    + esc(x.name) + ' ↗</a>'
+                    + '<div style="color:#6b7280;font-size:13.5px;margin-top:4px;">更新于 ' + dateStr + '</div>'
+                    + (x.description ? '<div style="margin-top:8px;line-height:1.7;">' + esc(x.description) + "</div>" : "")
+                    + "</div>";
+            });
+            box.innerHTML = html;
+        })
+        .catch(function () {
+            box.innerHTML = "<p>加载失败：可能是网络暂时连不上 GitHub API，稍后刷新重试。</p>";
+        });
+})();
+</script>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
 </div>
 
             <footer id="footer">
@@ -257,6 +284,12 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+
+
+
+
     
 <!-- hexo injector body_end start --><script>var meting_api='https://api.injahow.cn/meting/?server=:server&type=:type&id=:id';</script>
 <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
