@@ -190,7 +190,7 @@
         
         
         <span>
-            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="background: #00a596">
+            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="background: #03a9f4">
                 <span class="icon">
                     <i class="fa-solid fa-tags fa-fw"></i>
                 </span>
@@ -232,8 +232,79 @@
     </div>
     <script src="/js/main.js"></script>
     
-<!-- hexo injector body_end start --><script>var meting_api='https://api.injahow.cn/meting/?server=:server&type=:type&id=:id';</script>
+<!-- hexo injector body_end start -->
+<script>
+(function () {
+    var box = document.getElementById("my-pages-list");
+    if (!box) return; // 只在「我的Pages」页面生效
+    var USER = "DogEgg-alR";
+    function esc(s) {
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function (ch) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+        });
+    }
+    fetch("https://api.github.com/users/" + USER + "/repos?per_page=100&sort=updated")
+        .then(function (r) { return r.json(); })
+        .then(function (repos) {
+            if (!Array.isArray(repos)) throw new Error("API返回异常");
+            var pages = repos.filter(function (x) { return x.has_pages; });
+            if (!pages.length) {
+                box.innerHTML = "<p>暂时没有公开的 Pages 站点。</p>";
+                return;
+            }
+            var html = "";
+            pages.forEach(function (x) {
+                var url = x.name === USER + ".github.io"
+                    ? "https://" + USER.toLowerCase() + ".github.io/"
+                    : "https://" + USER.toLowerCase() + ".github.io/" + encodeURIComponent(x.name) + "/";
+                var d = new Date(x.updated_at);
+                var dateStr = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+                html += '<div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;margin:12px 0;background:#fff;">'
+                    + '<a href="' + url + '" target="_blank" rel="noopener" style="font-size:17px;font-weight:600;color:#2563eb;text-decoration:none;">'
+                    + esc(x.name) + ' ↗</a>'
+                    + '<div style="color:#6b7280;font-size:13.5px;margin-top:4px;">更新于 ' + dateStr + '</div>'
+                    + (x.description ? '<div style="margin-top:8px;line-height:1.7;">' + esc(x.description) + "</div>" : "")
+                    + "</div>";
+            });
+            box.innerHTML = html;
+        })
+        .catch(function () {
+            box.innerHTML = "<p>加载失败：可能是网络暂时连不上 GitHub API，稍后刷新重试。</p>";
+        });
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
-<meting-js server="netease" type="playlist" id="5249620781" fixed="true" autoplay="true" theme="#2563eb" order="random" list-folded="true" volume="0.4"></meting-js><!-- hexo injector body_end end --></body>
+<script>
+(function () {
+    var ids = ["5249620781"];
+    var server = "netease";
+    var api = "https://api.injahow.cn/meting/?server=" + server + "&type=playlist&id=";
+    Promise.all(ids.map(function (id) {
+        return fetch(api + id).then(function (r) { return r.json(); });
+    })).then(function (lists) {
+        var audio = [];
+        lists.forEach(function (list) {
+            if (!Array.isArray(list)) return;
+            list.forEach(function (t) {
+                audio.push({ name: t.name, artist: t.artist, url: t.url, cover: t.pic, lrc: t.lrc });
+            });
+        });
+        if (!audio.length) { console.warn("歌单为空或读取失败"); return; }
+        var div = document.createElement("div");
+        document.body.appendChild(div);
+        new APlayer({
+            container: div,
+            fixed: true,
+            autoplay: true,
+            theme: "#2563eb",
+            order: "random",
+            listFolded: true,
+            volume: 0.4,
+            audio: audio
+        });
+    }).catch(function (e) {
+        console.warn("音乐加载失败：", e);
+    });
+})();
+</script><!-- hexo injector body_end end --></body>
 </html>
