@@ -67,7 +67,7 @@
     }
 }
 </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
 <body>
     <div id="layout">
         <transition name="fade">
@@ -253,76 +253,149 @@
 <!-- hexo injector body_end start -->
 <script>
 (function () {
-    var box = document.getElementById("my-pages-list");
-    if (!box) return; // 只在「我的Pages」页面生效
-    var USER = "DogEgg-alR";
-    function esc(s) {
-        return String(s == null ? "" : s).replace(/[&<>"']/g, function (ch) {
-            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+    if (window.__blogBgmStarted) return; // 防止同一页面重复初始化
+    window.__blogBgmStarted = true;
+
+    var PLAYER_SOURCES = [{"js":"/js/APlayer.min.js","css":"/css/APlayer.min.css"},{"js":"https://s4.zstatic.net/ajax/libs/aplayer/1.10.1/APlayer.min.js","css":"https://s4.zstatic.net/ajax/libs/aplayer/1.10.1/APlayer.min.css"},{"js":"https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.js","css":"https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.css"},{"js":"https://registry.npmmirror.com/aplayer/1.10.1/files/dist/APlayer.min.js","css":"https://registry.npmmirror.com/aplayer/1.10.1/files/dist/APlayer.min.css"},{"js":"https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js","css":"https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"},{"js":"https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.js","css":"https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css"}];
+    var API_HOSTS = ["https://api.injahow.cn/meting/?server=","https://meting.qjqq.cn/api.php?server=","https://api.i-meto.com/meting/api?server="];
+    var MUSIC_IDS = ["5249620781"];
+    var SERVER = "netease";
+    var ORDER = "random";
+    var VOLUME = 0.4;
+    var AUTOPLAY = true;
+
+    function toast(msg) {
+        var d = document.createElement("div");
+        d.style.cssText = "position:fixed;left:50%;bottom:84px;transform:translateX(-50%);z-index:999999;" +
+            "background:rgba(25,25,25,.88);color:#fff;font-size:13px;line-height:1.6;" +
+            "padding:8px 16px;border-radius:8px;max-width:82%;text-align:center;" +
+            "box-shadow:0 2px 10px rgba(0,0,0,.25);";
+        d.textContent = msg;
+        document.body.appendChild(d);
+        setTimeout(function () {
+            d.style.transition = "opacity .8s";
+            d.style.opacity = "0";
+            setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 900);
+        }, 6000);
+    }
+
+    function ensureCss(url) {
+        if (!url) return;
+        var q = 'link[data-bgm-css="' + url + '"]';
+        if (document.querySelector(q)) return;
+        var l = document.createElement("link");
+        l.rel = "stylesheet";
+        l.setAttribute("data-bgm-css", url);
+        l.href = url;
+        document.head.appendChild(l);
+    }
+
+    function fetchJson(url) {
+        var hasAbort = typeof AbortController !== "undefined";
+        var ctrl = hasAbort ? new AbortController() : null;
+        var timer = hasAbort ? setTimeout(function () { ctrl.abort(); }, 12000) : null;
+        return fetch(url, hasAbort ? { signal: ctrl.signal } : {}).then(function (r) {
+            if (timer) clearTimeout(timer);
+            return r.json();
+        }, function (err) {
+            if (timer) clearTimeout(timer);
+            throw err;
         });
     }
-    fetch("https://api.github.com/users/" + USER + "/repos?per_page=100&sort=updated")
-        .then(function (r) { return r.json(); })
-        .then(function (repos) {
-            if (!Array.isArray(repos)) throw new Error("API返回异常");
-            var pages = repos.filter(function (x) { return x.has_pages; });
-            if (!pages.length) {
-                box.innerHTML = "<p>暂时没有公开的 Pages 站点。</p>";
+
+    function fetchList(id, hostIndex) {
+        if (hostIndex >= API_HOSTS.length) return Promise.resolve(null);
+        var url = API_HOSTS[hostIndex] + SERVER + "&type=playlist&id=" + encodeURIComponent(id);
+        return fetchJson(url).then(function (data) {
+            if (Array.isArray(data) && data.length) return data;
+            return fetchList(id, hostIndex + 1); // 换下一个接口试试
+        }, function () {
+            return fetchList(id, hostIndex + 1);
+        });
+    }
+
+    function startPlayer() {
+        var tasks = [];
+        MUSIC_IDS.forEach(function (id) { tasks.push(fetchList(id, 0)); });
+        Promise.all(tasks).then(function (parts) {
+            var audio = [];
+            parts.forEach(function (list) {
+                if (!Array.isArray(list)) return;
+                list.forEach(function (t) {
+                    if (!t) return;
+                    audio.push({
+                        name: t.name || t.title || "",
+                        artist: t.artist || t.author || "",
+                        url: t.url || "",
+                        cover: t.pic || t.cover || "",
+                        lrc: t.lrc || ""
+                    });
+                });
+            });
+            audio = audio.filter(function (a) { return a.url; });
+            if (!audio.length) {
+                toast("背景音乐加载失败：暂时连不上歌单接口，稍后刷新再试。");
                 return;
             }
-            var html = "";
-            pages.forEach(function (x) {
-                var url = x.name === USER + ".github.io"
-                    ? "https://" + USER.toLowerCase() + ".github.io/"
-                    : "https://" + USER.toLowerCase() + ".github.io/" + encodeURIComponent(x.name) + "/";
-                var d = new Date(x.updated_at);
-                var dateStr = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
-                html += '<div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;margin:12px 0;background:#fff;">'
-                    + '<a href="' + url + '" target="_blank" rel="noopener" style="font-size:17px;font-weight:600;color:#2563eb;text-decoration:none;">'
-                    + esc(x.name) + ' ↗</a>'
-                    + '<div style="color:#6b7280;font-size:13.5px;margin-top:4px;">更新于 ' + dateStr + '</div>'
-                    + (x.description ? '<div style="margin-top:8px;line-height:1.7;">' + esc(x.description) + "</div>" : "")
-                    + "</div>";
+            var div = document.createElement("div");
+            document.body.appendChild(div);
+            new APlayer({
+                container: div,
+                fixed: true,
+                autoplay: AUTOPLAY,
+                theme: "#2563eb",
+                order: ORDER,
+                listFolded: true,
+                volume: VOLUME,
+                audio: audio
             });
-            box.innerHTML = html;
-        })
-        .catch(function () {
-            box.innerHTML = "<p>加载失败：可能是网络暂时连不上 GitHub API，稍后刷新重试。</p>";
+        }).catch(function () {
+            toast("背景音乐加载失败：网络异常，稍后刷新再试。");
         });
-})();
-</script>
-<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
-<script>
-(function () {
-    var ids = ["5249620781"];
-    var server = "netease";
-    var api = "https://api.injahow.cn/meting/?server=" + server + "&type=playlist&id=";
-    Promise.all(ids.map(function (id) {
-        return fetch(api + id).then(function (r) { return r.json(); });
-    })).then(function (lists) {
-        var audio = [];
-        lists.forEach(function (list) {
-            if (!Array.isArray(list)) return;
-            list.forEach(function (t) {
-                audio.push({ name: t.name, artist: t.artist, url: t.url, cover: t.pic, lrc: t.lrc });
-            });
-        });
-        if (!audio.length) { console.warn("歌单为空或读取失败"); return; }
-        var div = document.createElement("div");
-        document.body.appendChild(div);
-        new APlayer({
-            container: div,
-            fixed: true,
-            autoplay: true,
-            theme: "#2563eb",
-            order: "random",
-            listFolded: true,
-            volume: 0.4,
-            audio: audio
-        });
-    }).catch(function (e) {
-        console.warn("音乐加载失败：", e);
-    });
+    }
+
+    function tryLoadPlayer(i) {
+        if (i >= PLAYER_SOURCES.length) {
+            toast("背景音乐组件加载失败（多个网络源都连不上），不影响浏览其他内容。");
+            return;
+        }
+        if (window.APlayer) { // 已经可用了
+            ensureCss(PLAYER_SOURCES[i].css);
+            startPlayer();
+            return;
+        }
+        var src = PLAYER_SOURCES[i];
+        var done = false;
+        var timer = setTimeout(function () { // 单个源最长等 10 秒
+            if (done) return;
+            done = true;
+            tryLoadPlayer(i + 1);
+        }, 10000);
+        var el = document.createElement("script");
+        el.async = true;
+        el.src = src.js;
+        el.onload = function () {
+            if (done) return;
+            done = true;
+            clearTimeout(timer);
+            if (window.APlayer) {
+                ensureCss(src.css);
+                startPlayer();
+            } else {
+                tryLoadPlayer(i + 1);
+            }
+        };
+        el.onerror = function () {
+            if (done) return;
+            done = true;
+            clearTimeout(timer);
+            tryLoadPlayer(i + 1);
+        };
+        document.head.appendChild(el);
+    }
+
+    ensureCss(PLAYER_SOURCES[0].css); // 先保证本地样式就绪
+    tryLoadPlayer(0);
 })();
 </script><!-- hexo injector body_end end --></body>
 </html>
