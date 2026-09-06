@@ -262,7 +262,8 @@
     var SERVER = "netease";
     var ORDER = "random";
     var VOLUME = 0.4;
-    var AUTOPLAY = true;
+    var AUTOPLAY = false;
+    var LIST_FOLDED = false;
 
     function toast(msg) {
         var d = document.createElement("div");
@@ -345,7 +346,7 @@
                 autoplay: AUTOPLAY,
                 theme: "#2563eb",
                 order: ORDER,
-                listFolded: true,
+                listFolded: LIST_FOLDED,
                 volume: VOLUME,
                 audio: audio
             });

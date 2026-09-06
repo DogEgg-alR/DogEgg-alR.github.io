@@ -215,7 +215,7 @@
                         
                         <span class="tag">
                             
-                            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #ff7d73">
+                            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #ffa2c4">
                                 关于自己
                             </a>
                         </span>
@@ -270,7 +270,8 @@
     var SERVER = "netease";
     var ORDER = "random";
     var VOLUME = 0.4;
-    var AUTOPLAY = true;
+    var AUTOPLAY = false;
+    var LIST_FOLDED = false;
 
     function toast(msg) {
         var d = document.createElement("div");
@@ -353,7 +354,7 @@
                 autoplay: AUTOPLAY,
                 theme: "#2563eb",
                 order: ORDER,
-                listFolded: true,
+                listFolded: LIST_FOLDED,
                 volume: VOLUME,
                 audio: audio
             });
