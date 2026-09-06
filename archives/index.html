@@ -215,7 +215,7 @@
                         
                         <span class="tag">
                             
-                            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #00bcd4">
+                            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #03a9f4">
                                 关于自己
                             </a>
                         </span>
@@ -272,6 +272,7 @@
     var VOLUME = 0.4;
     var AUTOPLAY = false;
     var LIST_FOLDED = false;
+    var RESUME = true;
 
     function toast(msg) {
         var d = document.createElement("div");
@@ -323,6 +324,76 @@
         });
     }
 
+    var SAVE_KEY = "blogBgmResume_v1";
+    var trackList = []; // 当前歌单，切页后按歌曲地址找回同一首
+
+    /* 记录播放进度（歌曲地址 + 播到第几秒 + 是否在播） */
+    function saveResumeState() {
+        try {
+            var ap = window.__ap;
+            if (!ap || !ap.audio) return;
+            var a = ap.audio;
+            var src = a.currentSrc || "";
+            if (!src) return;
+            var t = a.currentTime || 0;
+            if (t < 1) return; // 还没真正开播就不记，避免打扰
+            var playing = !a.paused && !a.ended;
+            localStorage.setItem(SAVE_KEY, JSON.stringify({ u: src, t: t, p: playing, ts: Date.now() }));
+        } catch (e) { /* 隐私模式等情况下忽略 */ }
+    }
+
+    function clearResumeState() {
+        try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
+    }
+
+    /* 新页面加载后：找回同一首歌，从上次进度继续（尽量自动续播） */
+    function tryResume() {
+        if (!RESUME) return;
+        var saved = null;
+        try { saved = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); } catch (e) {}
+        if (!saved || !saved.u) return;
+        if (saved.ts && Date.now() - Number(saved.ts) > 3 * 3600 * 1000) {
+            clearResumeState(); // 超过 3 小时的旧记录不再自动续播
+            return;
+        }
+        var idx = -1;
+        for (var i = 0; i < trackList.length; i++) {
+            if (trackList[i].url === saved.u) { idx = i; break; }
+        }
+        if (idx < 0) return; // 歌单已换，不强行续播
+        var ap = window.__ap;
+        var time = Math.max(0, Number(saved.t) || 0);
+        var wantPlay = !!saved.p;
+        ap.list.switch(idx); // 切回同一首歌
+        var a = ap.audio;
+        var tries = 0;
+        (function seekAndPlay() {
+            tries++;
+            if (tries > 40) { // 等了约 12 秒还没就绪，直接尝试播放
+                if (wantPlay) ap.play();
+                return;
+            }
+            var dur = isFinite(a.duration) ? a.duration : 0;
+            if (dur > 0 || a.readyState >= 1) {
+                try {
+                    a.currentTime = (time > 0 && time < dur - 1) ? time : 0; // 从未播完的位置继续
+                } catch (e) {}
+                if (wantPlay) ap.play(); // 若被浏览器自动播放限制拦下，会停在原位置，点一下播放键即可继续
+            } else {
+                setTimeout(seekAndPlay, 300);
+            }
+        })();
+    }
+
+    /* 定时保存进度，并在离开页面时保存一次 */
+    function startResumeKeeper() {
+        setInterval(saveResumeState, 3000);
+        if (typeof window.addEventListener === "function") {
+            window.addEventListener("pagehide", saveResumeState, false);
+            window.addEventListener("beforeunload", saveResumeState, false);
+        }
+    }
+
     function startPlayer() {
         var tasks = [];
         MUSIC_IDS.forEach(function (id) { tasks.push(fetchList(id, 0)); });
@@ -346,9 +417,10 @@
                 toast("背景音乐加载失败：暂时连不上歌单接口，稍后刷新再试。");
                 return;
             }
+            trackList = audio.slice();
             var div = document.createElement("div");
             document.body.appendChild(div);
-            new APlayer({
+            window.__ap = new APlayer({
                 container: div,
                 fixed: true,
                 autoplay: AUTOPLAY,
@@ -358,6 +430,8 @@
                 volume: VOLUME,
                 audio: audio
             });
+            startResumeKeeper();
+            tryResume(); // 把上一页正在播的那首接着放
         }).catch(function () {
             toast("背景音乐加载失败：网络异常，稍后刷新再试。");
         });
