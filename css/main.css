@@ -973,3 +973,15 @@ ol li {
         padding-left: 20px;
     }
 }
+
+/* ===== 正文图片：等比缩小到约一半宽，防止占用太多版面（2026-09 新增）===== */
+.content img {
+    max-width: 48%;
+    height: auto;
+}
+/* 手机等小屏幕适当放大，避免图片太小看不清 */
+@media screen and (max-width: 600px) {
+    .content img {
+        max-width: 80%;
+    }
+}
