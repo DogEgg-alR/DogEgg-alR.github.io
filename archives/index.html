@@ -44,7 +44,120 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start -->
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mupq3cp0" /><script>
+(function () {
+
+    var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
+    var SCHEMES = [{"key":"tonal-spot","name":"柔和同色","en":"Tonal Spot","sat":45,"light":62,"altH":60,"altSat":42,"altLight":72},{"key":"vibrant","name":"鲜艳","en":"Vibrant","sat":88,"light":58,"altH":120,"altSat":85,"altLight":70},{"key":"content","name":"内容取色","en":"Content","sat":38,"light":64,"altH":35,"altSat":36,"altLight":74},{"key":"expressive","name":"张扬撞色","en":"Expressive","sat":66,"light":60,"altH":180,"altSat":72,"altLight":68},{"key":"rainbow","name":"彩虹","en":"Rainbow","sat":82,"light":62,"altH":200,"altSat":82,"altLight":66},{"key":"fruit-salad","name":"果色拼盘","en":"Fruit Salad","sat":74,"light":60,"altH":-60,"altSat":78,"altLight":66},{"key":"monochrome","name":"单色","en":"Monochrome","sat":6,"light":55,"altH":0,"altSat":6,"altLight":64},{"key":"neutral","name":"中性","en":"Neutral","sat":18,"light":58,"altH":20,"altSat":16,"altLight":68},{"key":"fidelity","name":"原色保真","en":"Fidelity","sat":81,"light":67,"altH":100,"altSat":100,"altLight":87}];
+    var TEXTURES = [{"key":"none","name":"无纹理","icon":"ban"},{"key":"starburst","name":"星芒光斑","icon":"wand-magic-sparkles"},{"key":"dots","name":"极客点阵","icon":"braille"},{"key":"contour","name":"流光等高线","icon":"water"},{"key":"crystal","name":"几何晶体","icon":"shapes"},{"key":"petal","name":"落樱微瓣","icon":"spa"}];
+    var KEY = "blogAppearance";
+    function loadCfg() {
+        var saved = {};
+        try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+        var cfg = {};
+        for (var k in DEFAULTS) cfg[k] = Object.prototype.hasOwnProperty.call(saved, k) ? saved[k] : DEFAULTS[k];
+        if (cfg.mode !== "system" && cfg.mode !== "dark") cfg.mode = "light";
+        if (typeof cfg.hue !== "number" || isNaN(cfg.hue)) cfg.hue = DEFAULTS.hue;
+        cfg.hue = ((Math.round(cfg.hue) % 360) + 360) % 360;
+        return cfg;
+    }
+    function saveCfg(cfg) {
+        try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch (e) {}
+    }
+    function schemeOf(key) {
+        for (var i = 0; i < SCHEMES.length; i++) if (SCHEMES[i].key === key) return SCHEMES[i];
+        return SCHEMES[SCHEMES.length - 1];
+    }
+    function resolveMode(mode) {
+        if (mode !== "system") return mode;
+        return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    function clampPct(v) { return Math.max(0, Math.min(100, v)); }
+    function schemeColors(cfg) {
+        var s = schemeOf(cfg.scheme);
+        var h = cfg.hue;
+        return [
+            "hsl(" + h + ", " + clampPct(s.sat) + "%, " + clampPct(s.light) + "%)",
+            "hsl(" + (h + Math.round(s.altH / 2)) + ", " + clampPct(s.altSat * 0.8) + "%, " + clampPct(s.light + 8) + "%)",
+            "hsl(" + (h + s.altH) + ", " + clampPct(s.altSat) + "%, " + clampPct(s.altLight) + "%)"
+        ];
+    }
+    /* 把设置应用到 <html> 上 */
+    function applyCfg(cfg) {
+        var html = document.documentElement;
+        var s = schemeOf(cfg.scheme);
+        html.style.setProperty("--hue", String(cfg.hue));
+        html.style.setProperty("--scheme-sat", clampPct(s.sat) + "%");
+        html.style.setProperty("--scheme-light", clampPct(s.light) + "%");
+        html.style.setProperty("--scheme-alt-h", String(s.altH));
+        html.style.setProperty("--scheme-alt-sat", clampPct(s.altSat) + "%");
+        html.style.setProperty("--scheme-alt-light", clampPct(s.altLight) + "%");
+        html.setAttribute("data-spec", cfg.spec === "m3e" ? "m3e" : "md3");
+        html.setAttribute("data-mode", resolveMode(cfg.mode));
+        html.setAttribute("data-bg", cfg.bg === "plain" ? "plain" : "banner");
+        html.setAttribute("data-layout", cfg.layout === "grid" ? "grid" : "list");
+        html.setAttribute("data-texture", cfg.texture || "none");
+        html.setAttribute("data-motion", cfg.motion === "reduced" ? "reduced" : "full");
+    }
+    var cfg = loadCfg();
+    if (!localStorage.getItem(KEY) && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        cfg.motion = "reduced";
+    }
+    applyCfg(cfg);
+    window.__appearanceCfg = cfg;
+})();
+</script>
+<style>
+#back-to-top {
+    align-items: center;
+    background: #1f2d2a;
+    border-radius: 50%;
+    bottom: 96px;
+    box-shadow: 0 4px 16px #00000033;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    height: 46px;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 26px;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s, background 0.25s;
+    width: 46px;
+    z-index: 1003;
+}
+#back-to-top.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+#back-to-top:hover {
+    background: var(--tc-main, #66afef);
+    transform: translateY(-3px);
+}
+#back-to-top i {
+    font-size: 17px;
+}
+#back-to-top::after {
+    border-radius: 50%;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+@media (max-width: 900px) {
+    #back-to-top {
+        bottom: 84px;
+        height: 40px;
+        right: 16px;
+        width: 40px;
+    }
+}
+</style>
 <style>
 @media (max-width: 900px) {
     #home-posts-wrap {
@@ -63,7 +176,503 @@
     }
 }
 </style>
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+
+<style>
+#projects-page .projects-empty,
+#projects-page .projects-note {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    line-height: 2;
+    margin-bottom: 18px;
+    padding: 20px 24px;
+    text-align: center;
+}
+#projects-page .projects-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+#projects-page .projects-chip {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 50px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 6px 14px;
+    transition: background 0.25s, color 0.25s, border 0.25s;
+}
+#projects-page .projects-chip em {
+    color: var(--text-mute);
+    font-size: 12px;
+    font-style: normal;
+}
+#projects-page .projects-chip:hover {
+    border-color: var(--tc-main, #66afef);
+    color: var(--tc-main, #66afef);
+}
+#projects-page .projects-chip.active {
+    background: var(--tc-main, #66afef);
+    border-color: var(--tc-main, #66afef);
+    color: #fff;
+}
+#projects-page .projects-chip.active em {
+    color: #ffffffcc;
+}
+#projects-page .projects-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+}
+#projects-page .project-card {
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: 0 2px 14px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    padding: 16px 18px;
+    transition: box-shadow 0.25s, transform 0.25s;
+}
+#projects-page .project-card:hover {
+    box-shadow: 0 8px 24px var(--shadow-strong);
+    transform: translateY(-4px);
+}
+#projects-page .project-card.hide {
+    display: none;
+}
+#projects-page .project-top {
+    align-items: flex-start;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+#projects-page .project-name {
+    color: var(--text);
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.5;
+    word-break: break-word;
+}
+#projects-page a.project-name:hover {
+    color: var(--tc-main, #66afef);
+}
+#projects-page .project-name i {
+    color: var(--tc-main, #66afef);
+}
+#projects-page .project-name .project-out {
+    color: var(--text-mute);
+    font-size: 12px;
+}
+#projects-page .project-status {
+    border-radius: 50px;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 10px;
+    white-space: nowrap;
+}
+/* 状态配色：改 projects.yml 里的 status_styles 就能换用哪种 */
+#projects-page .project-status.building,
+#projects-page .projects-chip[data-style="building"] {
+    background: #fff3e0;
+    color: #d97706;
+}
+#projects-page .project-status.done,
+#projects-page .projects-chip[data-style="done"] {
+    background: #e7f7ee;
+    color: #12a150;
+}
+#projects-page .project-status.plan,
+#projects-page .projects-chip[data-style="plan"] {
+    background: #eaf1ff;
+    color: #4c7ddb;
+}
+#projects-page .project-status.paused,
+#projects-page .projects-chip[data-style="paused"] {
+    background: #f1f3f5;
+    color: #78838c;
+}
+#projects-page .project-status.other,
+#projects-page .projects-chip[data-style="other"] {
+    background: hsl(var(--hue, 210), 100%, 93%);
+    color: hsl(var(--hue, 210), 60%, 45%);
+}
+/* 暗色下的状态配色 */
+html[data-mode="dark"] #projects-page .project-status.building,
+html[data-mode="dark"] #projects-page .projects-chip[data-style="building"] {
+    background: #d977062e;
+    color: #f0b25e;
+}
+html[data-mode="dark"] #projects-page .project-status.done,
+html[data-mode="dark"] #projects-page .projects-chip[data-style="done"] {
+    background: #12a1502e;
+    color: #56d68f;
+}
+html[data-mode="dark"] #projects-page .project-status.plan,
+html[data-mode="dark"] #projects-page .projects-chip[data-style="plan"] {
+    background: #4c7ddb2e;
+    color: #8ab4f8;
+}
+html[data-mode="dark"] #projects-page .project-status.paused,
+html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
+    background: #ffffff1a;
+    color: var(--text-dim);
+}
+#projects-page .projects-chip.active[data-style] {
+    background: var(--tc-main, #66afef);
+    border-color: var(--tc-main, #66afef);
+    color: #fff;
+}
+#projects-page .project-desc {
+    color: var(--text-dim);
+    font-size: 13.5px;
+    line-height: 1.8;
+    margin-top: 10px;
+}
+#projects-page .project-foot {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 12px;
+}
+#projects-page .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+#projects-page .project-tags span {
+    background: var(--bg-soft);
+    border-radius: 6px;
+    color: var(--tc-main, #66afef);
+    font-size: 12px;
+    padding: 2px 8px;
+}
+#projects-page .project-date {
+    color: var(--text-mute);
+    font-size: 12px;
+    margin-left: auto;
+}
+@media (max-width: 900px) {
+    #projects-page .projects-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+<style>
+/* ===== 头像 + 可展开的主页图标 ===== */
+#home-card #card-div .avatar {
+    cursor: pointer;
+}
+#home-card #card-div .avatar .avatar-caret {
+    background: var(--tc-main, #66afef);
+    border-radius: 50%;
+    bottom: -9px;
+    box-shadow: 0 0 0 3px var(--card), 0 2px 6px #0000002b;
+    color: #fff;
+    font-size: 11px;
+    height: 22px;
+    left: 50%;
+    line-height: 22px;
+    margin-left: -11px;
+    text-align: center;
+    transition: transform 0.3s;
+    width: 22px;
+}
+#home-card #card-div.avatar-open .avatar .avatar-caret {
+    transform: rotate(180deg);
+}
+#home-card #card-div .avatar-links {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin: 0 auto;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.3s ease, margin 0.3s ease;
+    width: 94%;
+}
+#home-card #card-div.avatar-open .avatar-links {
+    margin: 14px auto 0;
+    max-height: 260px;
+    opacity: 1;
+}
+#home-card #card-div .avatar-links .avatar-link {
+    align-items: center;
+    background: var(--bg-soft);
+    border-radius: 10px;
+    color: var(--text-dim);
+    display: flex;
+    flex-direction: column;
+    font-size: 17px;
+    gap: 2px;
+    padding: 7px 0 5px;
+    transition: background 0.25s, color 0.25s, transform 0.25s;
+    width: 47px;
+}
+#home-card #card-div .avatar-links .avatar-link:hover {
+    background: var(--tc-main, #66afef);
+    color: #fff;
+    opacity: 1;
+    transform: translateY(-3px);
+}
+#home-card #card-div .avatar-links .avatar-link .avatar-link-name {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* ===== 头像旁边的日历 ===== */
+#side-calendar {
+    background: var(--card-soft);
+    border-radius: 12px;
+    box-sizing: border-box;
+    margin: 0 auto 18px;
+    padding: 10px 12px 8px;
+    width: 88%;
+}
+#side-calendar .cal-head {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+#side-calendar .cal-title {
+    color: var(--text);
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: bold;
+}
+#side-calendar .cal-nav {
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 11px;
+    height: 22px;
+    line-height: 22px;
+    padding: 0;
+    transition: background 0.25s, color 0.25s;
+    width: 22px;
+}
+#side-calendar .cal-nav:hover {
+    background: var(--tc-main, #66afef);
+    color: #fff;
+}
+#side-calendar .cal-week,
+#side-calendar .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+#side-calendar .cal-week span {
+    color: var(--text-mute);
+    font-size: 11px;
+    padding: 2px 0 4px;
+    text-align: center;
+}
+#side-calendar .cal-cell {
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 12.5px;
+    height: 27px;
+    line-height: 27px;
+    position: relative;
+    text-align: center;
+    transition: background 0.2s, color 0.2s;
+}
+#side-calendar .cal-cell.blank {
+    visibility: hidden;
+}
+#side-calendar .cal-cell.today {
+    background: var(--tc-main, #66afef);
+    color: #fff;
+    font-weight: bold;
+}
+#side-calendar .cal-cell.has-post {
+    cursor: pointer;
+    font-weight: bold;
+}
+#side-calendar .cal-cell.has-post:hover {
+    background: var(--tc-pale, #a3ddfb);
+}
+#side-calendar .cal-cell.has-post::after {
+    background: var(--tc-main, #66afef);
+    border-radius: 50%;
+    bottom: 2px;
+    content: "";
+    height: 4px;
+    left: 50%;
+    margin-left: -2px;
+    position: absolute;
+    width: 4px;
+}
+#side-calendar .cal-cell.today.has-post::after {
+    background: #fff;
+}
+#side-calendar .cal-foot {
+    color: var(--text-mute);
+    font-size: 11px;
+    margin-top: 6px;
+    text-align: center;
+}
+
+/* 日历跳转过去时，让那篇文章闪一下 */
+@keyframes postFlash {
+    0% {
+        box-shadow: 0 0 0 0 hsl(var(--hue, 210), 81%, 67%, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 0 24px hsl(var(--hue, 210), 81%, 67%, 0);
+    }
+}
+#home-posts .post.post-flash {
+    animation: postFlash 1.1s ease-out 2;
+}
+</style>
+<style>
+#gallery-page {
+    margin: 30px 0 10px;
+}
+#gallery-page .gallery-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    color: var(--text-dim);
+    font-size: 15px;
+    padding: 48px 24px;
+    text-align: center;
+}
+#gallery-page .gallery-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 26px;
+}
+#gallery-page .gallery-chip {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 50px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 6px 14px;
+    transition: background 0.25s, color 0.25s, border 0.25s;
+}
+#gallery-page .gallery-chip em {
+    color: var(--text-mute);
+    font-size: 12px;
+    font-style: normal;
+}
+#gallery-page .gallery-chip:hover {
+    border-color: var(--tc-main, #66afef);
+    color: var(--tc-main, #66afef);
+}
+#gallery-page .gallery-chip.active {
+    background: var(--tc-main, #66afef);
+    border-color: var(--tc-main, #66afef);
+    color: #fff;
+}
+#gallery-page .gallery-chip.active em {
+    color: #ffffffcc;
+}
+#gallery-page .gallery-album {
+    margin-bottom: 34px;
+}
+#gallery-page .gallery-album.hide {
+    display: none;
+}
+#gallery-page .album-head {
+    align-items: baseline;
+    border-left: 4px solid var(--tc-main, #66afef);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding-left: 10px;
+}
+#gallery-page .album-title {
+    font-size: 19px;
+    margin: 0;
+}
+#gallery-page .album-title i {
+    color: var(--tc-main, #66afef);
+    margin-right: 6px;
+}
+#gallery-page .album-count {
+    color: var(--text-mute);
+    font-size: 13px;
+}
+#gallery-page .album-tags {
+    color: var(--tc-main, #66afef);
+    font-size: 13px;
+}
+#gallery-page .album-desc {
+    color: var(--text-dim);
+    font-size: 13.5px;
+    line-height: 1.8;
+    margin: 0 0 12px 14px;
+}
+#gallery-page .gallery-grid {
+    column-gap: 12px;
+    columns: 4 200px;
+}
+#gallery-page .gallery-item {
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px var(--shadow);
+    break-inside: avoid;
+    cursor: pointer;
+    margin: 0 0 12px;
+    overflow: hidden;
+    padding: 0;
+    transition: box-shadow 0.25s, transform 0.25s;
+}
+#gallery-page .gallery-item:hover {
+    box-shadow: 0 6px 20px var(--shadow-strong);
+    transform: translateY(-3px);
+}
+#gallery-page .gallery-item img {
+    border-radius: 0;
+    display: block;
+    height: auto;
+    margin: 0;
+    max-width: 100% !important;
+    width: 100%;
+}
+#gallery-page .gallery-item figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 10px 10px;
+}
+#gallery-page .gallery-item .gi-title {
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+}
+#gallery-page .gallery-item .gi-tags {
+    color: var(--tc-main, #66afef);
+    font-size: 11.5px;
+}
+#gallery-page .gallery-hint {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin: 10px 0 30px;
+    text-align: center;
+}
+@media (max-width: 900px) {
+    #gallery-page .gallery-grid {
+        columns: 2 140px;
+    }
+}
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
 <body>
     <div id="layout">
         <transition name="fade">
@@ -83,32 +692,37 @@
         
         <a href="/">
             <i class="fa-solid fa-house fa-fw"></i>
-            <span>&ensp;Home</span>
+            <span>&ensp;主页</span>
         </a>
         
         <a href="/about">
             <i class="fa-solid fa-id-card fa-fw"></i>
-            <span>&ensp;About</span>
+            <span>&ensp;关于</span>
         </a>
         
         <a href="/archives">
             <i class="fa-solid fa-box-archive fa-fw"></i>
-            <span>&ensp;Archives</span>
+            <span>&ensp;归档</span>
         </a>
         
         <a href="/categories">
             <i class="fa-solid fa-bookmark fa-fw"></i>
-            <span>&ensp;Categories</span>
+            <span>&ensp;分类</span>
         </a>
         
         <a href="/tags">
             <i class="fa-solid fa-tags fa-fw"></i>
-            <span>&ensp;Tags</span>
+            <span>&ensp;标签</span>
         </a>
         
         <a href="/pages">
-            <i class="fa-solid fa-globe fa-fw"></i>
-            <span>&ensp;我的Pages</span>
+            <i class="fa-solid fa-cube fa-fw"></i>
+            <span>&ensp;项目</span>
+        </a>
+        
+        <a href="/gallery">
+            <i class="fa-solid fa-images fa-fw"></i>
+            <span>&ensp;相册</span>
         </a>
         
     </nav>
@@ -125,7 +739,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-house fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">主页</div>
                     </div>
                 </a>
                 
@@ -134,7 +748,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-id-card fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">关于</div>
                     </div>
                 </a>
                 
@@ -143,7 +757,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-box-archive fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">归档</div>
                     </div>
                 </a>
                 
@@ -152,7 +766,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-bookmark fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">分类</div>
                     </div>
                 </a>
                 
@@ -161,16 +775,25 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-tags fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">标签</div>
                     </div>
                 </a>
                 
                 <a href="/pages">
                     <div class="item">
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-globe fa-fw"></i>
+                            <i class="fa-solid fa-cube fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">我的Pages</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">项目</div>
+                    </div>
+                </a>
+                
+                <a href="/gallery">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-images fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">相册</div>
                     </div>
                 </a>
                 
@@ -215,7 +838,7 @@
                         
                         <span class="tag">
                             
-                            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #00a596">
+                            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #ff7d73">
                                 关于自己
                             </a>
                         </span>
@@ -259,6 +882,447 @@
     <script src="/js/main.js"></script>
     
 <!-- hexo injector body_end start -->
+<script>
+(function () {
+
+    var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
+    var SCHEMES = [{"key":"tonal-spot","name":"柔和同色","en":"Tonal Spot","sat":45,"light":62,"altH":60,"altSat":42,"altLight":72},{"key":"vibrant","name":"鲜艳","en":"Vibrant","sat":88,"light":58,"altH":120,"altSat":85,"altLight":70},{"key":"content","name":"内容取色","en":"Content","sat":38,"light":64,"altH":35,"altSat":36,"altLight":74},{"key":"expressive","name":"张扬撞色","en":"Expressive","sat":66,"light":60,"altH":180,"altSat":72,"altLight":68},{"key":"rainbow","name":"彩虹","en":"Rainbow","sat":82,"light":62,"altH":200,"altSat":82,"altLight":66},{"key":"fruit-salad","name":"果色拼盘","en":"Fruit Salad","sat":74,"light":60,"altH":-60,"altSat":78,"altLight":66},{"key":"monochrome","name":"单色","en":"Monochrome","sat":6,"light":55,"altH":0,"altSat":6,"altLight":64},{"key":"neutral","name":"中性","en":"Neutral","sat":18,"light":58,"altH":20,"altSat":16,"altLight":68},{"key":"fidelity","name":"原色保真","en":"Fidelity","sat":81,"light":67,"altH":100,"altSat":100,"altLight":87}];
+    var TEXTURES = [{"key":"none","name":"无纹理","icon":"ban"},{"key":"starburst","name":"星芒光斑","icon":"wand-magic-sparkles"},{"key":"dots","name":"极客点阵","icon":"braille"},{"key":"contour","name":"流光等高线","icon":"water"},{"key":"crystal","name":"几何晶体","icon":"shapes"},{"key":"petal","name":"落樱微瓣","icon":"spa"}];
+    var KEY = "blogAppearance";
+    function loadCfg() {
+        var saved = {};
+        try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+        var cfg = {};
+        for (var k in DEFAULTS) cfg[k] = Object.prototype.hasOwnProperty.call(saved, k) ? saved[k] : DEFAULTS[k];
+        if (cfg.mode !== "system" && cfg.mode !== "dark") cfg.mode = "light";
+        if (typeof cfg.hue !== "number" || isNaN(cfg.hue)) cfg.hue = DEFAULTS.hue;
+        cfg.hue = ((Math.round(cfg.hue) % 360) + 360) % 360;
+        return cfg;
+    }
+    function saveCfg(cfg) {
+        try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch (e) {}
+    }
+    function schemeOf(key) {
+        for (var i = 0; i < SCHEMES.length; i++) if (SCHEMES[i].key === key) return SCHEMES[i];
+        return SCHEMES[SCHEMES.length - 1];
+    }
+    function resolveMode(mode) {
+        if (mode !== "system") return mode;
+        return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    function clampPct(v) { return Math.max(0, Math.min(100, v)); }
+    function schemeColors(cfg) {
+        var s = schemeOf(cfg.scheme);
+        var h = cfg.hue;
+        return [
+            "hsl(" + h + ", " + clampPct(s.sat) + "%, " + clampPct(s.light) + "%)",
+            "hsl(" + (h + Math.round(s.altH / 2)) + ", " + clampPct(s.altSat * 0.8) + "%, " + clampPct(s.light + 8) + "%)",
+            "hsl(" + (h + s.altH) + ", " + clampPct(s.altSat) + "%, " + clampPct(s.altLight) + "%)"
+        ];
+    }
+    /* 把设置应用到 <html> 上 */
+    function applyCfg(cfg) {
+        var html = document.documentElement;
+        var s = schemeOf(cfg.scheme);
+        html.style.setProperty("--hue", String(cfg.hue));
+        html.style.setProperty("--scheme-sat", clampPct(s.sat) + "%");
+        html.style.setProperty("--scheme-light", clampPct(s.light) + "%");
+        html.style.setProperty("--scheme-alt-h", String(s.altH));
+        html.style.setProperty("--scheme-alt-sat", clampPct(s.altSat) + "%");
+        html.style.setProperty("--scheme-alt-light", clampPct(s.altLight) + "%");
+        html.setAttribute("data-spec", cfg.spec === "m3e" ? "m3e" : "md3");
+        html.setAttribute("data-mode", resolveMode(cfg.mode));
+        html.setAttribute("data-bg", cfg.bg === "plain" ? "plain" : "banner");
+        html.setAttribute("data-layout", cfg.layout === "grid" ? "grid" : "list");
+        html.setAttribute("data-texture", cfg.texture || "none");
+        html.setAttribute("data-motion", cfg.motion === "reduced" ? "reduced" : "full");
+    }
+
+    var cfg = loadCfg();
+    var panel, numEl, dotEl, rangeEl, motionBtn;
+    var modeIcons = { light: "fa-sun", dark: "fa-moon", system: "fa-circle-half-stroke" };
+    var modeNames = { light: "亮色", dark: "暗色", system: "跟随系统" };
+
+    function toast(text) {
+        var d = document.createElement("div");
+        d.textContent = text;
+        d.style.cssText =
+            "position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:999999;background:rgba(25,25,25,.88);" +
+            "color:#fff;font-size:13px;padding:8px 16px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.25);";
+        document.body.appendChild(d);
+        setTimeout(function () {
+            d.style.transition = "opacity .5s";
+            d.style.opacity = "0";
+            setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 600);
+        }, 1100);
+    }
+
+    function apply(save) {
+        applyCfg(cfg);
+        if (save) saveCfg(cfg);
+        if (window.__appearanceCfg) window.__appearanceCfg = cfg;
+    }
+
+    /* ---------- 面板里的控件状态同步 ---------- */
+    function syncPanel() {
+        if (!panel) return;
+        if (numEl && numEl.value !== String(cfg.hue)) numEl.value = String(cfg.hue);
+        if (rangeEl && rangeEl.value !== String(cfg.hue)) rangeEl.value = String(cfg.hue);
+        if (dotEl) dotEl.style.background = "hsl(" + cfg.hue + ", " + schemeOf(cfg.scheme).sat + "%, 55%)";
+
+        each(panel.querySelectorAll(".tcp-scheme"), function (el) {
+            el.classList.toggle("current", el.getAttribute("data-key") === cfg.scheme);
+        });
+        each(panel.querySelectorAll(".tcp-seg"), function (seg) {
+            var field = seg.getAttribute("data-field");
+            each(seg.querySelectorAll("button"), function (b) {
+                b.classList.toggle("current", b.getAttribute("data-value") === cfg[field]);
+            });
+        });
+        each(panel.querySelectorAll(".tcp-texture"), function (el) {
+            el.classList.toggle("current", el.getAttribute("data-key") === (cfg.texture || "none"));
+        });
+        if (motionBtn) motionBtn.classList.toggle("on", cfg.motion === "reduced");
+    }
+
+    function each(list, fn) {
+        for (var i = 0; i < list.length; i++) fn(list[i]);
+    }
+
+    function el(tag, cls, html) {
+        var d = document.createElement(tag);
+        if (cls) d.className = cls;
+        if (html != null) d.innerHTML = html;
+        return d;
+    }
+
+    /* ---------- 面板 ---------- */
+    function buildPanel() {
+        panel = el("div");
+        panel.id = "theme-color-panel";
+        panel.className = "hidden";
+
+        var row = el("div", "tcp-row");
+        row.appendChild(el("span", "tcp-title", "主题颜色"));
+        var reset = el("button", "tcp-reset", '<i class="fa-solid fa-rotate-left fa-fw"></i>');
+        reset.title = "恢复默认外观";
+        reset.addEventListener("click", function () {
+            var keep = { mode: cfg.mode };
+            cfg = {};
+            for (var k in DEFAULTS) cfg[k] = DEFAULTS[k];
+            cfg.mode = keep.mode;
+            apply(true);
+            syncPanel();
+            refreshModeBtn();
+            toast("已恢复默认外观");
+        });
+        row.appendChild(reset);
+
+        numEl = el("input", "tcp-num");
+        numEl.type = "number";
+        numEl.min = "0";
+        numEl.max = "360";
+        numEl.addEventListener("change", function () {
+            cfg.hue = ((Math.round(Number(numEl.value) || 0) % 360) + 360) % 360;
+            apply(true);
+            syncPanel();
+        });
+        row.appendChild(numEl);
+
+        dotEl = el("span", "tcp-dot");
+        row.appendChild(dotEl);
+        panel.appendChild(row);
+
+        rangeEl = el("input", "tcp-range");
+        rangeEl.type = "range";
+        rangeEl.min = "0";
+        rangeEl.max = "360";
+        rangeEl.addEventListener("input", function () {
+            cfg.hue = Number(rangeEl.value);
+            apply(true);
+            syncPanel();
+        });
+        panel.appendChild(rangeEl);
+
+        /* 配色风格 */
+        var sec1 = el("div", "tcp-section");
+        sec1.appendChild(el("div", "tcp-label", "配色风格"));
+        var schemes = el("div", "tcp-schemes");
+        SCHEMES.forEach(function (s) {
+            var item = el("div", "tcp-scheme");
+            item.setAttribute("data-key", s.key);
+            item.title = s.en;
+            var dots = el("div", "dots");
+            ["", "", ""].forEach(function () {
+                dots.appendChild(el("span"));
+            });
+            item.appendChild(dots);
+            item.appendChild(el("div", "name", s.name));
+            item.addEventListener("click", function () {
+                cfg.scheme = s.key;
+                apply(true);
+                syncPanel();
+                paintDots();
+            });
+            schemes.appendChild(item);
+        });
+        sec1.appendChild(schemes);
+        panel.appendChild(sec1);
+
+        /* 配色规范 */
+        panel.appendChild(segSection("配色规范", "spec", [
+            { value: "md3", name: "MD3 2021" },
+            { value: "m3e", name: "M3E 2025" },
+        ]));
+
+        /* 页面背景 */
+        panel.appendChild(segSection("页面背景", "bg", [
+            { value: "plain", name: "纯色" },
+            { value: "banner", name: "横幅" },
+        ]));
+
+        /* 布局 */
+        panel.appendChild(segSection("布局", "layout", [
+            { value: "list", name: "列表" },
+            { value: "grid", name: "网格" },
+        ]));
+
+        /* 背景纹理 */
+        var sec5 = el("div", "tcp-section");
+        sec5.appendChild(el("div", "tcp-label", "背景纹理"));
+        var textures = el("div", "tcp-textures");
+        TEXTURES.forEach(function (t) {
+            var item = el("div", "tcp-texture");
+            item.setAttribute("data-key", t.key);
+            item.appendChild(el("i", "fa-solid fa-" + t.icon + " fa-fw"));
+            item.appendChild(el("div", "name", t.name));
+            item.addEventListener("click", function () {
+                cfg.texture = t.key;
+                apply(true);
+                syncPanel();
+            });
+            textures.appendChild(item);
+        });
+        sec5.appendChild(textures);
+        panel.appendChild(sec5);
+
+        /* 减少动态效果 */
+        var sec6 = el("div", "tcp-section tcp-switch-row");
+        sec6.appendChild(el("div", "tcp-label", "减少动态效果"));
+        motionBtn = el("button", "tcp-switch", "<span></span>");
+        motionBtn.title = "关掉页面上的动画和过渡";
+        motionBtn.addEventListener("click", function () {
+            cfg.motion = cfg.motion === "reduced" ? "full" : "reduced";
+            apply(true);
+            syncPanel();
+        });
+        sec6.appendChild(motionBtn);
+        panel.appendChild(sec6);
+
+        panel.appendChild(el("div", "tcp-tip", "设置会记在这台浏览器上"));
+        document.body.appendChild(panel);
+        syncPanel();
+        paintDots();
+    }
+
+    function segSection(label, field, options) {
+        var sec = el("div", "tcp-section");
+        sec.appendChild(el("div", "tcp-label", label));
+        var seg = el("div", "tcp-seg");
+        seg.setAttribute("data-field", field);
+        options.forEach(function (o) {
+            var b = el("button", null, o.name);
+            b.setAttribute("data-value", o.value);
+            b.addEventListener("click", function () {
+                cfg[field] = o.value;
+                apply(true);
+                syncPanel();
+            });
+            seg.appendChild(b);
+        });
+        sec.appendChild(seg);
+        return sec;
+    }
+
+    /* 每个配色风格的三色小圆点 */
+    function paintDots() {
+        each(panel.querySelectorAll(".tcp-scheme"), function (item) {
+            var s = schemeOf(item.getAttribute("data-key"));
+            var tmp = { hue: cfg.hue, scheme: s.key };
+            var colors = schemeColors(tmp);
+            each(item.querySelectorAll(".dots span"), function (dot, i) {
+                dot.style.background = colors[i] || colors[0];
+            });
+        });
+    }
+
+    /* ---------- 顶栏按钮 ---------- */
+    function togglePanel(force) {
+        if (!panel) buildPanel();
+        var open = typeof force === "boolean" ? force : panel.classList.contains("hidden");
+        panel.classList.toggle("hidden", !open);
+        var btn = document.getElementById("appearance-btn");
+        if (btn) btn.classList.toggle("at-work", open);
+    }
+
+    var modeBtn;
+    function refreshModeBtn() {
+        if (!modeBtn) return;
+        modeBtn.innerHTML = '<i class="fa-solid ' + modeIcons[cfg.mode] + ' fa-fw"></i>';
+        modeBtn.title = "显示模式：" + modeNames[cfg.mode] + "（点击切换）";
+        var m = document.getElementById("appearance-mode-mobile");
+        if (m) m.querySelector("i").className = "fa-solid " + modeIcons[cfg.mode] + " fa-fw";
+    }
+
+    function cycleMode() {
+        var order = ["light", "dark", "system"];
+        var i = order.indexOf(cfg.mode);
+        cfg.mode = order[(i + 1) % order.length];
+        apply(true);
+        refreshModeBtn();
+        toast("显示模式：" + modeNames[cfg.mode]);
+    }
+
+    function buildButtons() {
+        var desktop = document.querySelector("#menu #desktop-menu");
+        if (desktop && !document.querySelector(".nav-tools")) {
+            var tools = el("div", "nav-tools");
+
+            var searchBtn = el("a", null, '<i class="fa-solid fa-magnifying-glass fa-fw"></i>');
+            searchBtn.id = "search-btn";
+            searchBtn.title = "搜索文章（Ctrl + K）";
+            tools.appendChild(searchBtn);
+
+            modeBtn = el("a");
+            modeBtn.id = "appearance-mode-btn";
+            modeBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                cycleMode();
+            });
+            tools.appendChild(modeBtn);
+            refreshModeBtn();
+
+            var colorBtn = el("a", null, '<i class="fa-solid fa-palette fa-fw"></i>');
+            colorBtn.id = "appearance-btn";
+            colorBtn.title = "主题颜色与外观";
+            colorBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                togglePanel();
+            });
+            tools.appendChild(colorBtn);
+
+            desktop.appendChild(tools);
+            window.__navTools = tools;
+        }
+
+        var mobile = document.querySelector("#menu #mobile-menu .items");
+        if (mobile && !document.getElementById("appearance-mobile-tools")) {
+            var wrap = el("div");
+            wrap.id = "appearance-mobile-tools";
+
+            var mSearch = mobileRow("搜索文章", "magnifying-glass");
+            mSearch.id = "appearance-search-mobile";
+            wrap.appendChild(mSearch);
+
+            var mMode = mobileRow("显示模式", modeIcons[cfg.mode]);
+            mMode.id = "appearance-mode-mobile";
+            mMode.addEventListener("click", function (e) {
+                e.preventDefault();
+                cycleMode();
+            });
+            wrap.appendChild(mMode);
+
+            var mColor = mobileRow("主题颜色", "palette");
+            mColor.addEventListener("click", function (e) {
+                e.preventDefault();
+                togglePanel();
+            });
+            wrap.appendChild(mColor);
+
+            mobile.appendChild(wrap);
+        }
+    }
+
+    function mobileRow(label, icon) {
+        var a = el("a", "nav-tool-item");
+        a.href = "javascript:void(0)";
+        a.appendChild(
+            el(
+                "div",
+                "item",
+                '<div style="min-width:20px;max-width:50px;width:10%"><i class="fa-solid fa-' +
+                    icon +
+                    ' fa-fw"></i></div><div style="min-width:100px;max-width:150%;width:20%">' +
+                    label +
+                    "</div>"
+            )
+        );
+        return a;
+    }
+
+    /* ---------- 启动 ---------- */
+    function init() {
+        buildButtons();
+        apply(false);
+
+        /* 跟随系统时，系统主题一变就跟着变 */
+        if (window.matchMedia) {
+            var mq = window.matchMedia("(prefers-color-scheme: dark)");
+            var onChange = function () {
+                if (cfg.mode === "system") apply(false);
+            };
+            if (mq.addEventListener) mq.addEventListener("change", onChange);
+            else if (mq.addListener) mq.addListener(onChange);
+        }
+
+        document.addEventListener("click", function (e) {
+            if (!panel || panel.classList.contains("hidden")) return;
+            if (e.target.closest && (e.target.closest("#theme-color-panel") || e.target.closest("#appearance-btn") || e.target.closest("#appearance-mobile-tools"))) return;
+            togglePanel(false);
+        });
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") togglePanel(false);
+        });
+    }
+
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+})();
+</script>
+<script>
+(function () {
+    if (window.__backToTopStarted) return;
+    window.__backToTopStarted = true;
+
+    var SHOW_AFTER = 400;
+    var btn = document.createElement("div");
+    btn.id = "back-to-top";
+    btn.title = "回到顶部";
+    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
+    document.body.appendChild(btn);
+
+    var shown = false;
+    function scrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+    function update() {
+        var on = scrollTop() > SHOW_AFTER;
+        if (on === shown) return;
+        shown = on;
+        btn.classList.toggle("show", on);
+    }
+    btn.addEventListener("click", function () {
+        try {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (e) {
+            window.scrollTo(0, 0);
+        }
+    });
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+})();
+</script>
 <script>
 (function () {
     if (window.__blogBgmStarted) return; // 防止同一页面重复初始化
@@ -479,6 +1543,215 @@
 
     ensureCss(PLAYER_SOURCES[0].css); // 先保证本地样式就绪
     tryLoadPlayer(0);
+})();
+</script>
+<script>
+(function () {
+    if (window.__searchStarted) return;
+    window.__searchStarted = true;
+
+    var ROOT = "/";
+    var MAX_RESULTS = 12;
+
+    var mask, input, body, items = [], active = -1, index = null, loading = false;
+
+    function esc(s) {
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+    }
+
+    function mark(text, q) {
+        var safe = esc(text);
+        if (!q) return safe;
+        var lower = safe.toLowerCase();
+        var out = "", i = 0, pos;
+        while ((pos = lower.indexOf(q, i)) >= 0) {
+            out += safe.slice(i, pos) + "<mark>" + safe.slice(pos, pos + q.length) + "</mark>";
+            i = pos + q.length;
+        }
+        return out + safe.slice(i);
+    }
+
+    function build() {
+        mask = document.createElement("div");
+        mask.id = "search-mask";
+        mask.className = "hidden";
+
+        var panel = document.createElement("div");
+        panel.id = "search-panel";
+
+        var head = document.createElement("div");
+        head.className = "sp-head";
+        head.innerHTML = '<i class="fa-solid fa-magnifying-glass fa-fw"></i>';
+
+        input = document.createElement("input");
+        input.className = "sp-input";
+        input.type = "text";
+        input.placeholder = "搜索文章标题、标签、正文…";
+        input.setAttribute("autocomplete", "off");
+        head.appendChild(input);
+
+        var close = document.createElement("button");
+        close.className = "sp-close";
+        close.textContent = "ESC";
+        close.addEventListener("click", function () { hide(); });
+        head.appendChild(close);
+        panel.appendChild(head);
+
+        body = document.createElement("div");
+        body.className = "sp-body";
+        body.innerHTML = '<div class="sp-empty">输入关键词开始搜索</div>';
+        panel.appendChild(body);
+
+        var foot = document.createElement("div");
+        foot.className = "sp-foot";
+        foot.innerHTML = "<kbd>↑</kbd><kbd>↓</kbd> 选择 · <kbd>Enter</kbd> 打开 · <kbd>Esc</kbd> 关闭";
+        panel.appendChild(foot);
+
+        mask.appendChild(panel);
+        mask.addEventListener("click", function (e) {
+            if (e.target === mask) hide();
+        });
+        document.body.appendChild(mask);
+
+        input.addEventListener("input", function () { run(); });
+        input.addEventListener("keydown", function (e) {
+            if (e.key === "ArrowDown") { e.preventDefault(); move(1); }
+            else if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
+            else if (e.key === "Enter") {
+                e.preventDefault();
+                var it = items[active >= 0 ? active : 0];
+                if (it) window.location.href = it.post.url;
+            }
+        });
+    }
+
+    function loadIndex() {
+        if (index || loading) return;
+        loading = true;
+        fetch(ROOT + "search.json")
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                index = data && data.posts ? data.posts : [];
+                loading = false;
+                if (input.value.trim()) run();
+            })
+            .catch(function () {
+                loading = false;
+                body.innerHTML = '<div class="sp-empty">搜索索引加载失败，刷新页面再试试</div>';
+            });
+    }
+
+    function query(q) {
+        q = q.trim().toLowerCase();
+        if (!q) return [];
+        var out = [];
+        for (var i = 0; i < index.length; i++) {
+            var p = index[i];
+            var title = String(p.title || "");
+            var meta = (p.tags || []).join(" ") + " " + (p.categories || []).join(" ");
+            var text = String(p.text || "");
+            var score = 0, snippet = "";
+            if (title.toLowerCase().indexOf(q) >= 0) score += 100;
+            if (meta.toLowerCase().indexOf(q) >= 0) score += 60;
+            var at = text.toLowerCase().indexOf(q);
+            if (at >= 0) {
+                score += 20;
+                snippet = text.slice(Math.max(0, at - 26), at + 76).trim();
+                if (at > 26) snippet = "…" + snippet;
+            }
+            if (score > 0) out.push({ post: p, score: score, snippet: snippet, q: q });
+        }
+        out.sort(function (a, b) { return b.score - a.score; });
+        return out.slice(0, MAX_RESULTS);
+    }
+
+    function run() {
+        var q = input.value;
+        if (!index) { loadIndex(); return; }
+        if (!q.trim()) {
+            items = [];
+            active = -1;
+            body.innerHTML = '<div class="sp-empty">输入关键词开始搜索</div>';
+            return;
+        }
+        items = query(q);
+        active = items.length ? 0 : -1;
+        if (!items.length) {
+            body.innerHTML = '<div class="sp-empty">没有找到和「' + esc(q.trim()) + '」相关的内容</div>';
+            return;
+        }
+        var html = "";
+        for (var i = 0; i < items.length; i++) {
+            var it = items[i], p = it.post;
+            var metaBits = [];
+            if (p.date) metaBits.push(p.date);
+            if ((p.categories || []).length) metaBits.push(p.categories.join(" / "));
+            if ((p.tags || []).length) metaBits.push("#" + p.tags.join(" #"));
+            html +=
+                '<a class="sp-item' + (i === active ? " active" : "") + '" href="' + esc(p.url) + '" data-i="' + i + '">' +
+                '<div class="sp-title">' + mark(p.title, it.q) + "</div>" +
+                '<div class="sp-meta">' + esc(metaBits.join(" · ")) + "</div>" +
+                (it.snippet ? '<div class="sp-text">' + mark(it.snippet, it.q) + "</div>" : "") +
+                "</a>";
+        }
+        body.innerHTML = html;
+    }
+
+    function move(step) {
+        if (!items.length) return;
+        active = (active + step + items.length) % items.length;
+        var nodes = body.querySelectorAll(".sp-item");
+        for (var i = 0; i < nodes.length; i++) nodes[i].classList.toggle("active", i === active);
+        if (nodes[active] && nodes[active].scrollIntoView) nodes[active].scrollIntoView({ block: "nearest" });
+    }
+
+    function show() {
+        if (!mask) build();
+        mask.classList.remove("hidden");
+        document.documentElement.style.overflow = "hidden";
+        loadIndex();
+        input.value = "";
+        items = [];
+        active = -1;
+        body.innerHTML = '<div class="sp-empty">输入关键词开始搜索</div>';
+        setTimeout(function () { input.focus(); }, 30);
+    }
+
+    function hide() {
+        if (!mask) return;
+        mask.classList.add("hidden");
+        document.documentElement.style.overflow = "";
+    }
+
+    function init() {
+        var tools = window.__navTools;
+        var btn = document.getElementById("search-btn");
+        if (!btn && tools) {
+            btn = document.createElement("a");
+            btn.id = "search-btn";
+            btn.innerHTML = '<i class="fa-solid fa-magnifying-glass fa-fw"></i>';
+            btn.title = "搜索文章（Ctrl + K）";
+            tools.insertBefore(btn, tools.firstChild);
+        }
+        if (btn) btn.addEventListener("click", function (e) { e.preventDefault(); show(); });
+
+        var m = document.getElementById("appearance-search-mobile");
+        if (m) m.addEventListener("click", function (e) { e.preventDefault(); show(); });
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") { hide(); return; }
+            if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) {
+                e.preventDefault();
+                if (mask && !mask.classList.contains("hidden")) hide();
+                else show();
+            }
+        });
+    }
+
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
 })();
 </script><!-- hexo injector body_end end --></body>
 </html>
