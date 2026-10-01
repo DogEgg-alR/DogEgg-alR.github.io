@@ -371,6 +371,13 @@ html[data-mode="dark"] #back-to-top {
 html[data-mode="dark"] #back-to-top:hover {
     background: var(--tc-main);
 }
+/* 首页首屏（横幅）上的标题：那里压着一个白色圆形底，
+   暗色下也保持原来的深色文字，不然会看不清 */
+html[data-mode="dark"] #home-head #home-info .info .wrap h1,
+html[data-mode="dark"] #home-head #home-info .info .wrap h3,
+html[data-mode="dark"] #home-head #home-info .info .wrap h5 {
+    color: #1e3e3f;
+}
 
 /* ============================================================
  * 4. 页面背景：纯色 / 横幅
