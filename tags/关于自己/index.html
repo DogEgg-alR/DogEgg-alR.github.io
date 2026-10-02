@@ -44,7 +44,58 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=muqgeezt" /><script>
+<!-- hexo injector head_end start -->
+<style>
+#back-to-top {
+    align-items: center;
+    background: #1f2d2a;
+    border-radius: 50%;
+    bottom: 96px;
+    box-shadow: 0 4px 16px #00000033;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    height: 46px;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 26px;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s, background 0.25s;
+    width: 46px;
+    z-index: 1003;
+}
+#back-to-top.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+#back-to-top:hover {
+    background: var(--tc-main, #66afef);
+    transform: translateY(-3px);
+}
+#back-to-top i {
+    font-size: 17px;
+}
+#back-to-top::after {
+    border-radius: 50%;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+@media (max-width: 900px) {
+    #back-to-top {
+        bottom: 84px;
+        height: 40px;
+        right: 16px;
+        width: 40px;
+    }
+}
+</style><link rel="stylesheet" href="/css/appearance.css?v=muqh9p16" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -107,57 +158,6 @@
     window.__appearanceCfg = cfg;
 })();
 </script>
-<style>
-#back-to-top {
-    align-items: center;
-    background: #1f2d2a;
-    border-radius: 50%;
-    bottom: 96px;
-    box-shadow: 0 4px 16px #00000033;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    height: 46px;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    position: fixed;
-    right: 26px;
-    transform: translateY(12px);
-    transition: opacity 0.3s, transform 0.3s, background 0.25s;
-    width: 46px;
-    z-index: 1003;
-}
-#back-to-top.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
-#back-to-top:hover {
-    background: var(--tc-main, #66afef);
-    transform: translateY(-3px);
-}
-#back-to-top i {
-    font-size: 17px;
-}
-#back-to-top::after {
-    border-radius: 50%;
-    content: "";
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-@media (max-width: 900px) {
-    #back-to-top {
-        bottom: 84px;
-        height: 40px;
-        right: 16px;
-        width: 40px;
-    }
-}
-</style>
 <style>
 #friends-page {
     margin: 30px 0 10px;
@@ -921,7 +921,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
                     
                     <span class="tag">
                         
-                        <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #00bcd4">
+                        <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #ffa2c4">
                             关于自己
                         </a>
                     </span>
@@ -964,6 +964,40 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     <script src="/js/main.js"></script>
     
 <!-- hexo injector body_end start -->
+<script>
+(function () {
+    if (window.__backToTopStarted) return;
+    window.__backToTopStarted = true;
+
+    var SHOW_AFTER = 400;
+    var btn = document.createElement("div");
+    btn.id = "back-to-top";
+    btn.title = "回到顶部";
+    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
+    document.body.appendChild(btn);
+
+    var shown = false;
+    function scrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+    function update() {
+        var on = scrollTop() > SHOW_AFTER;
+        if (on === shown) return;
+        shown = on;
+        btn.classList.toggle("show", on);
+    }
+    btn.addEventListener("click", function () {
+        try {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (e) {
+            window.scrollTo(0, 0);
+        }
+    });
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+})();
+</script>
 <script>
 (function () {
 
@@ -1376,36 +1410,34 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 </script>
 <script>
 (function () {
-    if (window.__backToTopStarted) return;
-    window.__backToTopStarted = true;
+    if (window.__giscusThemeStarted) return;
+    window.__giscusThemeStarted = true;
 
-    var SHOW_AFTER = 400;
-    var btn = document.createElement("div");
-    btn.id = "back-to-top";
-    btn.title = "回到顶部";
-    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
-    document.body.appendChild(btn);
+    function sync() {
+        var iframe = document.querySelector("iframe.giscus-frame");
+        if (!iframe || !iframe.contentWindow) return;
+        var dark = document.documentElement.getAttribute("data-mode") === "dark";
+        iframe.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: dark ? "dark" : "light" } } },
+            "https://giscus.app"
+        );
+    }
 
-    var shown = false;
-    function scrollTop() {
-        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    }
-    function update() {
-        var on = scrollTop() > SHOW_AFTER;
-        if (on === shown) return;
-        shown = on;
-        btn.classList.toggle("show", on);
-    }
-    btn.addEventListener("click", function () {
-        try {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        } catch (e) {
-            window.scrollTo(0, 0);
-        }
+    /* giscus 加载完/更新时会发消息过来，那时同步一次 */
+    window.addEventListener("message", function (e) {
+        if (e.origin !== "https://giscus.app") return;
+        if (e.data && e.data.giscus) sync();
     });
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
+
+    /* 自己切换亮暗模式时也同步一次 */
+    if (window.MutationObserver) {
+        new MutationObserver(sync).observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-mode"],
+        });
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync);
+    else sync();
 })();
 </script>
 <script>
