@@ -46,7 +46,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=muqnsw1i" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=muqor267" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -980,7 +980,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
         
         <span class="tag">
             
-            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #00a596">关于自己</a>
+            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #ffa2c4">关于自己</a>
         </span>
         
     </div>
@@ -1831,6 +1831,10 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
                 order: ORDER,
                 listFolded: LIST_FOLDED,
                 volume: VOLUME,
+                // ★ 歌词是「网址」形式（网易云接口给的就是歌词地址），
+                //   必须写 lrcType: 3，APlayer 才会去请求并显示歌词。
+                //   没有这一行播放器就完全不显示歌词（之前就是漏了它）。
+                lrcType: 3,
                 audio: audio
             });
             startResumeKeeper();
