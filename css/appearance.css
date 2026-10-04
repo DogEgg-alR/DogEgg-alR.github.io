@@ -952,3 +952,21 @@ html[data-mode="dark"] #theme-color-panel .tcp-scheme.current {
     opacity: 1;
     text-shadow: 0 1px 3px rgb(0 0 0 / 0.9), 0 0 8px rgb(0 0 0 / 0.6);
 }
+
+/* ============================================================
+ * 12. 首页大图的淡入
+ * ------------------------------------------------------------
+ * 大图（可能 1MB 以上）在慢网络下要好几秒。这里让它先不可见
+ * （露出来的是页面底色，不是刺眼的空白），图片下载完由
+ * home.js 加上 .loaded，再淡入。看着就不像"卡住了"。
+ * ============================================================ */
+#home-head #home-background {
+    opacity: 0;
+    transition: opacity 0.9s ease;
+}
+#home-head #home-background.loaded {
+    opacity: 1;
+}
+html[data-motion="reduced"] #home-head #home-background {
+    transition: none;
+}
