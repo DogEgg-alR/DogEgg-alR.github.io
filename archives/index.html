@@ -44,7 +44,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=muqor267" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mutsnj8z" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -909,7 +909,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
                         
                         <span class="tag">
                             
-                            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #03a9f4">
+                            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #00a596">
                                 关于自己
                             </a>
                         </span>
@@ -1437,6 +1437,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     var PLAYER_SOURCES = [{"js":"/js/APlayer.min.js","css":"/css/APlayer.min.css"},{"js":"https://s4.zstatic.net/ajax/libs/aplayer/1.10.1/APlayer.min.js","css":"https://s4.zstatic.net/ajax/libs/aplayer/1.10.1/APlayer.min.css"},{"js":"https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.js","css":"https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.css"},{"js":"https://registry.npmmirror.com/aplayer/1.10.1/files/dist/APlayer.min.js","css":"https://registry.npmmirror.com/aplayer/1.10.1/files/dist/APlayer.min.css"},{"js":"https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js","css":"https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"},{"js":"https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.js","css":"https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css"}];
     var API_HOSTS = ["https://api.injahow.cn/meting/?server=","https://meting.qjqq.cn/api.php?server=","https://api.i-meto.com/meting/api?server="];
     var MUSIC_IDS = ["5249620781"];
+    var ROOT = "/";
     var SERVER = "netease";
     var ORDER = "random";
     var VOLUME = 0.4;
@@ -1564,7 +1565,79 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
         }
     }
 
-    function startPlayer() {
+    /* ---------- 曲包模式（歌单超过 1000 首时用这个） ----------
+     * 发布前 fetch-music.js 会把整个歌单拆成若干曲包，放在 /music/：
+     *   index.json    总共几首、几片
+     *   part-1.json   第 1 片 …
+     * 这里先只加载第 1 片，能立刻开播；剩下的在后台逐片追加进歌单。
+     * 播放地址不存进曲包，运行时用网易云直链拼（稳定且不会过期）；
+     * 歌词地址格式也是固定的，同样运行时拼。
+     */
+    function songToAudio(s) {
+        return {
+            name: s.name || "",
+            artist: s.artist || "",
+            url: "https://music.163.com/song/media/outer/url?id=" + s.id + ".mp3",
+            cover: s.cover || "",
+            lrc: "https://api.injahow.cn/meting/?server=" + SERVER + "&type=lrc&id=" + s.id
+        };
+    }
+
+    function usable(a) {
+        return a && a.url && a.name;
+    }
+
+    function bootPlayer(audio) {
+        trackList = audio.slice();
+        var div = document.createElement("div");
+        document.body.appendChild(div);
+        window.__ap = new APlayer({
+            container: div,
+            fixed: true,
+            autoplay: AUTOPLAY,
+            theme: "#2563eb",
+            order: ORDER,
+            listFolded: LIST_FOLDED,
+            volume: VOLUME,
+            // ★ 歌词是「网址」形式，必须写 lrcType: 3，
+            //   APlayer 才会去请求并显示歌词（之前漏了它，歌词一直不显示）。
+            lrcType: 3,
+            audio: audio
+        });
+        startResumeKeeper();
+        tryResume(); // 把上一页正在播的那首接着放
+    }
+
+    /* 后台把剩下的曲包一片片追加进播放列表 */
+    function appendParts(idx, next) {
+        if (!window.__ap || !window.__ap.list || next > idx.parts) return;
+        fetchJson(ROOT + "music/part-" + next + ".json").then(function (list) {
+            var more = (list || []).map(songToAudio).filter(usable);
+            if (more.length) {
+                window.__ap.list.add(more);
+                trackList = trackList.concat(more);
+            }
+            appendParts(idx, next + 1);
+        }).catch(function () {
+            appendParts(idx, next + 1); // 某一片失败就跳过，不影响已经加载的
+        });
+    }
+
+    /* 优先用曲包；没有曲包（还没跑过 fetch-music.js）就回退到老接口 */
+    function startFromParts() {
+        return fetchJson(ROOT + "music/index.json").then(function (idx) {
+            if (!idx || !idx.parts) throw new Error("曲包索引无效");
+            return fetchJson(ROOT + "music/part-1.json").then(function (first) {
+                var audio = (first || []).map(songToAudio).filter(usable);
+                if (!audio.length) throw new Error("曲包为空");
+                bootPlayer(audio);
+                appendParts(idx, 2);
+            });
+        });
+    }
+
+    /* 老办法：走 meting 接口（单个歌单最多 1000 首），曲包不存在时兜底 */
+    function startFromApi() {
         var tasks = [];
         MUSIC_IDS.forEach(function (id) { tasks.push(fetchList(id, 0)); });
         Promise.all(tasks).then(function (parts) {
@@ -1587,27 +1660,15 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
                 toast("背景音乐加载失败：暂时连不上歌单接口，稍后刷新再试。");
                 return;
             }
-            trackList = audio.slice();
-            var div = document.createElement("div");
-            document.body.appendChild(div);
-            window.__ap = new APlayer({
-                container: div,
-                fixed: true,
-                autoplay: AUTOPLAY,
-                theme: "#2563eb",
-                order: ORDER,
-                listFolded: LIST_FOLDED,
-                volume: VOLUME,
-                // ★ 歌词是「网址」形式（网易云接口给的就是歌词地址），
-                //   必须写 lrcType: 3，APlayer 才会去请求并显示歌词。
-                //   没有这一行播放器就完全不显示歌词（之前就是漏了它）。
-                lrcType: 3,
-                audio: audio
-            });
-            startResumeKeeper();
-            tryResume(); // 把上一页正在播的那首接着放
+            bootPlayer(audio);
         }).catch(function () {
             toast("背景音乐加载失败：网络异常，稍后刷新再试。");
+        });
+    }
+
+    function startPlayer() {
+        startFromParts().catch(function () {
+            startFromApi();
         });
     }
 
