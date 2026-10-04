@@ -44,7 +44,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mutt3iac" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=muttf1o9" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -155,85 +155,6 @@
         height: 40px;
         right: 16px;
         width: 40px;
-    }
-}
-</style>
-<style>
-#friends-page {
-    margin: 30px 0 10px;
-}
-#friends-page .friends-empty {
-    background: var(--card);
-    border: 1px dashed var(--line);
-    border-radius: 14px;
-    color: var(--text-dim);
-    padding: 46px 24px;
-    text-align: center;
-}
-#friends-page .friends-grid {
-    display: grid;
-    gap: 14px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-#friends-page .friend-card {
-    align-items: center;
-    background: var(--card);
-    border: 1px solid transparent;
-    border-radius: 16px;
-    box-shadow: 0 2px 12px var(--shadow);
-    color: var(--text);
-    display: flex;
-    gap: 14px;
-    padding: 14px 16px;
-    transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s;
-}
-#friends-page .friend-card:hover {
-    border-color: var(--tc-main, #66afef);
-    box-shadow: 0 8px 22px var(--shadow-strong);
-    opacity: 1;
-    transform: translateY(-4px);
-}
-#friends-page .friend-avatar {
-    align-items: center;
-    background: var(--bg-soft);
-    border-radius: 50%;
-    color: var(--tc-main, #66afef);
-    display: flex;
-    flex-shrink: 0;
-    font-size: 18px;
-    height: 46px;
-    justify-content: center;
-    overflow: hidden;
-    width: 46px;
-}
-#friends-page .friend-avatar img {
-    border-radius: 0;
-    height: 100%;
-    margin: 0;
-    max-width: 100% !important;
-    object-fit: cover;
-    width: 100%;
-}
-#friends-page .friend-info {
-    min-width: 0;
-}
-#friends-page .friend-name {
-    font-size: 15px;
-    font-weight: bold;
-    line-height: 1.5;
-}
-#friends-page .friend-desc {
-    color: var(--text-dim);
-    font-size: 12.5px;
-    line-height: 1.6;
-    margin-top: 3px;
-    /* 让 desc 里写的换行原样显示（YAML 里用 | 或 
- 都行） */
-    white-space: pre-line;
-}
-@media (max-width: 900px) {
-    #friends-page .friends-grid {
-        grid-template-columns: 1fr;
     }
 }
 </style>
@@ -371,6 +292,85 @@
 @media (max-width: 900px) {
     #gallery-page .gallery-grid {
         columns: 2 140px;
+    }
+}
+</style>
+<style>
+#friends-page {
+    margin: 30px 0 10px;
+}
+#friends-page .friends-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    color: var(--text-dim);
+    padding: 46px 24px;
+    text-align: center;
+}
+#friends-page .friends-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+#friends-page .friend-card {
+    align-items: center;
+    background: var(--card);
+    border: 1px solid transparent;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px var(--shadow);
+    color: var(--text);
+    display: flex;
+    gap: 14px;
+    padding: 14px 16px;
+    transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s;
+}
+#friends-page .friend-card:hover {
+    border-color: var(--tc-main, #66afef);
+    box-shadow: 0 8px 22px var(--shadow-strong);
+    opacity: 1;
+    transform: translateY(-4px);
+}
+#friends-page .friend-avatar {
+    align-items: center;
+    background: var(--bg-soft);
+    border-radius: 50%;
+    color: var(--tc-main, #66afef);
+    display: flex;
+    flex-shrink: 0;
+    font-size: 18px;
+    height: 46px;
+    justify-content: center;
+    overflow: hidden;
+    width: 46px;
+}
+#friends-page .friend-avatar img {
+    border-radius: 0;
+    height: 100%;
+    margin: 0;
+    max-width: 100% !important;
+    object-fit: cover;
+    width: 100%;
+}
+#friends-page .friend-info {
+    min-width: 0;
+}
+#friends-page .friend-name {
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+#friends-page .friend-desc {
+    color: var(--text-dim);
+    font-size: 12.5px;
+    line-height: 1.6;
+    margin-top: 3px;
+    /* 让 desc 里写的换行原样显示（YAML 里用 | 或 
+ 都行） */
+    white-space: pre-line;
+}
+@media (max-width: 900px) {
+    #friends-page .friends-grid {
+        grid-template-columns: 1fr;
     }
 }
 </style>
