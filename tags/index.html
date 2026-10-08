@@ -97,7 +97,7 @@
         width: 40px;
     }
 }
-</style><link rel="stylesheet" href="/css/appearance.css?v=muztfx3o" /><script>
+</style><link rel="stylesheet" href="/css/appearance.css?v=muztlwke" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -418,11 +418,16 @@
     transform: translateY(-3px);
 }
 .gallery-item img {
+    /* 缩略图统一成正方形：不管原图多大、什么比例，
+       这里都裁成一样长宽，排列就整齐了。
+       点开看的是原图（完整不裁切）。 */
+    aspect-ratio: 1 / 1;
     border-radius: 0;
     display: block;
     height: auto;
     margin: 0;
     max-width: 100% !important;
+    object-fit: cover;
     width: 100%;
 }
 .gallery-item figcaption {
@@ -1010,7 +1015,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
         
         
         <span>
-            <a href="/tags/%E5%AD%A6%E4%B8%9A%E4%B8%8E%E7%94%9F%E6%B4%BB/" style="background: #00bcd4">
+            <a href="/tags/%E5%AD%A6%E4%B8%9A%E4%B8%8E%E7%94%9F%E6%B4%BB/" style="background: #ffa2c4">
                 <span class="icon">
                     <i class="fa-solid fa-tags fa-fw"></i>
                 </span>
@@ -1021,7 +1026,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
         
         
         <span>
-            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="background: #03a9f4">
+            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="background: #00a596">
                 <span class="icon">
                     <i class="fa-solid fa-tags fa-fw"></i>
                 </span>
@@ -1510,21 +1515,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 </script>
 <script>
 (function () {
-    if (window.__imgFallbackStarted) return;
-    window.__imgFallbackStarted = true;
-    document.addEventListener("error", function (e) {
-        var el = e.target;
-        if (!el || el.tagName !== "IMG" || el.__cdnRetried) return;
-        var src = el.currentSrc || el.src || "";
-        if (src.indexOf("/gh/") === -1) return;   // 不是加速地址就不管
-        el.__cdnRetried = true;
-        var local = src.replace(/^https?:\/\/[^/]+\/gh\/[^/]+\/[^@/]+@[^/]+\//, "/");
-        if (local !== src) el.src = local;
-    }, true);
-})();
-</script>
-<script>
-(function () {
     if (window.__giscusThemeStarted) return;
     window.__giscusThemeStarted = true;
 
@@ -1553,6 +1543,21 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync);
     else sync();
+})();
+</script>
+<script>
+(function () {
+    if (window.__imgFallbackStarted) return;
+    window.__imgFallbackStarted = true;
+    document.addEventListener("error", function (e) {
+        var el = e.target;
+        if (!el || el.tagName !== "IMG" || el.__cdnRetried) return;
+        var src = el.currentSrc || el.src || "";
+        if (src.indexOf("/gh/") === -1) return;   // 不是加速地址就不管
+        el.__cdnRetried = true;
+        var local = src.replace(/^https?:\/\/[^/]+\/gh\/[^/]+\/[^@/]+@[^/]+\//, "/");
+        if (local !== src) el.src = local;
+    }, true);
 })();
 </script>
 <script>
