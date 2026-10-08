@@ -46,7 +46,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=muzsrr6f" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=muzt2hl9" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -370,9 +370,160 @@
     margin: 10px 0 30px;
     text-align: center;
 }
+
+/* ===== 相册目录（一个相册一张卡片）===== */
+#gallery-page .album-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+#gallery-page .album-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 2px 10px var(--shadow);
+    cursor: pointer;
+    overflow: hidden;
+    transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s;
+}
+#gallery-page .album-card:hover {
+    border-color: var(--tc-main, #66afef);
+    box-shadow: 0 8px 24px var(--shadow-strong);
+    transform: translateY(-4px);
+}
+#gallery-page .album-card.hide {
+    display: none;
+}
+#gallery-page .album-cover {
+    aspect-ratio: 16 / 9;
+    background: var(--bg-soft);
+    overflow: hidden;
+    position: relative;
+}
+#gallery-page .album-cover img {
+    display: block;
+    height: 100%;
+    margin: 0;
+    max-width: none !important;
+    object-fit: cover;
+    transition: transform 0.4s;
+    width: 100%;
+}
+#gallery-page .album-card:hover .album-cover img {
+    transform: scale(1.04);
+}
+#gallery-page .album-cover-empty {
+    align-items: center;
+    color: var(--text-mute);
+    display: flex;
+    font-size: 30px;
+    height: 100%;
+    justify-content: center;
+}
+#gallery-page .album-count {
+    background: #000000a6;
+    border-radius: 20px;
+    bottom: 10px;
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 10px;
+    position: absolute;
+    right: 10px;
+}
+#gallery-page .album-body {
+    padding: 14px 16px 16px;
+}
+#gallery-page .album-card .album-title {
+    align-items: center;
+    color: var(--text);
+    display: flex;
+    font-size: 18px;
+    gap: 8px;
+    justify-content: space-between;
+    margin: 0 0 6px;
+}
+#gallery-page .album-card .album-title i {
+    color: var(--tc-main, #66afef);
+    font-size: 15px;
+    transition: transform 0.25s;
+}
+#gallery-page .album-card:hover .album-title i {
+    transform: translateX(4px);
+}
+#gallery-page .album-card .album-desc {
+    color: var(--text-dim);
+    font-size: 13px;
+    line-height: 1.65;
+    margin: 0 0 10px;
+}
+#gallery-page .album-meta {
+    color: var(--text-mute);
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 12px;
+    gap: 4px 10px;
+}
+#gallery-page .album-meta .album-tags {
+    color: var(--tc-main, #66afef);
+}
+
+/* ===== 进入某个相册后的详情视图 ===== */
+#gallery-page .album-view[hidden] {
+    display: none;
+}
+#gallery-page .album-view-head {
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+}
+#gallery-page .album-view-title {
+    font-size: 20px;
+    margin: 0;
+}
+#gallery-page .album-count-text {
+    color: var(--text-mute);
+    font-size: 13px;
+}
+#gallery-page .album-view-head .album-tags {
+    color: var(--tc-main, #66afef);
+    font-size: 13px;
+}
+#gallery-page .album-back {
+    align-items: center;
+    background: var(--bg-soft);
+    border: none;
+    border-radius: 20px;
+    color: var(--text-dim);
+    cursor: pointer;
+    display: inline-flex;
+    font: 500 13px Lexend, "Noto Sans SC", sans-serif;
+    gap: 6px;
+    padding: 6px 14px;
+    transition: background 0.25s, color 0.25s;
+}
+#gallery-page .album-back:hover {
+    background: var(--tc-main, #66afef);
+    color: #fff;
+}
+#gallery-page .album-view .album-desc {
+    color: var(--text-dim);
+    font-size: 13.5px;
+    line-height: 1.8;
+    margin: 0 0 16px;
+}
 @media (max-width: 900px) {
     #gallery-page .gallery-grid {
         columns: 2 140px;
+    }
+    #gallery-page .album-grid {
+        grid-template-columns: 1fr;
+    }
+    #gallery-page .album-card .album-title {
+        font-size: 17px;
     }
 }
 </style>
@@ -905,7 +1056,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
         
         
         <span>
-            <a href="/categories/%E5%BE%88%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%9C%E8%A5%BF/" style="background: #03a9f4">
+            <a href="/categories/%E5%BE%88%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%9C%E8%A5%BF/" style="background: #00bcd4">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
