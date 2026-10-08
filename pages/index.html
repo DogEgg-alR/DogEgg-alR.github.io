@@ -106,7 +106,7 @@
         width: 40px;
     }
 }
-</style><link rel="stylesheet" href="/css/appearance.css?v=muztlwke" /><script>
+</style><link rel="stylesheet" href="/css/appearance.css?v=muztrkwc" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -323,6 +323,15 @@
 #gallery-page .album-card.hide {
     display: none;
 }
+/* 两个视图的显隐 */
+#gallery-page #album-index[hidden],
+#gallery-page #photo-view[hidden] {
+    display: none;
+}
+#gallery-page .photo-view .gi-album {
+    color: var(--text-mute);
+    font-size: 11.5px;
+}
 #gallery-page .album-cover {
     aspect-ratio: 16 / 9;
     background: var(--bg-soft);
@@ -515,25 +524,6 @@
 </style>
 
 <style>
-.netease-player {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
-    display: block;
-    margin: 20px auto;
-    max-width: 100%;
-    width: 100%;
-}
-.netease-player-big {
-    max-width: 480px;
-}
-@media (max-width: 900px) {
-    .netease-player {
-        margin: 14px auto;
-    }
-}
-</style>
-<style>
 #projects-page .projects-empty,
 #projects-page .projects-note {
     background: var(--card);
@@ -716,6 +706,25 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 @media (max-width: 900px) {
     #projects-page .projects-grid {
         grid-template-columns: 1fr;
+    }
+}
+</style>
+<style>
+.netease-player {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    width: 100%;
+}
+.netease-player-big {
+    max-width: 480px;
+}
+@media (max-width: 900px) {
+    .netease-player {
+        margin: 14px auto;
     }
 }
 </style>
@@ -1517,6 +1526,21 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 </script>
 <script>
 (function () {
+    if (window.__imgFallbackStarted) return;
+    window.__imgFallbackStarted = true;
+    document.addEventListener("error", function (e) {
+        var el = e.target;
+        if (!el || el.tagName !== "IMG" || el.__cdnRetried) return;
+        var src = el.currentSrc || el.src || "";
+        if (src.indexOf("/gh/") === -1) return;   // 不是加速地址就不管
+        el.__cdnRetried = true;
+        var local = src.replace(/^https?:\/\/[^/]+\/gh\/[^/]+\/[^@/]+@[^/]+\//, "/");
+        if (local !== src) el.src = local;
+    }, true);
+})();
+</script>
+<script>
+(function () {
     if (window.__giscusThemeStarted) return;
     window.__giscusThemeStarted = true;
 
@@ -1545,21 +1569,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync);
     else sync();
-})();
-</script>
-<script>
-(function () {
-    if (window.__imgFallbackStarted) return;
-    window.__imgFallbackStarted = true;
-    document.addEventListener("error", function (e) {
-        var el = e.target;
-        if (!el || el.tagName !== "IMG" || el.__cdnRetried) return;
-        var src = el.currentSrc || el.src || "";
-        if (src.indexOf("/gh/") === -1) return;   // 不是加速地址就不管
-        el.__cdnRetried = true;
-        var local = src.replace(/^https?:\/\/[^/]+\/gh\/[^/]+\/[^@/]+@[^/]+\//, "/");
-        if (local !== src) el.src = local;
-    }, true);
 })();
 </script>
 <script>
