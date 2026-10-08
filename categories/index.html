@@ -97,7 +97,7 @@
         width: 40px;
     }
 }
-</style><link rel="stylesheet" href="/css/appearance.css?v=muzt6p49" /><script>
+</style><link rel="stylesheet" href="/css/appearance.css?v=muztfx3o" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -240,7 +240,8 @@
 }
 </style>
 <style>
-#gallery-page {
+#gallery-page,
+.album-view-page {
     margin: 30px 0 10px;
 }
 #gallery-page .gallery-empty {
@@ -252,11 +253,13 @@
     padding: 48px 24px;
     text-align: center;
 }
+
+/* ===== 标签筛选 ===== */
 #gallery-page .gallery-filter {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 26px;
+    margin-bottom: 24px;
 }
 #gallery-page .gallery-chip {
     background: var(--card);
@@ -285,93 +288,8 @@
 #gallery-page .gallery-chip.active em {
     color: #ffffffcc;
 }
-#gallery-page .gallery-album {
-    margin-bottom: 34px;
-}
-#gallery-page .gallery-album.hide {
-    display: none;
-}
-#gallery-page .album-head {
-    align-items: baseline;
-    border-left: 4px solid var(--tc-main, #66afef);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 8px;
-    padding-left: 10px;
-}
-#gallery-page .album-title {
-    font-size: 19px;
-    margin: 0;
-}
-#gallery-page .album-title i {
-    color: var(--tc-main, #66afef);
-    margin-right: 6px;
-}
-#gallery-page .album-count {
-    color: var(--text-mute);
-    font-size: 13px;
-}
-#gallery-page .album-tags {
-    color: var(--tc-main, #66afef);
-    font-size: 13px;
-}
-#gallery-page .album-desc {
-    color: var(--text-dim);
-    font-size: 13.5px;
-    line-height: 1.8;
-    margin: 0 0 12px 14px;
-}
-#gallery-page .gallery-grid {
-    column-gap: 12px;
-    columns: 4 200px;
-}
-#gallery-page .gallery-item {
-    background: var(--card);
-    border-radius: 12px;
-    box-shadow: 0 2px 10px var(--shadow);
-    break-inside: avoid;
-    cursor: pointer;
-    margin: 0 0 12px;
-    overflow: hidden;
-    padding: 0;
-    transition: box-shadow 0.25s, transform 0.25s;
-}
-#gallery-page .gallery-item:hover {
-    box-shadow: 0 6px 20px var(--shadow-strong);
-    transform: translateY(-3px);
-}
-#gallery-page .gallery-item img {
-    border-radius: 0;
-    display: block;
-    height: auto;
-    margin: 0;
-    max-width: 100% !important;
-    width: 100%;
-}
-#gallery-page .gallery-item figcaption {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 8px 10px 10px;
-}
-#gallery-page .gallery-item .gi-title {
-    color: var(--text);
-    font-size: 13px;
-    line-height: 1.5;
-}
-#gallery-page .gallery-item .gi-tags {
-    color: var(--tc-main, #66afef);
-    font-size: 11.5px;
-}
-#gallery-page .gallery-hint {
-    color: var(--text-mute);
-    font-size: 13px;
-    margin: 10px 0 30px;
-    text-align: center;
-}
 
-/* ===== 相册目录（一个相册一张卡片）===== */
+/* ===== 相册目录卡片 ===== */
 #gallery-page .album-grid {
     display: grid;
     gap: 16px;
@@ -382,13 +300,15 @@
     border: 1px solid var(--line);
     border-radius: 16px;
     box-shadow: 0 2px 10px var(--shadow);
-    cursor: pointer;
+    color: var(--text);
+    display: block;
     overflow: hidden;
     transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s;
 }
 #gallery-page .album-card:hover {
     border-color: var(--tc-main, #66afef);
     box-shadow: 0 8px 24px var(--shadow-strong);
+    opacity: 1;
     transform: translateY(-4px);
 }
 #gallery-page .album-card.hide {
@@ -397,6 +317,7 @@
 #gallery-page .album-cover {
     aspect-ratio: 16 / 9;
     background: var(--bg-soft);
+    cursor: pointer;
     overflow: hidden;
     position: relative;
 }
@@ -406,6 +327,9 @@
     margin: 0;
     max-width: none !important;
     object-fit: cover;
+    /* 让封面不接收点击：点哪都是点卡片本身（进相册），
+       也不会触发主题的「点图片放大」 */
+    pointer-events: none;
     transition: transform 0.4s;
     width: 100%;
 }
@@ -431,7 +355,12 @@
     right: 10px;
 }
 #gallery-page .album-body {
+    color: var(--text);
+    display: block;
     padding: 14px 16px 16px;
+}
+#gallery-page .album-body:hover {
+    opacity: 1;
 }
 #gallery-page .album-card .album-title {
     align-items: center;
@@ -467,63 +396,88 @@
     color: var(--tc-main, #66afef);
 }
 
-/* ===== 进入某个相册后的详情视图 ===== */
-#gallery-page .album-view[hidden] {
-    display: none;
+/* ===== 照片网格：按行排列（左到右、上到下）===== */
+.gallery-grid {
+    align-items: start;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
 }
-#gallery-page .album-view-head {
-    align-items: center;
-    border-bottom: 1px solid var(--line);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-}
-#gallery-page .album-view-title {
-    font-size: 20px;
+.gallery-item {
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px var(--shadow);
+    cursor: pointer;
     margin: 0;
+    overflow: hidden;
+    padding: 0;
+    transition: box-shadow 0.25s, transform 0.25s;
 }
-#gallery-page .album-count-text {
-    color: var(--text-mute);
+.gallery-item:hover {
+    box-shadow: 0 6px 20px var(--shadow-strong);
+    transform: translateY(-3px);
+}
+.gallery-item img {
+    border-radius: 0;
+    display: block;
+    height: auto;
+    margin: 0;
+    max-width: 100% !important;
+    width: 100%;
+}
+.gallery-item figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 10px 10px;
+}
+.gallery-item .gi-title {
+    color: var(--text);
     font-size: 13px;
+    line-height: 1.5;
 }
-#gallery-page .album-view-head .album-tags {
+.gallery-item .gi-tags {
     color: var(--tc-main, #66afef);
-    font-size: 13px;
+    font-size: 11.5px;
 }
-#gallery-page .album-back {
+
+/* ===== 相册子页面 ===== */
+.album-view-page .album-back {
     align-items: center;
     background: var(--bg-soft);
-    border: none;
     border-radius: 20px;
     color: var(--text-dim);
-    cursor: pointer;
     display: inline-flex;
-    font: 500 13px Lexend, "Noto Sans SC", sans-serif;
+    font-size: 13px;
     gap: 6px;
+    margin-bottom: 16px;
     padding: 6px 14px;
     transition: background 0.25s, color 0.25s;
 }
-#gallery-page .album-back:hover {
+.album-view-page .album-back:hover {
     background: var(--tc-main, #66afef);
     color: #fff;
+    opacity: 1;
 }
-#gallery-page .album-view .album-desc {
+.album-view-page .album-desc {
     color: var(--text-dim);
     font-size: 13.5px;
     line-height: 1.8;
     margin: 0 0 16px;
 }
+
+#gallery-page .gallery-hint {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin: 20px 0 30px;
+    text-align: center;
+}
 @media (max-width: 900px) {
-    #gallery-page .gallery-grid {
-        columns: 2 140px;
-    }
     #gallery-page .album-grid {
         grid-template-columns: 1fr;
     }
-    #gallery-page .album-card .album-title {
-        font-size: 17px;
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
 }
 </style>
@@ -546,6 +500,25 @@
 }
 </style>
 
+<style>
+.netease-player {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    width: 100%;
+}
+.netease-player-big {
+    max-width: 480px;
+}
+@media (max-width: 900px) {
+    .netease-player {
+        margin: 14px auto;
+    }
+}
+</style>
 <style>
 #projects-page .projects-empty,
 #projects-page .projects-note {
@@ -729,25 +702,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 @media (max-width: 900px) {
     #projects-page .projects-grid {
         grid-template-columns: 1fr;
-    }
-}
-</style>
-<style>
-.netease-player {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
-    display: block;
-    margin: 20px auto;
-    max-width: 100%;
-    width: 100%;
-}
-.netease-player-big {
-    max-width: 480px;
-}
-@media (max-width: 900px) {
-    .netease-player {
-        margin: 14px auto;
     }
 }
 </style>
@@ -1056,7 +1010,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
         
         
         <span>
-            <a href="/categories/%E5%BE%88%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%9C%E8%A5%BF/" style="background: #00a596">
+            <a href="/categories/%E5%BE%88%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%9C%E8%A5%BF/" style="background: #ff7d73">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>

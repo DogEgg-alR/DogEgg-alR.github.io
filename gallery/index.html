@@ -106,7 +106,7 @@
         width: 40px;
     }
 }
-</style><link rel="stylesheet" href="/css/appearance.css?v=muzt6p49" /><script>
+</style><link rel="stylesheet" href="/css/appearance.css?v=muztfx3o" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -249,7 +249,8 @@
 }
 </style>
 <style>
-#gallery-page {
+#gallery-page,
+.album-view-page {
     margin: 30px 0 10px;
 }
 #gallery-page .gallery-empty {
@@ -261,11 +262,13 @@
     padding: 48px 24px;
     text-align: center;
 }
+
+/* ===== 标签筛选 ===== */
 #gallery-page .gallery-filter {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 26px;
+    margin-bottom: 24px;
 }
 #gallery-page .gallery-chip {
     background: var(--card);
@@ -294,93 +297,8 @@
 #gallery-page .gallery-chip.active em {
     color: #ffffffcc;
 }
-#gallery-page .gallery-album {
-    margin-bottom: 34px;
-}
-#gallery-page .gallery-album.hide {
-    display: none;
-}
-#gallery-page .album-head {
-    align-items: baseline;
-    border-left: 4px solid var(--tc-main, #66afef);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 8px;
-    padding-left: 10px;
-}
-#gallery-page .album-title {
-    font-size: 19px;
-    margin: 0;
-}
-#gallery-page .album-title i {
-    color: var(--tc-main, #66afef);
-    margin-right: 6px;
-}
-#gallery-page .album-count {
-    color: var(--text-mute);
-    font-size: 13px;
-}
-#gallery-page .album-tags {
-    color: var(--tc-main, #66afef);
-    font-size: 13px;
-}
-#gallery-page .album-desc {
-    color: var(--text-dim);
-    font-size: 13.5px;
-    line-height: 1.8;
-    margin: 0 0 12px 14px;
-}
-#gallery-page .gallery-grid {
-    column-gap: 12px;
-    columns: 4 200px;
-}
-#gallery-page .gallery-item {
-    background: var(--card);
-    border-radius: 12px;
-    box-shadow: 0 2px 10px var(--shadow);
-    break-inside: avoid;
-    cursor: pointer;
-    margin: 0 0 12px;
-    overflow: hidden;
-    padding: 0;
-    transition: box-shadow 0.25s, transform 0.25s;
-}
-#gallery-page .gallery-item:hover {
-    box-shadow: 0 6px 20px var(--shadow-strong);
-    transform: translateY(-3px);
-}
-#gallery-page .gallery-item img {
-    border-radius: 0;
-    display: block;
-    height: auto;
-    margin: 0;
-    max-width: 100% !important;
-    width: 100%;
-}
-#gallery-page .gallery-item figcaption {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 8px 10px 10px;
-}
-#gallery-page .gallery-item .gi-title {
-    color: var(--text);
-    font-size: 13px;
-    line-height: 1.5;
-}
-#gallery-page .gallery-item .gi-tags {
-    color: var(--tc-main, #66afef);
-    font-size: 11.5px;
-}
-#gallery-page .gallery-hint {
-    color: var(--text-mute);
-    font-size: 13px;
-    margin: 10px 0 30px;
-    text-align: center;
-}
 
-/* ===== 相册目录（一个相册一张卡片）===== */
+/* ===== 相册目录卡片 ===== */
 #gallery-page .album-grid {
     display: grid;
     gap: 16px;
@@ -391,13 +309,15 @@
     border: 1px solid var(--line);
     border-radius: 16px;
     box-shadow: 0 2px 10px var(--shadow);
-    cursor: pointer;
+    color: var(--text);
+    display: block;
     overflow: hidden;
     transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s;
 }
 #gallery-page .album-card:hover {
     border-color: var(--tc-main, #66afef);
     box-shadow: 0 8px 24px var(--shadow-strong);
+    opacity: 1;
     transform: translateY(-4px);
 }
 #gallery-page .album-card.hide {
@@ -406,6 +326,7 @@
 #gallery-page .album-cover {
     aspect-ratio: 16 / 9;
     background: var(--bg-soft);
+    cursor: pointer;
     overflow: hidden;
     position: relative;
 }
@@ -415,6 +336,9 @@
     margin: 0;
     max-width: none !important;
     object-fit: cover;
+    /* 让封面不接收点击：点哪都是点卡片本身（进相册），
+       也不会触发主题的「点图片放大」 */
+    pointer-events: none;
     transition: transform 0.4s;
     width: 100%;
 }
@@ -440,7 +364,12 @@
     right: 10px;
 }
 #gallery-page .album-body {
+    color: var(--text);
+    display: block;
     padding: 14px 16px 16px;
+}
+#gallery-page .album-body:hover {
+    opacity: 1;
 }
 #gallery-page .album-card .album-title {
     align-items: center;
@@ -476,63 +405,88 @@
     color: var(--tc-main, #66afef);
 }
 
-/* ===== 进入某个相册后的详情视图 ===== */
-#gallery-page .album-view[hidden] {
-    display: none;
+/* ===== 照片网格：按行排列（左到右、上到下）===== */
+.gallery-grid {
+    align-items: start;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
 }
-#gallery-page .album-view-head {
-    align-items: center;
-    border-bottom: 1px solid var(--line);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-}
-#gallery-page .album-view-title {
-    font-size: 20px;
+.gallery-item {
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px var(--shadow);
+    cursor: pointer;
     margin: 0;
+    overflow: hidden;
+    padding: 0;
+    transition: box-shadow 0.25s, transform 0.25s;
 }
-#gallery-page .album-count-text {
-    color: var(--text-mute);
+.gallery-item:hover {
+    box-shadow: 0 6px 20px var(--shadow-strong);
+    transform: translateY(-3px);
+}
+.gallery-item img {
+    border-radius: 0;
+    display: block;
+    height: auto;
+    margin: 0;
+    max-width: 100% !important;
+    width: 100%;
+}
+.gallery-item figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 10px 10px;
+}
+.gallery-item .gi-title {
+    color: var(--text);
     font-size: 13px;
+    line-height: 1.5;
 }
-#gallery-page .album-view-head .album-tags {
+.gallery-item .gi-tags {
     color: var(--tc-main, #66afef);
-    font-size: 13px;
+    font-size: 11.5px;
 }
-#gallery-page .album-back {
+
+/* ===== 相册子页面 ===== */
+.album-view-page .album-back {
     align-items: center;
     background: var(--bg-soft);
-    border: none;
     border-radius: 20px;
     color: var(--text-dim);
-    cursor: pointer;
     display: inline-flex;
-    font: 500 13px Lexend, "Noto Sans SC", sans-serif;
+    font-size: 13px;
     gap: 6px;
+    margin-bottom: 16px;
     padding: 6px 14px;
     transition: background 0.25s, color 0.25s;
 }
-#gallery-page .album-back:hover {
+.album-view-page .album-back:hover {
     background: var(--tc-main, #66afef);
     color: #fff;
+    opacity: 1;
 }
-#gallery-page .album-view .album-desc {
+.album-view-page .album-desc {
     color: var(--text-dim);
     font-size: 13.5px;
     line-height: 1.8;
     margin: 0 0 16px;
 }
+
+#gallery-page .gallery-hint {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin: 20px 0 30px;
+    text-align: center;
+}
 @media (max-width: 900px) {
-    #gallery-page .gallery-grid {
-        columns: 2 140px;
-    }
     #gallery-page .album-grid {
         grid-template-columns: 1fr;
     }
-    #gallery-page .album-card .album-title {
-        font-size: 17px;
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
 }
 </style>
@@ -555,6 +509,25 @@
 }
 </style>
 
+<style>
+.netease-player {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    width: 100%;
+}
+.netease-player-big {
+    max-width: 480px;
+}
+@media (max-width: 900px) {
+    .netease-player {
+        margin: 14px auto;
+    }
+}
+</style>
 <style>
 #projects-page .projects-empty,
 #projects-page .projects-note {
@@ -738,25 +711,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 @media (max-width: 900px) {
     #projects-page .projects-grid {
         grid-template-columns: 1fr;
-    }
-}
-</style>
-<style>
-.netease-player {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
-    display: block;
-    margin: 20px auto;
-    max-width: 100%;
-    width: 100%;
-}
-.netease-player-big {
-    max-width: 480px;
-}
-@media (max-width: 900px) {
-    .netease-player {
-        margin: 14px auto;
     }
 }
 </style>
@@ -1075,7 +1029,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     
     <div class="content" v-pre>
         <p>这里放一些照片、截图和乱七八糟的图。</p>
-<div id="gallery-page"><div class="gallery-filter"><span class="gallery-chip active" data-tag="__all__">全部 <em>19</em></span><span class="gallery-chip" data-tag="冰与火之舞">冰与火之舞 <em>1</em></span><span class="gallery-chip" data-tag="查分">查分 <em>1</em></span><span class="gallery-chip" data-tag="初见">初见 <em>1</em></span><span class="gallery-chip" data-tag="范式起源">范式起源 <em>1</em></span><span class="gallery-chip" data-tag="节奏大师">节奏大师 <em>1</em></span><span class="gallery-chip" data-tag="截图">截图 <em>2</em></span><span class="gallery-chip" data-tag="收歌">收歌 <em>1</em></span><span class="gallery-chip" data-tag="蔚蓝">蔚蓝 <em>1</em></span><span class="gallery-chip" data-tag="音游">音游 <em>1</em></span><span class="gallery-chip" data-tag="Arcaea">Arcaea <em>1</em></span><span class="gallery-chip" data-tag="IWBTC">IWBTC <em>1</em></span><span class="gallery-chip" data-tag="Osu!">Osu! <em>1</em></span><span class="gallery-chip" data-tag="Phigros">Phigros <em>1</em></span><span class="gallery-chip" data-tag="Rizline">Rizline <em>1</em></span><span class="gallery-chip" data-tag="Siglota">Siglota <em>1</em></span><span class="gallery-chip" data-tag="vivid/stasis">vivid/stasis <em>1</em></span><span class="gallery-chip" data-tag="WAVEAT">WAVEAT <em>1</em></span></div><div class="album-grid" id="album-index"><div class="album-card" data-album="MUG" data-index="0" data-filter-tags="音游,截图,冰与火之舞,Arcaea,查分,Phigros,收歌,范式起源,初见,节奏大师,WAVEAT,Osu!,Rizline,Siglota,vivid/stasis"><div class="album-cover"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/%E5%86%B0%E4%B8%8E%E7%81%AB%20%E5%9C%9F%E8%80%B3%E5%85%B6%E8%BF%9B%E8%A1%8C%E6%9B%B2.png" alt="MUG" loading="lazy" /><span class="album-count">14 张</span></div><div class="album-body"><h2 class="album-title"><span>MUG</span><i class="fa-solid fa-arrow-right fa-fw"></i></h2><div class="album-desc">一些音游的查分图和成绩图</div><div class="album-meta"><span class="album-tags">#音游 #截图</span></div></div></div><div class="album-card" data-album="平台跳跃" data-index="1" data-filter-tags="蔚蓝,IWBTC,截图"><div class="album-cover"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/Celeste%207B.png" alt="平台跳跃" loading="lazy" /><span class="album-count">5 张</span></div><div class="album-body"><h2 class="album-title"><span>平台跳跃</span><i class="fa-solid fa-arrow-right fa-fw"></i></h2><div class="album-desc">一些平台跳跃游戏的截图，蔚蓝，i wanna等等</div><div class="album-meta"><span class="album-tags">#蔚蓝 #IWBTC #截图</span></div></div></div></div><section class="album-view" data-album="MUG" data-index="0" hidden><div class="album-view-head"><button type="button" class="album-back"><i class="fa-solid fa-arrow-left fa-fw"></i>相册</button><h2 class="album-view-title">MUG</h2><span class="album-count-text">14 张</span><span class="album-tags">#音游 #截图</span></div><div class="album-desc">一些音游的查分图和成绩图</div><div class="gallery-grid"><figure class="gallery-item" data-tags="冰与火之舞"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/%E5%86%B0%E4%B8%8E%E7%81%AB%20%E5%9C%9F%E8%80%B3%E5%85%B6%E8%BF%9B%E8%A1%8C%E6%9B%B2.png" alt="冰与火 土耳其进行曲" loading="lazy" /><figcaption><span class="gi-title">冰与火 土耳其进行曲</span><span class="gi-tags">#冰与火之舞</span></figcaption></figure><figure class="gallery-item" data-tags="Arcaea,查分"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Arc%E6%9F%A5%E5%88%86%E5%9B%BE.png" alt="Arcaea的查分图" loading="lazy" /><figcaption><span class="gi-title">Arcaea的查分图</span><span class="gi-tags">#Arcaea #查分</span></figcaption></figure><figure class="gallery-item" data-tags="Phigros,收歌"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%20321%20AT%20%E6%94%B6.png" alt="321收歌" loading="lazy" /><figcaption><span class="gi-title">321收歌</span><span class="gi-tags">#Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-tags="Phigros,收歌"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%20%E6%B3%A2%E5%A1%9E%E5%86%AC%20AT%20%E6%94%B6.png" alt="波塞冬收歌" loading="lazy" /><figcaption><span class="gi-title">波塞冬收歌</span><span class="gi-tags">#Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-tags="Phigros,收歌"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%20Ark%20AT%20%E6%94%B6.png" alt="Ark收歌" loading="lazy" /><figcaption><span class="gi-title">Ark收歌</span><span class="gi-tags">#Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-tags="范式起源,Phigros,初见,收歌"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E4%BE%A7%20NWAD%E5%88%9D%E8%A7%81%E6%94%B6.png" alt="NWAD（Phi侧）初见收" loading="lazy" /><figcaption><span class="gi-title">NWAD（Phi侧）初见收</span><span class="gi-tags">#范式起源 #Phigros #初见 #收歌</span></figcaption></figure><figure class="gallery-item" data-tags="节奏大师,Phigros,收歌"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E4%BE%A7%20PLEASE%20AT%E6%94%B6.png" alt="PLEASE（Phi侧）收歌" loading="lazy" /><figcaption><span class="gi-title">PLEASE（Phi侧）收歌</span><span class="gi-tags">#节奏大师 #Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-tags="WAVEAT,Phigros,收歌"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E4%BE%A7%20Volcanic%20AT%E6%94%B6.png" alt="Volcanic（Phi侧）收歌" loading="lazy" /><figcaption><span class="gi-title">Volcanic（Phi侧）收歌</span><span class="gi-tags">#WAVEAT #Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-tags="Phigros,查分"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E6%9F%A5%E5%88%86%E5%9B%BE.png" alt="Phigros的查分图" loading="lazy" /><figcaption><span class="gi-title">Phigros的查分图</span><span class="gi-tags">#Phigros #查分</span></figcaption></figure><figure class="gallery-item" data-tags="Osu!"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/rf4dan%E5%88%87%E4%BA%8C%E8%A7%81.png" alt="rf4dan切谱二见" loading="lazy" /><figcaption><span class="gi-title">rf4dan切谱二见</span><span class="gi-tags">#Osu!</span></figcaption></figure><figure class="gallery-item" data-tags="Osu!,初见"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/rf5dan%E5%88%87%E5%88%9D%E8%A7%81.png" alt="rf5dan切谱初见" loading="lazy" /><figcaption><span class="gi-title">rf5dan切谱初见</span><span class="gi-tags">#Osu! #初见</span></figcaption></figure><figure class="gallery-item" data-tags="Rizline,收歌"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Riz%20Power%20Attack%20%E6%94%B6%20%E6%9C%AA%E7%90%86%E8%AE%BA.png" alt="Power Attack收歌，未理论" loading="lazy" /><figcaption><span class="gi-title">Power Attack收歌，未理论</span><span class="gi-tags">#Rizline #收歌</span></figcaption></figure><figure class="gallery-item" data-tags="Siglota,收歌"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Sig%20ToxicUL%E5%AE%BD%E5%88%A4%E8%87%AA%E5%81%9A%E8%87%AA%E6%94%B610%E5%B0%8F.png" alt="Siglota Toxic UL宽判自做自收，10小" loading="lazy" /><figcaption><span class="gi-title">Siglota Toxic UL宽判自做自收，10小</span><span class="gi-tags">#Siglota #收歌</span></figcaption></figure><figure class="gallery-item" data-tags="vivid/stasis,查分"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/vs%E6%9F%A5%E5%88%86%E5%9B%BE.jpg" alt="vivid/stasis的查分图" loading="lazy" /><figcaption><span class="gi-title">vivid/stasis的查分图</span><span class="gi-tags">#vivid/stasis #查分</span></figcaption></figure></div></section><section class="album-view" data-album="平台跳跃" data-index="1" hidden><div class="album-view-head"><button type="button" class="album-back"><i class="fa-solid fa-arrow-left fa-fw"></i>相册</button><h2 class="album-view-title">平台跳跃</h2><span class="album-count-text">5 张</span><span class="album-tags">#蔚蓝 #IWBTC #截图</span></div><div class="album-desc">一些平台跳跃游戏的截图，蔚蓝，i wanna等等</div><div class="gallery-grid"><figure class="gallery-item" data-tags="蔚蓝"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/Celeste%207B.png" alt="蔚蓝7B通过" loading="lazy" /><figcaption><span class="gi-title">蔚蓝7B通过</span><span class="gi-tags">#蔚蓝</span></figcaption></figure><figure class="gallery-item" data-tags="蔚蓝"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/Celeste%20%E6%97%A0%E5%86%B2%E9%87%91.jpg" alt="蔚蓝无冲金获得" loading="lazy" /><figcaption><span class="gi-title">蔚蓝无冲金获得</span><span class="gi-tags">#蔚蓝</span></figcaption></figure><figure class="gallery-item" data-tags="IWBTC"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/IWBTC%202023%E6%98%A5%E8%8A%82%E6%8C%91%E6%88%98%E9%80%9A%E8%BF%87.png" alt="IWBTC 2023春节挑战通过" loading="lazy" /><figcaption><span class="gi-title">IWBTC 2023春节挑战通过</span><span class="gi-tags">#IWBTC</span></figcaption></figure><figure class="gallery-item" data-tags="IWBTC"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/IWBTC%20Abnegate%E9%80%9A%E8%BF%87.png" alt="IWBTC Abnegate通过" loading="lazy" /><figcaption><span class="gi-title">IWBTC Abnegate通过</span><span class="gi-tags">#IWBTC</span></figcaption></figure><figure class="gallery-item" data-tags="IWBTC"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/IWBTC%20NANG%E5%A4%8D%E5%88%BB%E9%80%9A%E8%BF%87.png" alt="IWBTC NANG复刻通过" loading="lazy" /><figcaption><span class="gi-title">IWBTC NANG复刻通过</span><span class="gi-tags">#IWBTC</span></figcaption></figure></div></section><div class="gallery-hint"><i class="fa-solid fa-circle-info fa-fw"></i> 点相册卡片进入，点照片可以放大查看</div></div>
+<div id="gallery-page"><div class="gallery-filter"><span class="gallery-chip active" data-tag="__all__">全部 <em>19</em></span><span class="gallery-chip" data-tag="冰与火之舞">冰与火之舞 <em>1</em></span><span class="gallery-chip" data-tag="查分">查分 <em>1</em></span><span class="gallery-chip" data-tag="初见">初见 <em>1</em></span><span class="gallery-chip" data-tag="范式起源">范式起源 <em>1</em></span><span class="gallery-chip" data-tag="节奏大师">节奏大师 <em>1</em></span><span class="gallery-chip" data-tag="截图">截图 <em>2</em></span><span class="gallery-chip" data-tag="收歌">收歌 <em>1</em></span><span class="gallery-chip" data-tag="蔚蓝">蔚蓝 <em>1</em></span><span class="gallery-chip" data-tag="音游">音游 <em>1</em></span><span class="gallery-chip" data-tag="Arcaea">Arcaea <em>1</em></span><span class="gallery-chip" data-tag="IWBTC">IWBTC <em>1</em></span><span class="gallery-chip" data-tag="Osu!">Osu! <em>1</em></span><span class="gallery-chip" data-tag="Phigros">Phigros <em>1</em></span><span class="gallery-chip" data-tag="Rizline">Rizline <em>1</em></span><span class="gallery-chip" data-tag="Siglota">Siglota <em>1</em></span><span class="gallery-chip" data-tag="vivid/stasis">vivid/stasis <em>1</em></span><span class="gallery-chip" data-tag="WAVEAT">WAVEAT <em>1</em></span></div><div class="album-grid"><a class="album-card" href="/gallery/MUG/" data-filter-tags="音游,截图,冰与火之舞,Arcaea,查分,Phigros,收歌,范式起源,初见,节奏大师,WAVEAT,Osu!,Rizline,Siglota,vivid/stasis"><div class="album-cover"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/%E5%86%B0%E4%B8%8E%E7%81%AB%20%E5%9C%9F%E8%80%B3%E5%85%B6%E8%BF%9B%E8%A1%8C%E6%9B%B2.png" alt="MUG" loading="lazy" /><span class="album-count">14 张</span></div><div class="album-body"><h2 class="album-title"><span>MUG</span><i class="fa-solid fa-arrow-right fa-fw"></i></h2><div class="album-desc">一些音游的查分图和成绩图</div><div class="album-meta"><span class="album-tags">#音游 #截图</span></div></div></a><a class="album-card" href="/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/" data-filter-tags="蔚蓝,IWBTC,截图"><div class="album-cover"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/Celeste%207B.png" alt="平台跳跃" loading="lazy" /><span class="album-count">5 张</span></div><div class="album-body"><h2 class="album-title"><span>平台跳跃</span><i class="fa-solid fa-arrow-right fa-fw"></i></h2><div class="album-desc">一些平台跳跃游戏的截图，蔚蓝，i wanna等等</div><div class="album-meta"><span class="album-tags">#蔚蓝 #IWBTC #截图</span></div></div></a></div><div class="gallery-hint"><i class="fa-solid fa-circle-info fa-fw"></i> 点相册卡片进入查看照片</div></div>
 
     </div>
     
@@ -2121,67 +2075,19 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 
     var chips = page.querySelectorAll(".gallery-chip");
     var cards = page.querySelectorAll(".album-card");
-    var views = page.querySelectorAll(".album-view");
-    var index = document.getElementById("album-index");
 
-    /* --- 标签筛选：筛的是相册卡片 --- */
-    function applyTag(tag) {
-        cards.forEach(function (card) {
-            var tags = (card.getAttribute("data-filter-tags") || "").split(",");
-            var hit = tag === "__all__" || tags.indexOf(tag) >= 0;
-            card.classList.toggle("hide", !hit);
-        });
-    }
     chips.forEach(function (chip) {
         chip.addEventListener("click", function () {
             chips.forEach(function (c) { c.classList.remove("active"); });
             chip.classList.add("active");
-            applyTag(chip.getAttribute("data-tag"));
-        });
-    });
-
-    /* --- 进入 / 退出相册 --- */
-    function openAlbum(index0, pushHash) {
-        views.forEach(function (v) {
-            v.hidden = v.getAttribute("data-index") !== String(index0);
-        });
-        if (index) index.hidden = true;
-        if (pushHash !== false) {
-            var name = "";
-            cards.forEach(function (c) {
-                if (c.getAttribute("data-index") === String(index0)) name = c.getAttribute("data-album");
+            var tag = chip.getAttribute("data-tag");
+            cards.forEach(function (card) {
+                var tags = (card.getAttribute("data-filter-tags") || "").split(",");
+                var hit = tag === "__all__" || tags.indexOf(tag) >= 0;
+                card.classList.toggle("hide", !hit);
             });
-            try { history.replaceState(null, "", "#相册=" + encodeURIComponent(name)); } catch (e) {}
-        }
-        window.scrollTo({ top: Math.max(0, page.offsetTop - 70), behavior: "smooth" });
-    }
-
-    function closeAlbum() {
-        views.forEach(function (v) { v.hidden = true; });
-        if (index) index.hidden = false;
-        try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
-    }
-
-    cards.forEach(function (card) {
-        card.addEventListener("click", function () {
-            openAlbum(card.getAttribute("data-index"));
         });
     });
-    page.querySelectorAll(".album-back").forEach(function (btn) {
-        btn.addEventListener("click", closeAlbum);
-    });
-
-    /* --- 支持用链接直接打开某个相册：/gallery/#相册=MUG --- */
-    function fromHash() {
-        var h = decodeURIComponent(location.hash.replace(/^#/, ""));
-        if (h.indexOf("相册=") !== 0) return;
-        var name = h.slice(3);
-        cards.forEach(function (c) {
-            if (c.getAttribute("data-album") === name) openAlbum(c.getAttribute("data-index"), false);
-        });
-    }
-    window.addEventListener("hashchange", fromHash);
-    fromHash();
 })();
 </script></body>
 </html>
