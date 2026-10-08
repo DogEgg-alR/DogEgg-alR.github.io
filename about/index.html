@@ -55,69 +55,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=muzppm8e" /><script>
-(function () {
-
-    var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
-    var SCHEMES = [{"key":"tonal-spot","name":"柔和同色","en":"Tonal Spot","sat":45,"light":62,"altH":60,"altSat":42,"altLight":72},{"key":"vibrant","name":"鲜艳","en":"Vibrant","sat":88,"light":58,"altH":120,"altSat":85,"altLight":70},{"key":"content","name":"内容取色","en":"Content","sat":38,"light":64,"altH":35,"altSat":36,"altLight":74},{"key":"expressive","name":"张扬撞色","en":"Expressive","sat":66,"light":60,"altH":180,"altSat":72,"altLight":68},{"key":"rainbow","name":"彩虹","en":"Rainbow","sat":82,"light":62,"altH":200,"altSat":82,"altLight":66},{"key":"fruit-salad","name":"果色拼盘","en":"Fruit Salad","sat":74,"light":60,"altH":-60,"altSat":78,"altLight":66},{"key":"monochrome","name":"单色","en":"Monochrome","sat":6,"light":55,"altH":0,"altSat":6,"altLight":64},{"key":"neutral","name":"中性","en":"Neutral","sat":18,"light":58,"altH":20,"altSat":16,"altLight":68},{"key":"fidelity","name":"原色保真","en":"Fidelity","sat":81,"light":67,"altH":100,"altSat":100,"altLight":87}];
-    var TEXTURES = [{"key":"none","name":"无纹理","icon":"ban"},{"key":"starburst","name":"星芒光斑","icon":"wand-magic-sparkles"},{"key":"dots","name":"极客点阵","icon":"braille"},{"key":"contour","name":"流光等高线","icon":"water"},{"key":"crystal","name":"几何晶体","icon":"shapes"},{"key":"petal","name":"落樱微瓣","icon":"spa"}];
-    var KEY = "blogAppearance";
-    function loadCfg() {
-        var saved = {};
-        try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
-        var cfg = {};
-        for (var k in DEFAULTS) cfg[k] = Object.prototype.hasOwnProperty.call(saved, k) ? saved[k] : DEFAULTS[k];
-        if (cfg.mode !== "system" && cfg.mode !== "dark") cfg.mode = "light";
-        if (typeof cfg.hue !== "number" || isNaN(cfg.hue)) cfg.hue = DEFAULTS.hue;
-        cfg.hue = ((Math.round(cfg.hue) % 360) + 360) % 360;
-        return cfg;
-    }
-    function saveCfg(cfg) {
-        try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch (e) {}
-    }
-    function schemeOf(key) {
-        for (var i = 0; i < SCHEMES.length; i++) if (SCHEMES[i].key === key) return SCHEMES[i];
-        return SCHEMES[SCHEMES.length - 1];
-    }
-    function resolveMode(mode) {
-        if (mode !== "system") return mode;
-        return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    }
-    function clampPct(v) { return Math.max(0, Math.min(100, v)); }
-    function schemeColors(cfg) {
-        var s = schemeOf(cfg.scheme);
-        var h = cfg.hue;
-        return [
-            "hsl(" + h + ", " + clampPct(s.sat) + "%, " + clampPct(s.light) + "%)",
-            "hsl(" + (h + Math.round(s.altH / 2)) + ", " + clampPct(s.altSat * 0.8) + "%, " + clampPct(s.light + 8) + "%)",
-            "hsl(" + (h + s.altH) + ", " + clampPct(s.altSat) + "%, " + clampPct(s.altLight) + "%)"
-        ];
-    }
-    /* 把设置应用到 <html> 上 */
-    function applyCfg(cfg) {
-        var html = document.documentElement;
-        var s = schemeOf(cfg.scheme);
-        html.style.setProperty("--hue", String(cfg.hue));
-        html.style.setProperty("--scheme-sat", clampPct(s.sat) + "%");
-        html.style.setProperty("--scheme-light", clampPct(s.light) + "%");
-        html.style.setProperty("--scheme-alt-h", String(s.altH));
-        html.style.setProperty("--scheme-alt-sat", clampPct(s.altSat) + "%");
-        html.style.setProperty("--scheme-alt-light", clampPct(s.altLight) + "%");
-        html.setAttribute("data-spec", cfg.spec === "m3e" ? "m3e" : "md3");
-        html.setAttribute("data-mode", resolveMode(cfg.mode));
-        html.setAttribute("data-bg", cfg.bg === "plain" ? "plain" : "banner");
-        html.setAttribute("data-layout", cfg.layout === "grid" ? "grid" : "list");
-        html.setAttribute("data-texture", cfg.texture || "none");
-        html.setAttribute("data-motion", cfg.motion === "reduced" ? "reduced" : "full");
-    }
-    var cfg = loadCfg();
-    if (!localStorage.getItem(KEY) && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        cfg.motion = "reduced";
-    }
-    applyCfg(cfg);
-    window.__appearanceCfg = cfg;
-})();
-</script>
+<!-- hexo injector head_end start -->
 <style>
 #back-to-top {
     align-items: center;
@@ -247,7 +185,69 @@
         grid-template-columns: 1fr;
     }
 }
-</style>
+</style><link rel="stylesheet" href="/css/appearance.css?v=muzqvmj0" /><script>
+(function () {
+
+    var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
+    var SCHEMES = [{"key":"tonal-spot","name":"柔和同色","en":"Tonal Spot","sat":45,"light":62,"altH":60,"altSat":42,"altLight":72},{"key":"vibrant","name":"鲜艳","en":"Vibrant","sat":88,"light":58,"altH":120,"altSat":85,"altLight":70},{"key":"content","name":"内容取色","en":"Content","sat":38,"light":64,"altH":35,"altSat":36,"altLight":74},{"key":"expressive","name":"张扬撞色","en":"Expressive","sat":66,"light":60,"altH":180,"altSat":72,"altLight":68},{"key":"rainbow","name":"彩虹","en":"Rainbow","sat":82,"light":62,"altH":200,"altSat":82,"altLight":66},{"key":"fruit-salad","name":"果色拼盘","en":"Fruit Salad","sat":74,"light":60,"altH":-60,"altSat":78,"altLight":66},{"key":"monochrome","name":"单色","en":"Monochrome","sat":6,"light":55,"altH":0,"altSat":6,"altLight":64},{"key":"neutral","name":"中性","en":"Neutral","sat":18,"light":58,"altH":20,"altSat":16,"altLight":68},{"key":"fidelity","name":"原色保真","en":"Fidelity","sat":81,"light":67,"altH":100,"altSat":100,"altLight":87}];
+    var TEXTURES = [{"key":"none","name":"无纹理","icon":"ban"},{"key":"starburst","name":"星芒光斑","icon":"wand-magic-sparkles"},{"key":"dots","name":"极客点阵","icon":"braille"},{"key":"contour","name":"流光等高线","icon":"water"},{"key":"crystal","name":"几何晶体","icon":"shapes"},{"key":"petal","name":"落樱微瓣","icon":"spa"}];
+    var KEY = "blogAppearance";
+    function loadCfg() {
+        var saved = {};
+        try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+        var cfg = {};
+        for (var k in DEFAULTS) cfg[k] = Object.prototype.hasOwnProperty.call(saved, k) ? saved[k] : DEFAULTS[k];
+        if (cfg.mode !== "system" && cfg.mode !== "dark") cfg.mode = "light";
+        if (typeof cfg.hue !== "number" || isNaN(cfg.hue)) cfg.hue = DEFAULTS.hue;
+        cfg.hue = ((Math.round(cfg.hue) % 360) + 360) % 360;
+        return cfg;
+    }
+    function saveCfg(cfg) {
+        try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch (e) {}
+    }
+    function schemeOf(key) {
+        for (var i = 0; i < SCHEMES.length; i++) if (SCHEMES[i].key === key) return SCHEMES[i];
+        return SCHEMES[SCHEMES.length - 1];
+    }
+    function resolveMode(mode) {
+        if (mode !== "system") return mode;
+        return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    function clampPct(v) { return Math.max(0, Math.min(100, v)); }
+    function schemeColors(cfg) {
+        var s = schemeOf(cfg.scheme);
+        var h = cfg.hue;
+        return [
+            "hsl(" + h + ", " + clampPct(s.sat) + "%, " + clampPct(s.light) + "%)",
+            "hsl(" + (h + Math.round(s.altH / 2)) + ", " + clampPct(s.altSat * 0.8) + "%, " + clampPct(s.light + 8) + "%)",
+            "hsl(" + (h + s.altH) + ", " + clampPct(s.altSat) + "%, " + clampPct(s.altLight) + "%)"
+        ];
+    }
+    /* 把设置应用到 <html> 上 */
+    function applyCfg(cfg) {
+        var html = document.documentElement;
+        var s = schemeOf(cfg.scheme);
+        html.style.setProperty("--hue", String(cfg.hue));
+        html.style.setProperty("--scheme-sat", clampPct(s.sat) + "%");
+        html.style.setProperty("--scheme-light", clampPct(s.light) + "%");
+        html.style.setProperty("--scheme-alt-h", String(s.altH));
+        html.style.setProperty("--scheme-alt-sat", clampPct(s.altSat) + "%");
+        html.style.setProperty("--scheme-alt-light", clampPct(s.altLight) + "%");
+        html.setAttribute("data-spec", cfg.spec === "m3e" ? "m3e" : "md3");
+        html.setAttribute("data-mode", resolveMode(cfg.mode));
+        html.setAttribute("data-bg", cfg.bg === "plain" ? "plain" : "banner");
+        html.setAttribute("data-layout", cfg.layout === "grid" ? "grid" : "list");
+        html.setAttribute("data-texture", cfg.texture || "none");
+        html.setAttribute("data-motion", cfg.motion === "reduced" ? "reduced" : "full");
+    }
+    var cfg = loadCfg();
+    if (!localStorage.getItem(KEY) && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        cfg.motion = "reduced";
+    }
+    applyCfg(cfg);
+    window.__appearanceCfg = cfg;
+})();
+</script>
 <style>
 #gallery-page {
     margin: 30px 0 10px;
@@ -587,6 +587,25 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 @media (max-width: 900px) {
     #projects-page .projects-grid {
         grid-template-columns: 1fr;
+    }
+}
+</style>
+<style>
+.netease-player {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    width: 100%;
+}
+.netease-player-big {
+    max-width: 480px;
+}
+@media (max-width: 900px) {
+    .netease-player {
+        margin: 14px auto;
     }
 }
 </style>
@@ -941,6 +960,40 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     <script src="/js/main.js"></script>
     
 <!-- hexo injector body_end start -->
+<script>
+(function () {
+    if (window.__backToTopStarted) return;
+    window.__backToTopStarted = true;
+
+    var SHOW_AFTER = 400;
+    var btn = document.createElement("div");
+    btn.id = "back-to-top";
+    btn.title = "回到顶部";
+    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
+    document.body.appendChild(btn);
+
+    var shown = false;
+    function scrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+    function update() {
+        var on = scrollTop() > SHOW_AFTER;
+        if (on === shown) return;
+        shown = on;
+        btn.classList.toggle("show", on);
+    }
+    btn.addEventListener("click", function () {
+        try {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (e) {
+            window.scrollTo(0, 0);
+        }
+    });
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+})();
+</script>
 <script>
 (function () {
 
@@ -1349,40 +1402,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
     else init();
-})();
-</script>
-<script>
-(function () {
-    if (window.__backToTopStarted) return;
-    window.__backToTopStarted = true;
-
-    var SHOW_AFTER = 400;
-    var btn = document.createElement("div");
-    btn.id = "back-to-top";
-    btn.title = "回到顶部";
-    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
-    document.body.appendChild(btn);
-
-    var shown = false;
-    function scrollTop() {
-        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    }
-    function update() {
-        var on = scrollTop() > SHOW_AFTER;
-        if (on === shown) return;
-        shown = on;
-        btn.classList.toggle("show", on);
-    }
-    btn.addEventListener("click", function () {
-        try {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        } catch (e) {
-            window.scrollTo(0, 0);
-        }
-    });
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
 })();
 </script>
 <script>

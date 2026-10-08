@@ -48,69 +48,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=muzppm8e" /><script>
-(function () {
-
-    var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
-    var SCHEMES = [{"key":"tonal-spot","name":"柔和同色","en":"Tonal Spot","sat":45,"light":62,"altH":60,"altSat":42,"altLight":72},{"key":"vibrant","name":"鲜艳","en":"Vibrant","sat":88,"light":58,"altH":120,"altSat":85,"altLight":70},{"key":"content","name":"内容取色","en":"Content","sat":38,"light":64,"altH":35,"altSat":36,"altLight":74},{"key":"expressive","name":"张扬撞色","en":"Expressive","sat":66,"light":60,"altH":180,"altSat":72,"altLight":68},{"key":"rainbow","name":"彩虹","en":"Rainbow","sat":82,"light":62,"altH":200,"altSat":82,"altLight":66},{"key":"fruit-salad","name":"果色拼盘","en":"Fruit Salad","sat":74,"light":60,"altH":-60,"altSat":78,"altLight":66},{"key":"monochrome","name":"单色","en":"Monochrome","sat":6,"light":55,"altH":0,"altSat":6,"altLight":64},{"key":"neutral","name":"中性","en":"Neutral","sat":18,"light":58,"altH":20,"altSat":16,"altLight":68},{"key":"fidelity","name":"原色保真","en":"Fidelity","sat":81,"light":67,"altH":100,"altSat":100,"altLight":87}];
-    var TEXTURES = [{"key":"none","name":"无纹理","icon":"ban"},{"key":"starburst","name":"星芒光斑","icon":"wand-magic-sparkles"},{"key":"dots","name":"极客点阵","icon":"braille"},{"key":"contour","name":"流光等高线","icon":"water"},{"key":"crystal","name":"几何晶体","icon":"shapes"},{"key":"petal","name":"落樱微瓣","icon":"spa"}];
-    var KEY = "blogAppearance";
-    function loadCfg() {
-        var saved = {};
-        try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
-        var cfg = {};
-        for (var k in DEFAULTS) cfg[k] = Object.prototype.hasOwnProperty.call(saved, k) ? saved[k] : DEFAULTS[k];
-        if (cfg.mode !== "system" && cfg.mode !== "dark") cfg.mode = "light";
-        if (typeof cfg.hue !== "number" || isNaN(cfg.hue)) cfg.hue = DEFAULTS.hue;
-        cfg.hue = ((Math.round(cfg.hue) % 360) + 360) % 360;
-        return cfg;
-    }
-    function saveCfg(cfg) {
-        try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch (e) {}
-    }
-    function schemeOf(key) {
-        for (var i = 0; i < SCHEMES.length; i++) if (SCHEMES[i].key === key) return SCHEMES[i];
-        return SCHEMES[SCHEMES.length - 1];
-    }
-    function resolveMode(mode) {
-        if (mode !== "system") return mode;
-        return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    }
-    function clampPct(v) { return Math.max(0, Math.min(100, v)); }
-    function schemeColors(cfg) {
-        var s = schemeOf(cfg.scheme);
-        var h = cfg.hue;
-        return [
-            "hsl(" + h + ", " + clampPct(s.sat) + "%, " + clampPct(s.light) + "%)",
-            "hsl(" + (h + Math.round(s.altH / 2)) + ", " + clampPct(s.altSat * 0.8) + "%, " + clampPct(s.light + 8) + "%)",
-            "hsl(" + (h + s.altH) + ", " + clampPct(s.altSat) + "%, " + clampPct(s.altLight) + "%)"
-        ];
-    }
-    /* 把设置应用到 <html> 上 */
-    function applyCfg(cfg) {
-        var html = document.documentElement;
-        var s = schemeOf(cfg.scheme);
-        html.style.setProperty("--hue", String(cfg.hue));
-        html.style.setProperty("--scheme-sat", clampPct(s.sat) + "%");
-        html.style.setProperty("--scheme-light", clampPct(s.light) + "%");
-        html.style.setProperty("--scheme-alt-h", String(s.altH));
-        html.style.setProperty("--scheme-alt-sat", clampPct(s.altSat) + "%");
-        html.style.setProperty("--scheme-alt-light", clampPct(s.altLight) + "%");
-        html.setAttribute("data-spec", cfg.spec === "m3e" ? "m3e" : "md3");
-        html.setAttribute("data-mode", resolveMode(cfg.mode));
-        html.setAttribute("data-bg", cfg.bg === "plain" ? "plain" : "banner");
-        html.setAttribute("data-layout", cfg.layout === "grid" ? "grid" : "list");
-        html.setAttribute("data-texture", cfg.texture || "none");
-        html.setAttribute("data-motion", cfg.motion === "reduced" ? "reduced" : "full");
-    }
-    var cfg = loadCfg();
-    if (!localStorage.getItem(KEY) && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        cfg.motion = "reduced";
-    }
-    applyCfg(cfg);
-    window.__appearanceCfg = cfg;
-})();
-</script>
+<!-- hexo injector head_end start -->
 <style>
 #back-to-top {
     align-items: center;
@@ -240,7 +178,69 @@
         grid-template-columns: 1fr;
     }
 }
-</style>
+</style><link rel="stylesheet" href="/css/appearance.css?v=muzqvmj0" /><script>
+(function () {
+
+    var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
+    var SCHEMES = [{"key":"tonal-spot","name":"柔和同色","en":"Tonal Spot","sat":45,"light":62,"altH":60,"altSat":42,"altLight":72},{"key":"vibrant","name":"鲜艳","en":"Vibrant","sat":88,"light":58,"altH":120,"altSat":85,"altLight":70},{"key":"content","name":"内容取色","en":"Content","sat":38,"light":64,"altH":35,"altSat":36,"altLight":74},{"key":"expressive","name":"张扬撞色","en":"Expressive","sat":66,"light":60,"altH":180,"altSat":72,"altLight":68},{"key":"rainbow","name":"彩虹","en":"Rainbow","sat":82,"light":62,"altH":200,"altSat":82,"altLight":66},{"key":"fruit-salad","name":"果色拼盘","en":"Fruit Salad","sat":74,"light":60,"altH":-60,"altSat":78,"altLight":66},{"key":"monochrome","name":"单色","en":"Monochrome","sat":6,"light":55,"altH":0,"altSat":6,"altLight":64},{"key":"neutral","name":"中性","en":"Neutral","sat":18,"light":58,"altH":20,"altSat":16,"altLight":68},{"key":"fidelity","name":"原色保真","en":"Fidelity","sat":81,"light":67,"altH":100,"altSat":100,"altLight":87}];
+    var TEXTURES = [{"key":"none","name":"无纹理","icon":"ban"},{"key":"starburst","name":"星芒光斑","icon":"wand-magic-sparkles"},{"key":"dots","name":"极客点阵","icon":"braille"},{"key":"contour","name":"流光等高线","icon":"water"},{"key":"crystal","name":"几何晶体","icon":"shapes"},{"key":"petal","name":"落樱微瓣","icon":"spa"}];
+    var KEY = "blogAppearance";
+    function loadCfg() {
+        var saved = {};
+        try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+        var cfg = {};
+        for (var k in DEFAULTS) cfg[k] = Object.prototype.hasOwnProperty.call(saved, k) ? saved[k] : DEFAULTS[k];
+        if (cfg.mode !== "system" && cfg.mode !== "dark") cfg.mode = "light";
+        if (typeof cfg.hue !== "number" || isNaN(cfg.hue)) cfg.hue = DEFAULTS.hue;
+        cfg.hue = ((Math.round(cfg.hue) % 360) + 360) % 360;
+        return cfg;
+    }
+    function saveCfg(cfg) {
+        try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch (e) {}
+    }
+    function schemeOf(key) {
+        for (var i = 0; i < SCHEMES.length; i++) if (SCHEMES[i].key === key) return SCHEMES[i];
+        return SCHEMES[SCHEMES.length - 1];
+    }
+    function resolveMode(mode) {
+        if (mode !== "system") return mode;
+        return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    function clampPct(v) { return Math.max(0, Math.min(100, v)); }
+    function schemeColors(cfg) {
+        var s = schemeOf(cfg.scheme);
+        var h = cfg.hue;
+        return [
+            "hsl(" + h + ", " + clampPct(s.sat) + "%, " + clampPct(s.light) + "%)",
+            "hsl(" + (h + Math.round(s.altH / 2)) + ", " + clampPct(s.altSat * 0.8) + "%, " + clampPct(s.light + 8) + "%)",
+            "hsl(" + (h + s.altH) + ", " + clampPct(s.altSat) + "%, " + clampPct(s.altLight) + "%)"
+        ];
+    }
+    /* 把设置应用到 <html> 上 */
+    function applyCfg(cfg) {
+        var html = document.documentElement;
+        var s = schemeOf(cfg.scheme);
+        html.style.setProperty("--hue", String(cfg.hue));
+        html.style.setProperty("--scheme-sat", clampPct(s.sat) + "%");
+        html.style.setProperty("--scheme-light", clampPct(s.light) + "%");
+        html.style.setProperty("--scheme-alt-h", String(s.altH));
+        html.style.setProperty("--scheme-alt-sat", clampPct(s.altSat) + "%");
+        html.style.setProperty("--scheme-alt-light", clampPct(s.altLight) + "%");
+        html.setAttribute("data-spec", cfg.spec === "m3e" ? "m3e" : "md3");
+        html.setAttribute("data-mode", resolveMode(cfg.mode));
+        html.setAttribute("data-bg", cfg.bg === "plain" ? "plain" : "banner");
+        html.setAttribute("data-layout", cfg.layout === "grid" ? "grid" : "list");
+        html.setAttribute("data-texture", cfg.texture || "none");
+        html.setAttribute("data-motion", cfg.motion === "reduced" ? "reduced" : "full");
+    }
+    var cfg = loadCfg();
+    if (!localStorage.getItem(KEY) && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        cfg.motion = "reduced";
+    }
+    applyCfg(cfg);
+    window.__appearanceCfg = cfg;
+})();
+</script>
 <style>
 #gallery-page {
     margin: 30px 0 10px;
@@ -584,6 +584,25 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 }
 </style>
 <style>
+.netease-player {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    width: 100%;
+}
+.netease-player-big {
+    max-width: 480px;
+}
+@media (max-width: 900px) {
+    .netease-player {
+        margin: 14px auto;
+    }
+}
+</style>
+<style>
 /* ===== 头像 + 可展开的主页图标 ===== */
 #home-card #card-div .avatar {
     cursor: pointer;
@@ -910,6 +929,76 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
         
 
 <div class="post">
+    <a href="/2026/10/09/%E5%87%A0%E5%B9%B4%E5%89%8D%E5%88%9D%E4%B8%AD%E6%AF%95%E4%B8%9A%E6%97%B6%E6%9C%89%E6%84%9F%E8%80%8C%E5%8F%91%E5%86%99%E7%9A%84%E5%B0%8F%E4%BD%9C%E6%96%87/">
+        <h2 class="post-title">几年前初中毕业时有感而发写的小作文</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E5%BE%88%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%9C%E8%A5%BF/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                很重要的东西
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/10/9
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <p>又是一个一天。朝而往，暮而归，一切在作息下都显得一成不变，就好像正所走的地方。</p>
+<p>毕业，对于一所学校，不过平常——无非就是筹划一场典礼，拍一张张横竖的照，列一条美观的队，踏出三年在校里的最后一步；其间与同学激励鼓气，在他们的校服上留下自己的名字，鞠课堂的最后一躬，将不舍弹出或咽在肚子里——似乎每一年的学校都是如此景观，但仍为仅有一次三年时光的学生仍然积极筹备；履历丰富的教师因其非大相径庭，便在外表显得不以为意，却又在不为人知一侧叹息……毕业季是个神奇的阶段，年年都有，年年期待，年年见证，年年祝福，年年落幕。</p>
+<p>七下八下时，每逢六月下旬，于课间时列为长龙，见九年级各班挥舞大旗，威武方阵，浩浩荡荡过状元门，不解地看着学长在门外擦拭眼泪又不舍离去之景，不解他们为何不为解放而开怀，不为自由而奔跑；今天，历史似乎闭环，我们成了被包围的人，于雨下，望着队列两旁同学看着门外毕业生的疑惑，最后踏出那个一年一见的状元门，与同学道别，然后又是一个熟悉的回家路途；望着校内七八年级的学生整队回班，他们在里头，我在外头。</p>
+<p>——我似乎离开这所学校了。</p>
+<p>记得七年级刚来，花了半个月知道英语大作文是要分三段的，花了一个月适应了学案上总要写的“解：原式＝”，花了一个半月才知道历史也是要写小作文的，政治评析题不是口语交际般自己写的——到现在，却又为天天去刷的每一个背烂的题型而烦躁，去为“选8填14化简求值15统计16应用17几何18统计画图1920一次函数21探究22动点23二次函数24”组成的考试系统挑灯夜战，然后发现自己在三年来学会了许多，起初的稚嫩仿佛早已褪去，却记忆犹新。</p>
+<p>万物伊始似乎就在眼前，每个细节都能清楚回忆——什么时空，什么人物事件，什么所得一清二楚——都已经是千日之前了。</p>
+<p>初一时觉得时光方长，却在初二被地生的一百天折服；考完地生后的九上觉得三百天太久，却又在百日誓师的时候才想只争朝夕，双眸一闭一睁百十回，当时奋斗百日的口号又成为了百日之前。</p>
+<p>然后才发现我们仅仅在学校生活了一个角落，真正的乐趣却在前几天才被发掘。</p>
+<p>正如小学时我的说法，学校的时间不快，但一旦有人开始买同学录了，那一切就基本结束了。前几天便就是，花了一段时间写完一张同学录，再一抬头，距离中考仅剩十余天；周五是在校有正课的最后一天，在同学们的纸上书上写了一遍遍自己的名字，此时在校还有两天。</p>
+<p>我个人没有买同学录给别人签字的习惯，事实上，我一张白纸找同学写上名字也是我懒得去进行的活动，这也是我更乐意去给别人写上名字，或者找老师签名的缘由。于是又和别的同学一样，楼层上下旋旋转转，将书的首页填得丰丰满满。自从上了初三，似乎再也没有如此有乐趣的时光——将三年的所见所闻浓缩在一张张纸上，自然是趣事。</p>
+<p>再次回到眼前回班的七八年级队伍，他们回去后会看见什么？“空荡荡”的九年级教室，还是愈加紧促的跟随九年级之后的地生考生？没人知道，至少在校门外得行人无法知悉。日升月沉，学校的一切又将正常进行，只不过少了三分之一的景观，但在阳光之下，我们留下的却又给了学校另外三分之二的力量。</p>
+<p>这就是毕业季。</p>
+<p>班级始终在学校的一隅，或是三楼，或是四楼；学校也是路途的一隅，也是一个拐点，过去度过的，经历的，似乎都成为了记忆所存，过去要每天度过12h的教室，却成为了视线里勉强能够扫射到的一个渡口。过去阳光下富有言谈，富有生命力，富有读书声，富有良师益友的地方，又如同上一年一样成为了空寂20天的房室，却又在永恒地迎接下一轮人物的到来。</p>
+<p>或许2024~2025学期开始，那个地方又要成为曾经的茶艺室，拥有我们一芥痕迹的桌椅都将分散离开，唯独的，我们的记忆还在。</p>
+<p>2023<del>2024初三的落幕，2024</del>2025新高一的迎接，每个高中又见证了一轮学生的离开，或许又会有许多位学生望着三年的学府心生感慨，我们又怀着不解与期待迎接新的三年，又在三年后的那天回望我们的现在。</p>
+<p>——这就是时光的闭环。</p>
+<p>在日光普照之下，又是相似时光的诞生；<br>不一样地，我们会随着太阳变得不同，<br>——然后真正成为八九点钟的太阳。</p>
+<hr>
+<p>感谢英政（*2）史地生物（*2）化（签了两次）体老师，一些同学，五楼一位保洁阿姨，门口一位保安大爷的签字</p>
+<p>语文，数学，音乐等等的还没来得及签，或许以后也签不上了。</p>
+<p>怅然若失。</p>
+<p>写于2024.6.24<br>于2026.10.9被我想起来，并且放到了这里。<br>出于一些原因，相关的照片不会放到网站里。</p>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%AD%A6%E4%B8%9A%E4%B8%8E%E7%94%9F%E6%B4%BB/" style="color: #ffa2c4">学业与生活</a>
+        </span>
+        
+    </div>
+    <a href="/2026/10/09/%E5%87%A0%E5%B9%B4%E5%89%8D%E5%88%9D%E4%B8%AD%E6%AF%95%E4%B8%9A%E6%97%B6%E6%9C%89%E6%84%9F%E8%80%8C%E5%8F%91%E5%86%99%E7%9A%84%E5%B0%8F%E4%BD%9C%E6%96%87/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2026/08/26/%E8%87%AA%E4%BB%8B/">
         <h2 class="post-title">自介</h2>
     </a>
@@ -982,7 +1071,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
         
         <span class="tag">
             
-            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #ffa2c4">关于自己</a>
+            <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #00bcd4">关于自己</a>
         </span>
         
     </div>
@@ -1199,6 +1288,40 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     <script src="/js/main.js"></script>
     
 <!-- hexo injector body_end start -->
+<script>
+(function () {
+    if (window.__backToTopStarted) return;
+    window.__backToTopStarted = true;
+
+    var SHOW_AFTER = 400;
+    var btn = document.createElement("div");
+    btn.id = "back-to-top";
+    btn.title = "回到顶部";
+    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
+    document.body.appendChild(btn);
+
+    var shown = false;
+    function scrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+    function update() {
+        var on = scrollTop() > SHOW_AFTER;
+        if (on === shown) return;
+        shown = on;
+        btn.classList.toggle("show", on);
+    }
+    btn.addEventListener("click", function () {
+        try {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (e) {
+            window.scrollTo(0, 0);
+        }
+    });
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+})();
+</script>
 <script>
 (function () {
 
@@ -1607,40 +1730,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
     else init();
-})();
-</script>
-<script>
-(function () {
-    if (window.__backToTopStarted) return;
-    window.__backToTopStarted = true;
-
-    var SHOW_AFTER = 400;
-    var btn = document.createElement("div");
-    btn.id = "back-to-top";
-    btn.title = "回到顶部";
-    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
-    document.body.appendChild(btn);
-
-    var shown = false;
-    function scrollTop() {
-        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    }
-    function update() {
-        var on = scrollTop() > SHOW_AFTER;
-        if (on === shown) return;
-        shown = on;
-        btn.classList.toggle("show", on);
-    }
-    btn.addEventListener("click", function () {
-        try {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        } catch (e) {
-            window.scrollTo(0, 0);
-        }
-    });
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
 })();
 </script>
 <script>
@@ -2197,7 +2286,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
     else init();
 })();
-</script><!-- hexo injector body_end end --><script>window.__blogPosts = [{"t":"自介","u":"/2026/08/26/自介/","d":"2026-08-26"}];</script>
+</script><!-- hexo injector body_end end --><script>window.__blogPosts = [{"t":"几年前初中毕业时有感而发写的小作文","u":"/2026/10/09/几年前初中毕业时有感而发写的小作文/","d":"2026-10-09"},{"t":"自介","u":"/2026/08/26/自介/","d":"2026-08-26"}];</script>
 <script>
 (function () {
     if (window.__sideCardStarted) return;
