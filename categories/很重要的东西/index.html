@@ -46,58 +46,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start -->
-<style>
-#back-to-top {
-    align-items: center;
-    background: #1f2d2a;
-    border-radius: 50%;
-    bottom: 96px;
-    box-shadow: 0 4px 16px #00000033;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    height: 46px;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    position: fixed;
-    right: 26px;
-    transform: translateY(12px);
-    transition: opacity 0.3s, transform 0.3s, background 0.25s;
-    width: 46px;
-    z-index: 1003;
-}
-#back-to-top.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
-#back-to-top:hover {
-    background: var(--tc-main, #66afef);
-    transform: translateY(-3px);
-}
-#back-to-top i {
-    font-size: 17px;
-}
-#back-to-top::after {
-    border-radius: 50%;
-    content: "";
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-@media (max-width: 900px) {
-    #back-to-top {
-        bottom: 84px;
-        height: 40px;
-        right: 16px;
-        width: 40px;
-    }
-}
-</style><link rel="stylesheet" href="/css/appearance.css?v=muztrkwc" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv185zwt" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -160,6 +109,57 @@
     window.__appearanceCfg = cfg;
 })();
 </script>
+<style>
+#back-to-top {
+    align-items: center;
+    background: #1f2d2a;
+    border-radius: 50%;
+    bottom: 96px;
+    box-shadow: 0 4px 16px #00000033;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    height: 46px;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 26px;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s, background 0.25s;
+    width: 46px;
+    z-index: 1003;
+}
+#back-to-top.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+#back-to-top:hover {
+    background: var(--tc-main, #66afef);
+    transform: translateY(-3px);
+}
+#back-to-top i {
+    font-size: 17px;
+}
+#back-to-top::after {
+    border-radius: 50%;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+@media (max-width: 900px) {
+    #back-to-top {
+        bottom: 84px;
+        height: 40px;
+        right: 16px;
+        width: 40px;
+    }
+}
+</style>
 <style>
 #friends-page {
     margin: 30px 0 10px;
@@ -515,6 +515,85 @@
 </style>
 
 <style>
+.netease-player {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    width: 100%;
+}
+.netease-player-big {
+    max-width: 480px;
+}
+@media (max-width: 900px) {
+    .netease-player {
+        margin: 14px auto;
+    }
+}
+</style>
+<style>
+/* 标签按钮条：和相册页的标签按钮同一套样子 */
+.tag-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 auto 28px;
+    max-width: 900px;
+}
+.tf-chip {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 50px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 6px 14px;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.tf-chip em {
+    color: var(--text-mute);
+    font-size: 12px;
+    font-style: normal;
+}
+.tf-chip:hover {
+    border-color: var(--tc-main, #66afef);
+    color: var(--tc-main, #66afef);
+    opacity: 1;
+}
+.tf-chip.active {
+    background: var(--tc-main, #66afef);
+    border-color: var(--tc-main, #66afef);
+    color: #fff;
+}
+.tf-chip.active em {
+    color: #ffffffcc;
+}
+/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
+#tag-post-list .tf-link {
+    cursor: pointer;
+}
+#tag-post-list {
+    scroll-margin-top: 90px;
+}
+.tag-filter-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    color: var(--text-dim);
+    font-size: 15px;
+    padding: 48px 24px;
+    text-align: center;
+}
+.tag-page-hint {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin: 20px 0 30px;
+    text-align: center;
+}
+</style>
+<style>
 #projects-page .projects-empty,
 #projects-page .projects-note {
     background: var(--card);
@@ -697,25 +776,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 @media (max-width: 900px) {
     #projects-page .projects-grid {
         grid-template-columns: 1fr;
-    }
-}
-</style>
-<style>
-.netease-player {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
-    display: block;
-    margin: 20px auto;
-    max-width: 100%;
-    width: 100%;
-}
-.netease-player-big {
-    max-width: 480px;
-}
-@media (max-width: 900px) {
-    .netease-player {
-        margin: 14px auto;
     }
 }
 </style>
@@ -1035,6 +1095,28 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
         
         
         
+        
+        <span>
+            <a href="/categories/%E9%9F%B3%E4%B9%90/" style="background: #03a9f4">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                音乐
+            </a>
+        </span>
+        
+        
+        
+        <span>
+            <a href="/categories/%E4%BC%81%E5%88%92/" style="background: #00a596">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                企划
+            </a>
+        </span>
+        
+        
     </div>
     
     <div class="timeline">
@@ -1064,7 +1146,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
                     
                     <span class="tag">
                         
-                        <a href="/tags/%E5%AD%A6%E4%B8%9A%E4%B8%8E%E7%94%9F%E6%B4%BB/" style="color: #00a596">
+                        <a href="/tags/%E5%AD%A6%E4%B8%9A%E4%B8%8E%E7%94%9F%E6%B4%BB/" style="color: #00bcd4">
                             学业与生活
                         </a>
                     </span>
@@ -1102,7 +1184,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
                     
                     <span class="tag">
                         
-                        <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #ff7d73">
+                        <a href="/tags/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1/" style="color: #03a9f4">
                             关于自己
                         </a>
                     </span>
@@ -1145,40 +1227,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     <script src="/js/main.js"></script>
     
 <!-- hexo injector body_end start -->
-<script>
-(function () {
-    if (window.__backToTopStarted) return;
-    window.__backToTopStarted = true;
-
-    var SHOW_AFTER = 400;
-    var btn = document.createElement("div");
-    btn.id = "back-to-top";
-    btn.title = "回到顶部";
-    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
-    document.body.appendChild(btn);
-
-    var shown = false;
-    function scrollTop() {
-        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    }
-    function update() {
-        var on = scrollTop() > SHOW_AFTER;
-        if (on === shown) return;
-        shown = on;
-        btn.classList.toggle("show", on);
-    }
-    btn.addEventListener("click", function () {
-        try {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        } catch (e) {
-            window.scrollTo(0, 0);
-        }
-    });
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
-})();
-</script>
 <script>
 (function () {
 
@@ -1591,17 +1639,36 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 </script>
 <script>
 (function () {
-    if (window.__imgFallbackStarted) return;
-    window.__imgFallbackStarted = true;
-    document.addEventListener("error", function (e) {
-        var el = e.target;
-        if (!el || el.tagName !== "IMG" || el.__cdnRetried) return;
-        var src = el.currentSrc || el.src || "";
-        if (src.indexOf("/gh/") === -1) return;   // 不是加速地址就不管
-        el.__cdnRetried = true;
-        var local = src.replace(/^https?:\/\/[^/]+\/gh\/[^/]+\/[^@/]+@[^/]+\//, "/");
-        if (local !== src) el.src = local;
-    }, true);
+    if (window.__backToTopStarted) return;
+    window.__backToTopStarted = true;
+
+    var SHOW_AFTER = 400;
+    var btn = document.createElement("div");
+    btn.id = "back-to-top";
+    btn.title = "回到顶部";
+    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
+    document.body.appendChild(btn);
+
+    var shown = false;
+    function scrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+    function update() {
+        var on = scrollTop() > SHOW_AFTER;
+        if (on === shown) return;
+        shown = on;
+        btn.classList.toggle("show", on);
+    }
+    btn.addEventListener("click", function () {
+        try {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (e) {
+            window.scrollTo(0, 0);
+        }
+    });
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
 })();
 </script>
 <script>
@@ -1634,6 +1701,21 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync);
     else sync();
+})();
+</script>
+<script>
+(function () {
+    if (window.__imgFallbackStarted) return;
+    window.__imgFallbackStarted = true;
+    document.addEventListener("error", function (e) {
+        var el = e.target;
+        if (!el || el.tagName !== "IMG" || el.__cdnRetried) return;
+        var src = el.currentSrc || el.src || "";
+        if (src.indexOf("/gh/") === -1) return;   // 不是加速地址就不管
+        el.__cdnRetried = true;
+        var local = src.replace(/^https?:\/\/[^/]+\/gh\/[^/]+\/[^@/]+@[^/]+\//, "/");
+        if (local !== src) el.src = local;
+    }, true);
 })();
 </script>
 <script>

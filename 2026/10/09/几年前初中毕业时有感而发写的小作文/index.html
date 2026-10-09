@@ -55,58 +55,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start -->
-<style>
-#back-to-top {
-    align-items: center;
-    background: #1f2d2a;
-    border-radius: 50%;
-    bottom: 96px;
-    box-shadow: 0 4px 16px #00000033;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    height: 46px;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    position: fixed;
-    right: 26px;
-    transform: translateY(12px);
-    transition: opacity 0.3s, transform 0.3s, background 0.25s;
-    width: 46px;
-    z-index: 1003;
-}
-#back-to-top.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
-#back-to-top:hover {
-    background: var(--tc-main, #66afef);
-    transform: translateY(-3px);
-}
-#back-to-top i {
-    font-size: 17px;
-}
-#back-to-top::after {
-    border-radius: 50%;
-    content: "";
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-@media (max-width: 900px) {
-    #back-to-top {
-        bottom: 84px;
-        height: 40px;
-        right: 16px;
-        width: 40px;
-    }
-}
-</style><link rel="stylesheet" href="/css/appearance.css?v=muztrkwc" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv185zwt" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -169,6 +118,57 @@
     window.__appearanceCfg = cfg;
 })();
 </script>
+<style>
+#back-to-top {
+    align-items: center;
+    background: #1f2d2a;
+    border-radius: 50%;
+    bottom: 96px;
+    box-shadow: 0 4px 16px #00000033;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    height: 46px;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 26px;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s, background 0.25s;
+    width: 46px;
+    z-index: 1003;
+}
+#back-to-top.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+#back-to-top:hover {
+    background: var(--tc-main, #66afef);
+    transform: translateY(-3px);
+}
+#back-to-top i {
+    font-size: 17px;
+}
+#back-to-top::after {
+    border-radius: 50%;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+@media (max-width: 900px) {
+    #back-to-top {
+        bottom: 84px;
+        height: 40px;
+        right: 16px;
+        width: 40px;
+    }
+}
+</style>
 <style>
 #friends-page {
     margin: 30px 0 10px;
@@ -524,6 +524,85 @@
 </style>
 
 <style>
+.netease-player {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    width: 100%;
+}
+.netease-player-big {
+    max-width: 480px;
+}
+@media (max-width: 900px) {
+    .netease-player {
+        margin: 14px auto;
+    }
+}
+</style>
+<style>
+/* 标签按钮条：和相册页的标签按钮同一套样子 */
+.tag-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 auto 28px;
+    max-width: 900px;
+}
+.tf-chip {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 50px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 6px 14px;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.tf-chip em {
+    color: var(--text-mute);
+    font-size: 12px;
+    font-style: normal;
+}
+.tf-chip:hover {
+    border-color: var(--tc-main, #66afef);
+    color: var(--tc-main, #66afef);
+    opacity: 1;
+}
+.tf-chip.active {
+    background: var(--tc-main, #66afef);
+    border-color: var(--tc-main, #66afef);
+    color: #fff;
+}
+.tf-chip.active em {
+    color: #ffffffcc;
+}
+/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
+#tag-post-list .tf-link {
+    cursor: pointer;
+}
+#tag-post-list {
+    scroll-margin-top: 90px;
+}
+.tag-filter-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    color: var(--text-dim);
+    font-size: 15px;
+    padding: 48px 24px;
+    text-align: center;
+}
+.tag-page-hint {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin: 20px 0 30px;
+    text-align: center;
+}
+</style>
+<style>
 #projects-page .projects-empty,
 #projects-page .projects-note {
     background: var(--card);
@@ -706,25 +785,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 @media (max-width: 900px) {
     #projects-page .projects-grid {
         grid-template-columns: 1fr;
-    }
-}
-</style>
-<style>
-.netease-player {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
-    display: block;
-    margin: 20px auto;
-    max-width: 100%;
-    width: 100%;
-}
-.netease-player-big {
-    max-width: 480px;
-}
-@media (max-width: 900px) {
-    .netease-player {
-        margin: 14px auto;
     }
 }
 </style>
@@ -1079,8 +1139,8 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 <p>再次回到眼前回班的七八年级队伍，他们回去后会看见什么？“空荡荡”的九年级教室，还是愈加紧促的跟随九年级之后的地生考生？没人知道，至少在校门外得行人无法知悉。日升月沉，学校的一切又将正常进行，只不过少了三分之一的景观，但在阳光之下，我们留下的却又给了学校另外三分之二的力量。</p>
 <p>这就是毕业季。</p>
 <p>班级始终在学校的一隅，或是三楼，或是四楼；学校也是路途的一隅，也是一个拐点，过去度过的，经历的，似乎都成为了记忆所存，过去要每天度过12h的教室，却成为了视线里勉强能够扫射到的一个渡口。过去阳光下富有言谈，富有生命力，富有读书声，富有良师益友的地方，又如同上一年一样成为了空寂20天的房室，却又在永恒地迎接下一轮人物的到来。</p>
-<p>或许2024~2025学期开始，那个地方又要成为曾经的茶艺室，拥有我们一芥痕迹的桌椅都将分散离开，唯独的，我们的记忆还在。</p>
-<p>2023<del>2024初三的落幕，2024</del>2025新高一的迎接，每个高中又见证了一轮学生的离开，或许又会有许多位学生望着三年的学府心生感慨，我们又怀着不解与期待迎接新的三年，又在三年后的那天回望我们的现在。</p>
+<p>或许2024-2025学期开始，那个地方又要成为曾经的茶艺室，拥有我们一芥痕迹的桌椅都将分散离开，唯独的，我们的记忆还在。</p>
+<p>2023-2024初三的落幕，2024-2025新高一的迎接，每个高中又见证了一轮学生的离开，或许又会有许多位学生望着三年的学府心生感慨，我们又怀着不解与期待迎接新的三年，又在三年后的那天回望我们的现在。</p>
 <p>——这就是时光的闭环。</p>
 <p>在日光普照之下，又是相似时光的诞生；<br>不一样地，我们会随着太阳变得不同，<br>——然后真正成为八九点钟的太阳。</p>
 <hr>
@@ -1156,40 +1216,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 
     
 <!-- hexo injector body_end start -->
-<script>
-(function () {
-    if (window.__backToTopStarted) return;
-    window.__backToTopStarted = true;
-
-    var SHOW_AFTER = 400;
-    var btn = document.createElement("div");
-    btn.id = "back-to-top";
-    btn.title = "回到顶部";
-    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
-    document.body.appendChild(btn);
-
-    var shown = false;
-    function scrollTop() {
-        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    }
-    function update() {
-        var on = scrollTop() > SHOW_AFTER;
-        if (on === shown) return;
-        shown = on;
-        btn.classList.toggle("show", on);
-    }
-    btn.addEventListener("click", function () {
-        try {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        } catch (e) {
-            window.scrollTo(0, 0);
-        }
-    });
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
-})();
-</script>
 <script>
 (function () {
 
@@ -1602,17 +1628,36 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 </script>
 <script>
 (function () {
-    if (window.__imgFallbackStarted) return;
-    window.__imgFallbackStarted = true;
-    document.addEventListener("error", function (e) {
-        var el = e.target;
-        if (!el || el.tagName !== "IMG" || el.__cdnRetried) return;
-        var src = el.currentSrc || el.src || "";
-        if (src.indexOf("/gh/") === -1) return;   // 不是加速地址就不管
-        el.__cdnRetried = true;
-        var local = src.replace(/^https?:\/\/[^/]+\/gh\/[^/]+\/[^@/]+@[^/]+\//, "/");
-        if (local !== src) el.src = local;
-    }, true);
+    if (window.__backToTopStarted) return;
+    window.__backToTopStarted = true;
+
+    var SHOW_AFTER = 400;
+    var btn = document.createElement("div");
+    btn.id = "back-to-top";
+    btn.title = "回到顶部";
+    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
+    document.body.appendChild(btn);
+
+    var shown = false;
+    function scrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+    function update() {
+        var on = scrollTop() > SHOW_AFTER;
+        if (on === shown) return;
+        shown = on;
+        btn.classList.toggle("show", on);
+    }
+    btn.addEventListener("click", function () {
+        try {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (e) {
+            window.scrollTo(0, 0);
+        }
+    });
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
 })();
 </script>
 <script>
@@ -1645,6 +1690,21 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync);
     else sync();
+})();
+</script>
+<script>
+(function () {
+    if (window.__imgFallbackStarted) return;
+    window.__imgFallbackStarted = true;
+    document.addEventListener("error", function (e) {
+        var el = e.target;
+        if (!el || el.tagName !== "IMG" || el.__cdnRetried) return;
+        var src = el.currentSrc || el.src || "";
+        if (src.indexOf("/gh/") === -1) return;   // 不是加速地址就不管
+        el.__cdnRetried = true;
+        var local = src.replace(/^https?:\/\/[^/]+\/gh\/[^/]+\/[^@/]+@[^/]+\//, "/");
+        if (local !== src) el.src = local;
+    }, true);
 })();
 </script>
 <script>
