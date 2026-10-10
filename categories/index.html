@@ -46,7 +46,58 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv2jgckn" /><script>
+<!-- hexo injector head_end start -->
+<style>
+#back-to-top {
+    align-items: center;
+    background: #1f2d2a;
+    border-radius: 50%;
+    bottom: 96px;
+    box-shadow: 0 4px 16px #00000033;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    height: 46px;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 26px;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s, background 0.25s;
+    width: 46px;
+    z-index: 1003;
+}
+#back-to-top.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+#back-to-top:hover {
+    background: var(--tc-main, #66afef);
+    transform: translateY(-3px);
+}
+#back-to-top i {
+    font-size: 17px;
+}
+#back-to-top::after {
+    border-radius: 50%;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+@media (max-width: 900px) {
+    #back-to-top {
+        bottom: 84px;
+        height: 40px;
+        right: 16px;
+        width: 40px;
+    }
+}
+</style><link rel="stylesheet" href="/css/appearance.css?v=mv2jx6h2" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -109,57 +160,6 @@
     window.__appearanceCfg = cfg;
 })();
 </script>
-<style>
-#back-to-top {
-    align-items: center;
-    background: #1f2d2a;
-    border-radius: 50%;
-    bottom: 96px;
-    box-shadow: 0 4px 16px #00000033;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    height: 46px;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    position: fixed;
-    right: 26px;
-    transform: translateY(12px);
-    transition: opacity 0.3s, transform 0.3s, background 0.25s;
-    width: 46px;
-    z-index: 1003;
-}
-#back-to-top.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
-#back-to-top:hover {
-    background: var(--tc-main, #66afef);
-    transform: translateY(-3px);
-}
-#back-to-top i {
-    font-size: 17px;
-}
-#back-to-top::after {
-    border-radius: 50%;
-    content: "";
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-@media (max-width: 900px) {
-    #back-to-top {
-        bottom: 84px;
-        height: 40px;
-        right: 16px;
-        width: 40px;
-    }
-}
-</style>
 <style>
 #friends-page {
     margin: 30px 0 10px;
@@ -515,6 +515,7 @@
 </style>
 
 <style>
+/* 大播放器（单独的 iframe） */
 .netease-player {
     border: none;
     border-radius: 12px;
@@ -527,8 +528,28 @@
 .netease-player-big {
     max-width: 480px;
 }
+
+/* 小播放条：外面一层框，里面 iframe 用负边距抵消网易云自带的 10px 上/左边距，
+   这样播放条和外框上下左右都贴齐（以前只有上面有白边） */
+.netease-frame {
+    border-radius: 12px;
+    box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
+    height: 66px;
+    margin: 20px auto;
+    max-width: 100%;
+    overflow: hidden;
+    width: 100%;
+}
+.netease-frame iframe {
+    border: 0;
+    display: block;
+    margin: -10px 0 0 -10px;
+    width: calc(100% + 10px);
+}
+
 @media (max-width: 900px) {
-    .netease-player {
+    .netease-player,
+    .netease-frame {
         margin: 14px auto;
     }
 }
@@ -1150,6 +1171,40 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 <!-- hexo injector body_end start -->
 <script>
 (function () {
+    if (window.__backToTopStarted) return;
+    window.__backToTopStarted = true;
+
+    var SHOW_AFTER = 400;
+    var btn = document.createElement("div");
+    btn.id = "back-to-top";
+    btn.title = "回到顶部";
+    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
+    document.body.appendChild(btn);
+
+    var shown = false;
+    function scrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+    function update() {
+        var on = scrollTop() > SHOW_AFTER;
+        if (on === shown) return;
+        shown = on;
+        btn.classList.toggle("show", on);
+    }
+    btn.addEventListener("click", function () {
+        try {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (e) {
+            window.scrollTo(0, 0);
+        }
+    });
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+})();
+</script>
+<script>
+(function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
     var SCHEMES = [{"key":"tonal-spot","name":"柔和同色","en":"Tonal Spot","sat":45,"light":62,"altH":60,"altSat":42,"altLight":72},{"key":"vibrant","name":"鲜艳","en":"Vibrant","sat":88,"light":58,"altH":120,"altSat":85,"altLight":70},{"key":"content","name":"内容取色","en":"Content","sat":38,"light":64,"altH":35,"altSat":36,"altLight":74},{"key":"expressive","name":"张扬撞色","en":"Expressive","sat":66,"light":60,"altH":180,"altSat":72,"altLight":68},{"key":"rainbow","name":"彩虹","en":"Rainbow","sat":82,"light":62,"altH":200,"altSat":82,"altLight":66},{"key":"fruit-salad","name":"果色拼盘","en":"Fruit Salad","sat":74,"light":60,"altH":-60,"altSat":78,"altLight":66},{"key":"monochrome","name":"单色","en":"Monochrome","sat":6,"light":55,"altH":0,"altSat":6,"altLight":64},{"key":"neutral","name":"中性","en":"Neutral","sat":18,"light":58,"altH":20,"altSat":16,"altLight":68},{"key":"fidelity","name":"原色保真","en":"Fidelity","sat":81,"light":67,"altH":100,"altSat":100,"altLight":87}];
@@ -1556,40 +1611,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
     else init();
-})();
-</script>
-<script>
-(function () {
-    if (window.__backToTopStarted) return;
-    window.__backToTopStarted = true;
-
-    var SHOW_AFTER = 400;
-    var btn = document.createElement("div");
-    btn.id = "back-to-top";
-    btn.title = "回到顶部";
-    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
-    document.body.appendChild(btn);
-
-    var shown = false;
-    function scrollTop() {
-        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    }
-    function update() {
-        var on = scrollTop() > SHOW_AFTER;
-        if (on === shown) return;
-        shown = on;
-        btn.classList.toggle("show", on);
-    }
-    btn.addEventListener("click", function () {
-        try {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        } catch (e) {
-            window.scrollTo(0, 0);
-        }
-    });
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
 })();
 </script>
 <script>
