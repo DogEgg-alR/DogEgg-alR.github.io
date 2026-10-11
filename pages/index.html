@@ -55,7 +55,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv3an2pj" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv3asjpi" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -524,8 +524,11 @@
 </style>
 
 <style>
-/* 大播放器（单独的 iframe） */
-.netease-player {
+/* 大播放器（单独的 iframe）
+   注意：主题的 main.css 里有「.content iframe { max-width: 75% }」，
+   不加更具体的选择器盖掉的话，播放器只能占正文宽度的 75%，
+   右边就会空出一大截。下面这些 .content 开头的写法就是为了盖过它。 */
+.content .netease-player {
     border: none;
     border-radius: 12px;
     box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
@@ -534,16 +537,16 @@
     max-width: 100%;
     width: 100%;
 }
-.netease-player-big {
+.content .netease-player-big {
     max-width: 480px;
 }
 
 /* 小播放条：外面一层框，里面 iframe 用负边距抵消网易云自带的 10px 上/左边距，
-   这样播放条和外框上下左右都贴齐。
+   播放条和外框上下左右就都贴齐。
    width 给 +20px 是因为网易云自己在窗口变化时会把播放条设成
-   「iframe 宽 - 20px」（左右各留 10px），+20 之后播放条正好和外框一样宽，
-   不会在右边留出一截空白。多出来的 10px 被外框的 overflow:hidden 切掉。 */
-.netease-frame {
+   「iframe 宽 - 20px」（左右各留 10px），+20 之后播放条正好和外框一样宽。
+   多出来的那点被外框的 overflow:hidden 切掉。 */
+.content .netease-frame {
     border-radius: 12px;
     box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
     height: 66px;
@@ -552,18 +555,79 @@
     overflow: hidden;
     width: 100%;
 }
-.netease-frame iframe {
+.content .netease-frame iframe {
     border: 0;
     display: block;
     margin: -10px 0 0 -10px;
+    max-width: none;
     width: calc(100% + 20px);
 }
 
 @media (max-width: 900px) {
-    .netease-player,
-    .netease-frame {
+    .content .netease-player,
+    .content .netease-frame {
         margin: 14px auto;
     }
+}
+</style>
+<style>
+/* 标签按钮条：和相册页的标签按钮同一套样子 */
+.tag-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 auto 28px;
+    max-width: 900px;
+}
+.tf-chip {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 50px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 6px 14px;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.tf-chip em {
+    color: var(--text-mute);
+    font-size: 12px;
+    font-style: normal;
+}
+.tf-chip:hover {
+    border-color: var(--tc-main, #66afef);
+    color: var(--tc-main, #66afef);
+    opacity: 1;
+}
+.tf-chip.active {
+    background: var(--tc-main, #66afef);
+    border-color: var(--tc-main, #66afef);
+    color: #fff;
+}
+.tf-chip.active em {
+    color: #ffffffcc;
+}
+/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
+#tag-post-list .tf-link {
+    cursor: pointer;
+}
+#tag-post-list {
+    scroll-margin-top: 90px;
+}
+.tag-filter-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    color: var(--text-dim);
+    font-size: 15px;
+    padding: 48px 24px;
+    text-align: center;
+}
+.tag-page-hint {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin: 20px 0 30px;
+    text-align: center;
 }
 </style>
 <style>
@@ -750,66 +814,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     #projects-page .projects-grid {
         grid-template-columns: 1fr;
     }
-}
-</style>
-<style>
-/* 标签按钮条：和相册页的标签按钮同一套样子 */
-.tag-filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 0 auto 28px;
-    max-width: 900px;
-}
-.tf-chip {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 50px;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-size: 13.5px;
-    padding: 6px 14px;
-    transition: background 0.25s, color 0.25s, border-color 0.25s;
-}
-.tf-chip em {
-    color: var(--text-mute);
-    font-size: 12px;
-    font-style: normal;
-}
-.tf-chip:hover {
-    border-color: var(--tc-main, #66afef);
-    color: var(--tc-main, #66afef);
-    opacity: 1;
-}
-.tf-chip.active {
-    background: var(--tc-main, #66afef);
-    border-color: var(--tc-main, #66afef);
-    color: #fff;
-}
-.tf-chip.active em {
-    color: #ffffffcc;
-}
-/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
-#tag-post-list .tf-link {
-    cursor: pointer;
-}
-#tag-post-list {
-    scroll-margin-top: 90px;
-}
-.tag-filter-empty {
-    background: var(--card);
-    border: 1px dashed var(--line);
-    border-radius: 14px;
-    color: var(--text-dim);
-    font-size: 15px;
-    padding: 48px 24px;
-    text-align: center;
-}
-.tag-page-hint {
-    color: var(--text-mute);
-    font-size: 13px;
-    margin: 20px 0 30px;
-    text-align: center;
 }
 </style>
 <style>

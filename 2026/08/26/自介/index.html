@@ -55,7 +55,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv3an2pj" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv3asjpi" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -524,8 +524,11 @@
 </style>
 
 <style>
-/* 大播放器（单独的 iframe） */
-.netease-player {
+/* 大播放器（单独的 iframe）
+   注意：主题的 main.css 里有「.content iframe { max-width: 75% }」，
+   不加更具体的选择器盖掉的话，播放器只能占正文宽度的 75%，
+   右边就会空出一大截。下面这些 .content 开头的写法就是为了盖过它。 */
+.content .netease-player {
     border: none;
     border-radius: 12px;
     box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
@@ -534,16 +537,16 @@
     max-width: 100%;
     width: 100%;
 }
-.netease-player-big {
+.content .netease-player-big {
     max-width: 480px;
 }
 
 /* 小播放条：外面一层框，里面 iframe 用负边距抵消网易云自带的 10px 上/左边距，
-   这样播放条和外框上下左右都贴齐。
+   播放条和外框上下左右就都贴齐。
    width 给 +20px 是因为网易云自己在窗口变化时会把播放条设成
-   「iframe 宽 - 20px」（左右各留 10px），+20 之后播放条正好和外框一样宽，
-   不会在右边留出一截空白。多出来的 10px 被外框的 overflow:hidden 切掉。 */
-.netease-frame {
+   「iframe 宽 - 20px」（左右各留 10px），+20 之后播放条正好和外框一样宽。
+   多出来的那点被外框的 overflow:hidden 切掉。 */
+.content .netease-frame {
     border-radius: 12px;
     box-shadow: 0 2px 12px var(--shadow, #d9d9d966);
     height: 66px;
@@ -552,18 +555,79 @@
     overflow: hidden;
     width: 100%;
 }
-.netease-frame iframe {
+.content .netease-frame iframe {
     border: 0;
     display: block;
     margin: -10px 0 0 -10px;
+    max-width: none;
     width: calc(100% + 20px);
 }
 
 @media (max-width: 900px) {
-    .netease-player,
-    .netease-frame {
+    .content .netease-player,
+    .content .netease-frame {
         margin: 14px auto;
     }
+}
+</style>
+<style>
+/* 标签按钮条：和相册页的标签按钮同一套样子 */
+.tag-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 auto 28px;
+    max-width: 900px;
+}
+.tf-chip {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 50px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 6px 14px;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.tf-chip em {
+    color: var(--text-mute);
+    font-size: 12px;
+    font-style: normal;
+}
+.tf-chip:hover {
+    border-color: var(--tc-main, #66afef);
+    color: var(--tc-main, #66afef);
+    opacity: 1;
+}
+.tf-chip.active {
+    background: var(--tc-main, #66afef);
+    border-color: var(--tc-main, #66afef);
+    color: #fff;
+}
+.tf-chip.active em {
+    color: #ffffffcc;
+}
+/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
+#tag-post-list .tf-link {
+    cursor: pointer;
+}
+#tag-post-list {
+    scroll-margin-top: 90px;
+}
+.tag-filter-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    color: var(--text-dim);
+    font-size: 15px;
+    padding: 48px 24px;
+    text-align: center;
+}
+.tag-page-hint {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin: 20px 0 30px;
+    text-align: center;
 }
 </style>
 <style>
@@ -750,66 +814,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     #projects-page .projects-grid {
         grid-template-columns: 1fr;
     }
-}
-</style>
-<style>
-/* 标签按钮条：和相册页的标签按钮同一套样子 */
-.tag-filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 0 auto 28px;
-    max-width: 900px;
-}
-.tf-chip {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 50px;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-size: 13.5px;
-    padding: 6px 14px;
-    transition: background 0.25s, color 0.25s, border-color 0.25s;
-}
-.tf-chip em {
-    color: var(--text-mute);
-    font-size: 12px;
-    font-style: normal;
-}
-.tf-chip:hover {
-    border-color: var(--tc-main, #66afef);
-    color: var(--tc-main, #66afef);
-    opacity: 1;
-}
-.tf-chip.active {
-    background: var(--tc-main, #66afef);
-    border-color: var(--tc-main, #66afef);
-    color: #fff;
-}
-.tf-chip.active em {
-    color: #ffffffcc;
-}
-/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
-#tag-post-list .tf-link {
-    cursor: pointer;
-}
-#tag-post-list {
-    scroll-margin-top: 90px;
-}
-.tag-filter-empty {
-    background: var(--card);
-    border: 1px dashed var(--line);
-    border-radius: 14px;
-    color: var(--text-dim);
-    font-size: 15px;
-    padding: 48px 24px;
-    text-align: center;
-}
-.tag-page-hint {
-    color: var(--text-mute);
-    font-size: 13px;
-    margin: 20px 0 30px;
-    text-align: center;
 }
 </style>
 <style>
@@ -1153,7 +1157,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 <h2 id="关于我的马甲"><a href="#关于我的马甲" class="headerlink" title="关于我的马甲"></a>关于我的马甲</h2><p>狗蛋，常用马甲DogEgg_，也用过DE_、D_E等为马甲，之前用的名字“DogEgg_狗蛋”是受很喜欢的up主GoldenEggs的影响。<br><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/old_avatar1.jpg" alt="头像" loading="lazy" decoding="async"><br>这个头像是我除b站，网易云音乐外大多平台的常用头像。高三生。</p>
 <hr>
 <p>后来忘了啥时候改的马甲叫DE_alR，DE是什么不必多说，alR是accelerator的简写，R大写感觉会很酷所以写的alR（）<br><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/latest_avatar.jpg" alt="我最常用的头像" loading="lazy" decoding="async"><br>这个是我现在的头像！<br><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/My_Lovest.jpg" alt="这是我最爱的头像！" loading="lazy" decoding="async"><br>这个是我最爱的头像！是<a target="_blank" rel="noopener" href="https://space.bilibili.com/472307072">幻蓝！</a>画的！</p>
-<h2 id="我玩的游戏"><a href="#我玩的游戏" class="headerlink" title="我玩的游戏"></a>我玩的游戏</h2><p>主要是玩音游的，<br>Phigros rks16.80+，金51。<img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/Phigros_ranking.jpg" alt="Phigros rks16.80+" loading="lazy" decoding="async">arc双星（但是7.0后就没了qaq），orz不到12，之前更新后次方全要重推，因时间原因没再推过。<br>其他的例如riz，范式，md，cytus，osu!，malody（4k5dan通过），spin rhythm等也有涉猎，街机音游没有太多空玩；<br>其他类型游戏例如沙盒类主玩麦块，泰拉瑞亚曾在移动端玩过一两天，然后就淡坑了；<br>平台跳跃类的游戏比较喜欢玩celeste，目前全成就，酱五绿水平，这是我的无冲金！<img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/Celeste-the-no-rushing-strawberry.jpg" alt="无冲金awa" loading="lazy" decoding="async"><br>IC（I Wanna Be The Creator）Give Up，Abnegate，NANG复刻通过；<br>fps等玩过hl，hl2（ep1，ep2）等，主要是v社的游戏；<br>解密玩过portal系列和熵中心（没玩完），baba is you（没玩完）以及patrick’s parabox（主线全通）等；<br>一些游戏在steam库里，但还没玩，比如l4d2。无人深空等也没怎么玩。</p>
+<h2 id="我玩的游戏"><a href="#我玩的游戏" class="headerlink" title="我玩的游戏"></a>我玩的游戏</h2><p>主要是玩音游的，<br>Phigros rks16.80+，金51。<img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/Phigros_ranking.png" alt="Phigros rks16.90+" loading="lazy" decoding="async">arc双星（但是7.0后就没了qaq），orz不到12，之前更新后次方全要重推，因时间原因没再推过。<br>其他的例如riz，范式，md，cytus，osu!，malody（4k5dan通过），spin rhythm等也有涉猎，街机音游没有太多空玩；<br>其他类型游戏例如沙盒类主玩麦块，泰拉瑞亚曾在移动端玩过一两天，然后就淡坑了；<br>平台跳跃类的游戏比较喜欢玩celeste，目前全成就，酱五绿水平，这是我的无冲金！<img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/Celeste-the-no-rushing-strawberry.jpg" alt="无冲金awa" loading="lazy" decoding="async"><br>IC（I Wanna Be The Creator）Give Up，Abnegate，NANG复刻通过；<br>fps等玩过hl，hl2（ep1，ep2）等，主要是v社的游戏；<br>解密玩过portal系列和熵中心（没玩完），baba is you（没玩完）以及patrick’s parabox（主线全通）等；<br>一些游戏在steam库里，但还没玩，比如l4d2。无人深空等也没怎么玩。</p>
 <h2 id="我所涉猎的其他东西"><a href="#我所涉猎的其他东西" class="headerlink" title="我所涉猎的其他东西"></a>我所涉猎的其他东西</h2><p>比较喜欢看backrooms的文章，主要喜欢看wikidot站的，但fandom有的也看，比如Level ZH -197；<br>喜欢看刘慈欣写的小说；<br>喜欢怪核与梦核，伤核很少看；<br>喜欢听speedcore、extratone、psy、hardcore、breakcore、color、artcore、dubstep、neurofunk、house等；<br>没看过什么番；<br>在部分企划（音游企划为主）负责文案（剧情），有的同时担任策划（副）。</p>
 <h2 id="一些小玩意"><a href="#一些小玩意" class="headerlink" title="一些小玩意"></a>一些小玩意</h2><p>以下是我用AI生成的一些小玩意：<br><a href="https://dogegg-alr.github.io/-Unity-TextMeshPro-/">TMP富文本编辑器</a><br><a href="https://dogegg-alr.github.io/Genetics_Calculator/">遗传学多功能计算器</a><br><a href="https://dogegg-alr.github.io/Cubic-Bezier-Generator/">贝赛尔曲线生成器</a><br><a href="https://dogegg-alr.github.io/Markdown-Editor/">Markdown双栏编辑器</a><br><a href="https://dogegg-alr.github.io/Pixel-Beads-Pattern-Generator/">拼豆图纸生成器</a></p>
 <h2 id="我目前所在的厂牌-企划们"><a href="#我目前所在的厂牌-企划们" class="headerlink" title="我目前所在的厂牌&#x2F;企划们"></a>我目前所在的厂牌&#x2F;企划们</h2><p>之前参与过不少，后来因为种种原因不得不离开，这里写一些我目前还在的主要的一些厂牌&#x2F;企划们（排名无先后顺序，为了保证工整性，找不到B站链接的会放到有链接的后面QAQ）。</p>
