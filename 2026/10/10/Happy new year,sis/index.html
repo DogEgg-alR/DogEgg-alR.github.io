@@ -106,7 +106,7 @@
         width: 40px;
     }
 }
-</style><link rel="stylesheet" href="/css/appearance.css?v=mv5b33dj" /><script>
+</style><link rel="stylesheet" href="/css/appearance.css?v=mv5dzz1v" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -1170,7 +1170,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     </div>
     
     <div class="content" v-pre>
-        <div class="netease-frame"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" width="100%" height="76" loading="lazy" src="https://music.163.com/m/outchain/player?type=2&id=3335425660&auto=0&height=66"></iframe></div>
+        <div class="netease-frame"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" width="100%" height="76" loading="lazy" data-netease-src="https://music.163.com{path}?type=2&id=3335425660&auto=0&height=66"></iframe></div>
 
 <hr>
 <p>继self后v&#x2F;s能给我的第二次感动</p>
@@ -2247,8 +2247,20 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 </script><!-- hexo injector body_end end -->
 <script>
 (function () {
+    var needSrc = Array.prototype.slice.call(document.querySelectorAll("iframe[data-netease-src]"));
     var frames = Array.prototype.slice.call(document.querySelectorAll(".netease-frame iframe"));
-    if (!frames.length) return;
+    if (!needSrc.length && !frames.length) return;
+
+    var ua = navigator.userAgent || "";
+    var isMobile =
+        /Android|iPhone|iPad|iPod|Windows Phone|HarmonyOS|Mobile/i.test(ua) ||
+        (navigator.maxTouchPoints > 1 && /Macintosh/.test(ua)); // iPadOS
+    var path = isMobile ? "/m/outchain/player" : "/outchain/player";
+
+    needSrc.forEach(function (f) {
+        var tpl = f.getAttribute("data-netease-src");
+        if (tpl && !f.getAttribute("src")) f.setAttribute("src", tpl.replace("{path}", path));
+    });
 
     function nudge(f) {
         f.style.width = "calc(100% + 22px)";
