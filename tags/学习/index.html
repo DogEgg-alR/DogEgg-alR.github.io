@@ -46,7 +46,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv6ptfmj" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv6qnmh7" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -497,6 +497,7 @@
 </style>
 <style>
 @media (max-width: 900px) {
+    /* ---- 1. 侧栏卡片：显示 + 挪到文章上面 + 居中 ---- */
     #home-posts-wrap {
         flex-direction: column;
         align-items: center;
@@ -506,10 +507,39 @@
         width: 100%;
         max-width: 400px;
         margin: 0 auto 20px;
+        order: -1;              /* 排到 #home-posts（文章列表）前面 */
     }
     #card-style .avatar img {
         width: 96px;
         height: 96px;
+    }
+
+    /* ---- 2. 首页大圈里的文字：收进圈里、正常换行 ---- */
+    /* 圈本身在窄屏(比如 320px 宽的手机)会超出屏幕，这里让它跟着屏幕缩 */
+    #home-head #home-info,
+    #home-head #home-info .info {
+        height: min(350px, 88vw);
+        width: min(350px, 88vw);
+    }
+    /* 文字块原来是「按内容撑开」的（会比圈还宽，看起来就像没换行、还歪了），
+       改成固定占满圈内宽度，文字就会正常折行 */
+    #home-head #home-info .info .wrap {
+        box-sizing: border-box;
+        max-width: 100%;
+        min-width: 0;
+        padding: min(50px, 9vw);
+        width: 100%;
+    }
+    #home-head #home-info .info .wrap h1,
+    #home-head #home-info .info .wrap h3,
+    #home-head #home-info .info .wrap h5 {
+        max-width: 100%;
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+    /* 标题字号跟着屏幕缩，标题就不会被拆成「DE_alR的博 / 客」两行 */
+    #home-head #home-info .info .wrap h1 {
+        font-size: min(46px, 9.5vw);
     }
 }
 </style>
@@ -559,66 +589,6 @@
     .content .netease-frame {
         margin: 14px auto;
     }
-}
-</style>
-<style>
-/* 标签按钮条：和相册页的标签按钮同一套样子 */
-.tag-filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 0 auto 28px;
-    max-width: 900px;
-}
-.tf-chip {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 50px;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-size: 13.5px;
-    padding: 6px 14px;
-    transition: background 0.25s, color 0.25s, border-color 0.25s;
-}
-.tf-chip em {
-    color: var(--text-mute);
-    font-size: 12px;
-    font-style: normal;
-}
-.tf-chip:hover {
-    border-color: var(--tc-main, #66afef);
-    color: var(--tc-main, #66afef);
-    opacity: 1;
-}
-.tf-chip.active {
-    background: var(--tc-main, #66afef);
-    border-color: var(--tc-main, #66afef);
-    color: #fff;
-}
-.tf-chip.active em {
-    color: #ffffffcc;
-}
-/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
-#tag-post-list .tf-link {
-    cursor: pointer;
-}
-#tag-post-list {
-    scroll-margin-top: 90px;
-}
-.tag-filter-empty {
-    background: var(--card);
-    border: 1px dashed var(--line);
-    border-radius: 14px;
-    color: var(--text-dim);
-    font-size: 15px;
-    padding: 48px 24px;
-    text-align: center;
-}
-.tag-page-hint {
-    color: var(--text-mute);
-    font-size: 13px;
-    margin: 20px 0 30px;
-    text-align: center;
 }
 </style>
 <style>
@@ -805,6 +775,66 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     #projects-page .projects-grid {
         grid-template-columns: 1fr;
     }
+}
+</style>
+<style>
+/* 标签按钮条：和相册页的标签按钮同一套样子 */
+.tag-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 auto 28px;
+    max-width: 900px;
+}
+.tf-chip {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 50px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 6px 14px;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.tf-chip em {
+    color: var(--text-mute);
+    font-size: 12px;
+    font-style: normal;
+}
+.tf-chip:hover {
+    border-color: var(--tc-main, #66afef);
+    color: var(--tc-main, #66afef);
+    opacity: 1;
+}
+.tf-chip.active {
+    background: var(--tc-main, #66afef);
+    border-color: var(--tc-main, #66afef);
+    color: #fff;
+}
+.tf-chip.active em {
+    color: #ffffffcc;
+}
+/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
+#tag-post-list .tf-link {
+    cursor: pointer;
+}
+#tag-post-list {
+    scroll-margin-top: 90px;
+}
+.tag-filter-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    color: var(--text-dim);
+    font-size: 15px;
+    padding: 48px 24px;
+    text-align: center;
+}
+.tag-page-hint {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin: 20px 0 30px;
+    text-align: center;
 }
 </style>
 <style>
