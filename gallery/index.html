@@ -55,7 +55,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv6qnmh7" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv6r1mz0" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -505,6 +505,27 @@
 }
 </style>
 <style>
+/* 放大看图：支持缩放/拖动 */
+#preview {
+    overscroll-behavior: contain;
+    touch-action: none;
+}
+#preview-content {
+    cursor: zoom-in;
+    touch-action: none;
+    /* 用 translate + scale 来做缩放，原点固定在左上角方便算 */
+    transform-origin: 0 0;
+    transition: transform 0.18s ease-out;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+    will-change: transform;
+}
+#preview-content.is-zoomed {
+    cursor: zoom-out;
+}
+</style>
+<style>
 @media (max-width: 900px) {
     /* ---- 1. 侧栏卡片：显示 + 挪到文章上面 + 居中 ---- */
     #home-posts-wrap {
@@ -549,6 +570,28 @@
     /* 标题字号跟着屏幕缩，标题就不会被拆成「DE_alR的博 / 客」两行 */
     #home-head #home-info .info .wrap h1 {
         font-size: min(46px, 9.5vw);
+    }
+
+    /* ---- 3. 首页标题后面那 4 个慢慢转的白色光斑（电脑上有，手机上以前被隐藏） ---- */
+    #home-head #home-info .loop {
+        display: inline-block;
+        /* 比中间的圈大一圈，转起来就能从圈边上露出来 */
+        height: min(430px, 108vw);
+        width: min(430px, 108vw);
+    }
+
+    /* ---- 4. 电脑上靠 hover 的抬升效果，手机换成「按下有反馈」 ---- */
+    #home-posts .post:active,
+    #home-card #card-div .icon-links a:active,
+    #home-card #card-div .friend-links a:active,
+    #gallery-page .gallery-item:active,
+    #gallery-page .album-card:active,
+    #gallery-page .gallery-chip:active,
+    #projects-page .project-card:active,
+    #projects-page .project-chip:active,
+    #back-to-top:active {
+        transform: scale(0.97);
+        transition: transform 0.12s ease-out;
     }
 }
 </style>
@@ -598,6 +641,66 @@
     .content .netease-frame {
         margin: 14px auto;
     }
+}
+</style>
+<style>
+/* 标签按钮条：和相册页的标签按钮同一套样子 */
+.tag-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 auto 28px;
+    max-width: 900px;
+}
+.tf-chip {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 50px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 6px 14px;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.tf-chip em {
+    color: var(--text-mute);
+    font-size: 12px;
+    font-style: normal;
+}
+.tf-chip:hover {
+    border-color: var(--tc-main, #66afef);
+    color: var(--tc-main, #66afef);
+    opacity: 1;
+}
+.tf-chip.active {
+    background: var(--tc-main, #66afef);
+    border-color: var(--tc-main, #66afef);
+    color: #fff;
+}
+.tf-chip.active em {
+    color: #ffffffcc;
+}
+/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
+#tag-post-list .tf-link {
+    cursor: pointer;
+}
+#tag-post-list {
+    scroll-margin-top: 90px;
+}
+.tag-filter-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    color: var(--text-dim);
+    font-size: 15px;
+    padding: 48px 24px;
+    text-align: center;
+}
+.tag-page-hint {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin: 20px 0 30px;
+    text-align: center;
 }
 </style>
 <style>
@@ -787,66 +890,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 }
 </style>
 <style>
-/* 标签按钮条：和相册页的标签按钮同一套样子 */
-.tag-filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 0 auto 28px;
-    max-width: 900px;
-}
-.tf-chip {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 50px;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-size: 13.5px;
-    padding: 6px 14px;
-    transition: background 0.25s, color 0.25s, border-color 0.25s;
-}
-.tf-chip em {
-    color: var(--text-mute);
-    font-size: 12px;
-    font-style: normal;
-}
-.tf-chip:hover {
-    border-color: var(--tc-main, #66afef);
-    color: var(--tc-main, #66afef);
-    opacity: 1;
-}
-.tf-chip.active {
-    background: var(--tc-main, #66afef);
-    border-color: var(--tc-main, #66afef);
-    color: #fff;
-}
-.tf-chip.active em {
-    color: #ffffffcc;
-}
-/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
-#tag-post-list .tf-link {
-    cursor: pointer;
-}
-#tag-post-list {
-    scroll-margin-top: 90px;
-}
-.tag-filter-empty {
-    background: var(--card);
-    border: 1px dashed var(--line);
-    border-radius: 14px;
-    color: var(--text-dim);
-    font-size: 15px;
-    padding: 48px 24px;
-    text-align: center;
-}
-.tag-page-hint {
-    color: var(--text-mute);
-    font-size: 13px;
-    margin: 20px 0 30px;
-    text-align: center;
-}
-</style>
-<style>
 /* ===== 头像 + 可展开的主页图标 ===== */
 #home-card #card-div .avatar {
     cursor: pointer;
@@ -996,7 +1039,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 #home-posts .post.post-flash {
     animation: postFlash 1.1s ease-out 2;
 }
-</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><script defer src="/js/image-zoom.js"></script></head>
 <body>
     <div id="layout">
         <transition name="fade">
@@ -1161,7 +1204,7 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     
     <div class="content" v-pre>
         <p>这里放一些照片、截图和乱七八糟的图。</p>
-<div id="gallery-page"><div class="gallery-filter"><span class="gallery-chip active" data-tag="__albums__"><i class="fa-solid fa-images fa-fw"></i>相册</span><span class="gallery-chip" data-tag="__all__">全部 <em>19</em></span><span class="gallery-chip" data-tag="冰与火之舞">冰与火之舞 <em>1</em></span><span class="gallery-chip" data-tag="查分">查分 <em>3</em></span><span class="gallery-chip" data-tag="初见">初见 <em>2</em></span><span class="gallery-chip" data-tag="范式起源">范式起源 <em>1</em></span><span class="gallery-chip" data-tag="节奏大师">节奏大师 <em>1</em></span><span class="gallery-chip" data-tag="截图">截图 <em>19</em></span><span class="gallery-chip" data-tag="收歌">收歌 <em>8</em></span><span class="gallery-chip" data-tag="蔚蓝">蔚蓝 <em>5</em></span><span class="gallery-chip" data-tag="音游">音游 <em>14</em></span><span class="gallery-chip" data-tag="Arcaea">Arcaea <em>1</em></span><span class="gallery-chip" data-tag="IWBTC">IWBTC <em>5</em></span><span class="gallery-chip" data-tag="Osu!">Osu! <em>2</em></span><span class="gallery-chip" data-tag="Phigros">Phigros <em>7</em></span><span class="gallery-chip" data-tag="Rizline">Rizline <em>1</em></span><span class="gallery-chip" data-tag="Siglota">Siglota <em>1</em></span><span class="gallery-chip" data-tag="vivid/stasis">vivid/stasis <em>1</em></span><span class="gallery-chip" data-tag="WAVEAT">WAVEAT <em>1</em></span></div><div class="album-grid" id="album-index"><a class="album-card" href="/gallery/MUG/"><div class="album-cover"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/%E5%86%B0%E4%B8%8E%E7%81%AB%20%E5%9C%9F%E8%80%B3%E5%85%B6%E8%BF%9B%E8%A1%8C%E6%9B%B2.png" alt="MUG" loading="lazy" /><span class="album-count">14 张</span></div><div class="album-body"><h2 class="album-title"><span>MUG</span><i class="fa-solid fa-arrow-right fa-fw"></i></h2><div class="album-desc">一些音游的查分图和成绩图</div><div class="album-meta"><span class="album-tags">#音游 #截图</span></div></div></a><a class="album-card" href="/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/"><div class="album-cover"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/Celeste%207B.png" alt="平台跳跃" loading="lazy" /><span class="album-count">5 张</span></div><div class="album-body"><h2 class="album-title"><span>平台跳跃</span><i class="fa-solid fa-arrow-right fa-fw"></i></h2><div class="album-desc">一些平台跳跃游戏的截图，蔚蓝，i wanna等等</div><div class="album-meta"><span class="album-tags">#蔚蓝 #IWBTC #截图</span></div></div></a></div><div class="photo-view" id="photo-view" hidden><div class="gallery-grid"><figure class="gallery-item" data-filter-tags="音游,截图,冰与火之舞" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/%E5%86%B0%E4%B8%8E%E7%81%AB%20%E5%9C%9F%E8%80%B3%E5%85%B6%E8%BF%9B%E8%A1%8C%E6%9B%B2.png" alt="冰与火 土耳其进行曲" loading="lazy" /><figcaption><span class="gi-title">冰与火 土耳其进行曲</span><span class="gi-album">MUG</span><span class="gi-tags">#冰与火之舞</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Arcaea,查分" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Arc%E6%9F%A5%E5%88%86%E5%9B%BE.png" alt="Arcaea的查分图" loading="lazy" /><figcaption><span class="gi-title">Arcaea的查分图</span><span class="gi-album">MUG</span><span class="gi-tags">#Arcaea #查分</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Phigros,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%20321%20AT%20%E6%94%B6.png" alt="321收歌" loading="lazy" /><figcaption><span class="gi-title">321收歌</span><span class="gi-album">MUG</span><span class="gi-tags">#Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Phigros,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%20%E6%B3%A2%E5%A1%9E%E5%86%AC%20AT%20%E6%94%B6.png" alt="波塞冬收歌" loading="lazy" /><figcaption><span class="gi-title">波塞冬收歌</span><span class="gi-album">MUG</span><span class="gi-tags">#Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Phigros,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%20Ark%20AT%20%E6%94%B6.png" alt="Ark收歌" loading="lazy" /><figcaption><span class="gi-title">Ark收歌</span><span class="gi-album">MUG</span><span class="gi-tags">#Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,范式起源,Phigros,初见,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E4%BE%A7%20NWAD%E5%88%9D%E8%A7%81%E6%94%B6.png" alt="NWAD（Phi侧）初见收" loading="lazy" /><figcaption><span class="gi-title">NWAD（Phi侧）初见收</span><span class="gi-album">MUG</span><span class="gi-tags">#范式起源 #Phigros #初见 #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,节奏大师,Phigros,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E4%BE%A7%20PLEASE%20AT%E6%94%B6.png" alt="PLEASE（Phi侧）收歌" loading="lazy" /><figcaption><span class="gi-title">PLEASE（Phi侧）收歌</span><span class="gi-album">MUG</span><span class="gi-tags">#节奏大师 #Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,WAVEAT,Phigros,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E4%BE%A7%20Volcanic%20AT%E6%94%B6.png" alt="Volcanic（Phi侧）收歌" loading="lazy" /><figcaption><span class="gi-title">Volcanic（Phi侧）收歌</span><span class="gi-album">MUG</span><span class="gi-tags">#WAVEAT #Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Phigros,查分" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E6%9F%A5%E5%88%86%E5%9B%BE.png" alt="Phigros的查分图" loading="lazy" /><figcaption><span class="gi-title">Phigros的查分图</span><span class="gi-album">MUG</span><span class="gi-tags">#Phigros #查分</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Osu!" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/rf4dan%E5%88%87%E4%BA%8C%E8%A7%81.png" alt="rf4dan切谱二见" loading="lazy" /><figcaption><span class="gi-title">rf4dan切谱二见</span><span class="gi-album">MUG</span><span class="gi-tags">#Osu!</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Osu!,初见" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/rf5dan%E5%88%87%E5%88%9D%E8%A7%81.png" alt="rf5dan切谱初见" loading="lazy" /><figcaption><span class="gi-title">rf5dan切谱初见</span><span class="gi-album">MUG</span><span class="gi-tags">#Osu! #初见</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Rizline,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Riz%20Power%20Attack%20%E6%94%B6%20%E6%9C%AA%E7%90%86%E8%AE%BA.png" alt="Power Attack收歌，未理论" loading="lazy" /><figcaption><span class="gi-title">Power Attack收歌，未理论</span><span class="gi-album">MUG</span><span class="gi-tags">#Rizline #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Siglota,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Sig%20ToxicUL%E5%AE%BD%E5%88%A4%E8%87%AA%E5%81%9A%E8%87%AA%E6%94%B610%E5%B0%8F.png" alt="Siglota Toxic UL宽判自做自收，10小" loading="lazy" /><figcaption><span class="gi-title">Siglota Toxic UL宽判自做自收，10小</span><span class="gi-album">MUG</span><span class="gi-tags">#Siglota #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,vivid/stasis,查分" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/vs%E6%9F%A5%E5%88%86%E5%9B%BE.jpg" alt="vivid/stasis的查分图" loading="lazy" /><figcaption><span class="gi-title">vivid/stasis的查分图</span><span class="gi-album">MUG</span><span class="gi-tags">#vivid/stasis #查分</span></figcaption></figure><figure class="gallery-item" data-filter-tags="蔚蓝,IWBTC,截图" data-album="平台跳跃"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/Celeste%207B.png" alt="蔚蓝7B通过" loading="lazy" /><figcaption><span class="gi-title">蔚蓝7B通过</span><span class="gi-album">平台跳跃</span><span class="gi-tags">#蔚蓝</span></figcaption></figure><figure class="gallery-item" data-filter-tags="蔚蓝,IWBTC,截图" data-album="平台跳跃"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/Celeste%20%E6%97%A0%E5%86%B2%E9%87%91.jpg" alt="蔚蓝无冲金获得" loading="lazy" /><figcaption><span class="gi-title">蔚蓝无冲金获得</span><span class="gi-album">平台跳跃</span><span class="gi-tags">#蔚蓝</span></figcaption></figure><figure class="gallery-item" data-filter-tags="蔚蓝,IWBTC,截图" data-album="平台跳跃"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/IWBTC%202023%E6%98%A5%E8%8A%82%E6%8C%91%E6%88%98%E9%80%9A%E8%BF%87.png" alt="IWBTC 2023春节挑战通过" loading="lazy" /><figcaption><span class="gi-title">IWBTC 2023春节挑战通过</span><span class="gi-album">平台跳跃</span><span class="gi-tags">#IWBTC</span></figcaption></figure><figure class="gallery-item" data-filter-tags="蔚蓝,IWBTC,截图" data-album="平台跳跃"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/IWBTC%20Abnegate%E9%80%9A%E8%BF%87.png" alt="IWBTC Abnegate通过" loading="lazy" /><figcaption><span class="gi-title">IWBTC Abnegate通过</span><span class="gi-album">平台跳跃</span><span class="gi-tags">#IWBTC</span></figcaption></figure><figure class="gallery-item" data-filter-tags="蔚蓝,IWBTC,截图" data-album="平台跳跃"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/IWBTC%20NANG%E5%A4%8D%E5%88%BB%E9%80%9A%E8%BF%87.png" alt="IWBTC NANG复刻通过" loading="lazy" /><figcaption><span class="gi-title">IWBTC NANG复刻通过</span><span class="gi-album">平台跳跃</span><span class="gi-tags">#IWBTC</span></figcaption></figure></div><div class="gallery-hint"><i class="fa-solid fa-circle-info fa-fw"></i> 点照片可以放大看完整图片</div></div><div class="gallery-hint"><i class="fa-solid fa-circle-info fa-fw"></i> 点相册卡片进入查看；点上方标签可以直接铺开照片</div></div>
+<div id="gallery-page"><div class="gallery-filter"><span class="gallery-chip active" data-tag="__albums__"><i class="fa-solid fa-images fa-fw"></i>相册</span><span class="gallery-chip" data-tag="__all__">全部 <em>19</em></span><span class="gallery-chip" data-tag="冰与火之舞">冰与火之舞 <em>1</em></span><span class="gallery-chip" data-tag="查分">查分 <em>3</em></span><span class="gallery-chip" data-tag="初见">初见 <em>2</em></span><span class="gallery-chip" data-tag="范式起源">范式起源 <em>1</em></span><span class="gallery-chip" data-tag="节奏大师">节奏大师 <em>1</em></span><span class="gallery-chip" data-tag="截图">截图 <em>19</em></span><span class="gallery-chip" data-tag="收歌">收歌 <em>8</em></span><span class="gallery-chip" data-tag="蔚蓝">蔚蓝 <em>5</em></span><span class="gallery-chip" data-tag="音游">音游 <em>14</em></span><span class="gallery-chip" data-tag="Arcaea">Arcaea <em>1</em></span><span class="gallery-chip" data-tag="IWBTC">IWBTC <em>5</em></span><span class="gallery-chip" data-tag="Osu!">Osu! <em>2</em></span><span class="gallery-chip" data-tag="Phigros">Phigros <em>7</em></span><span class="gallery-chip" data-tag="Rizline">Rizline <em>1</em></span><span class="gallery-chip" data-tag="Siglota">Siglota <em>1</em></span><span class="gallery-chip" data-tag="vivid/stasis">vivid/stasis <em>1</em></span><span class="gallery-chip" data-tag="WAVEAT">WAVEAT <em>1</em></span></div><div class="album-grid" id="album-index"><a class="album-card" href="/gallery/MUG/"><div class="album-cover"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/%E5%86%B0%E4%B8%8E%E7%81%AB%20%E5%9C%9F%E8%80%B3%E5%85%B6%E8%BF%9B%E8%A1%8C%E6%9B%B2.png" alt="MUG" loading="lazy" /><span class="album-count">14 张</span></div><div class="album-body"><h2 class="album-title"><span>MUG</span><i class="fa-solid fa-arrow-right fa-fw"></i></h2><div class="album-desc">一些音游的查分图和成绩图</div><div class="album-meta"><span class="album-tags">#音游 #截图</span></div></div></a><a class="album-card" href="/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/"><div class="album-cover"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/Celeste%207B.png" alt="平台跳跃" loading="lazy" /><span class="album-count">5 张</span></div><div class="album-body"><h2 class="album-title"><span>平台跳跃</span><i class="fa-solid fa-arrow-right fa-fw"></i></h2><div class="album-desc">一些平台跳跃游戏的截图，蔚蓝，i wanna等等</div><div class="album-meta"><span class="album-tags">#蔚蓝 #IWBTC #截图</span></div></div></a></div><div class="photo-view" id="photo-view" hidden><div class="gallery-grid"><figure class="gallery-item" data-filter-tags="音游,截图,冰与火之舞" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/%E5%86%B0%E4%B8%8E%E7%81%AB%20%E5%9C%9F%E8%80%B3%E5%85%B6%E8%BF%9B%E8%A1%8C%E6%9B%B2.png" alt="冰与火 土耳其进行曲" loading="lazy" /><figcaption><span class="gi-title">冰与火 土耳其进行曲</span><span class="gi-album">MUG</span><span class="gi-tags">#冰与火之舞</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Arcaea,查分" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Arc%E6%9F%A5%E5%88%86%E5%9B%BE.png" alt="Arcaea的查分图" loading="lazy" /><figcaption><span class="gi-title">Arcaea的查分图</span><span class="gi-album">MUG</span><span class="gi-tags">#Arcaea #查分</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Phigros,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%20321%20AT%20%E6%94%B6.png" alt="321收歌" loading="lazy" /><figcaption><span class="gi-title">321收歌</span><span class="gi-album">MUG</span><span class="gi-tags">#Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Phigros,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%20%E6%B3%A2%E5%A1%9E%E5%86%AC%20AT%20%E6%94%B6.png" alt="波塞冬收歌" loading="lazy" /><figcaption><span class="gi-title">波塞冬收歌</span><span class="gi-album">MUG</span><span class="gi-tags">#Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Phigros,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%20Ark%20AT%20%E6%94%B6.png" alt="Ark收歌" loading="lazy" /><figcaption><span class="gi-title">Ark收歌</span><span class="gi-album">MUG</span><span class="gi-tags">#Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,范式起源,Phigros,初见,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E4%BE%A7%20NWAD%E5%88%9D%E8%A7%81%E6%94%B6.png" alt="NWAD（Phi侧）初见收" loading="lazy" /><figcaption><span class="gi-title">NWAD（Phi侧）初见收</span><span class="gi-album">MUG</span><span class="gi-tags">#范式起源 #Phigros #初见 #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,节奏大师,Phigros,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E4%BE%A7%20PLEASE%20AT%E6%94%B6.png" alt="PLEASE（Phi侧）收歌" loading="lazy" /><figcaption><span class="gi-title">PLEASE（Phi侧）收歌</span><span class="gi-album">MUG</span><span class="gi-tags">#节奏大师 #Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,WAVEAT,Phigros,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E4%BE%A7%20Volcanic%20AT%E6%94%B6.png" alt="Volcanic（Phi侧）收歌" loading="lazy" /><figcaption><span class="gi-title">Volcanic（Phi侧）收歌</span><span class="gi-album">MUG</span><span class="gi-tags">#WAVEAT #Phigros #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Phigros,查分" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Phi%E6%9F%A5%E5%88%86%E5%9B%BE.png" alt="Phigros的查分图" loading="lazy" /><figcaption><span class="gi-title">Phigros的查分图</span><span class="gi-album">MUG</span><span class="gi-tags">#Phigros #查分</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Osu!" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/rf4dan%E5%88%87%E4%BA%8C%E8%A7%81.png" alt="rf4dan切谱二见" loading="lazy" /><figcaption><span class="gi-title">rf4dan切谱二见</span><span class="gi-album">MUG</span><span class="gi-tags">#Osu!</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Osu!,初见" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/rf5dan%E5%88%87%E5%88%9D%E8%A7%81.png" alt="rf5dan切谱初见" loading="lazy" /><figcaption><span class="gi-title">rf5dan切谱初见</span><span class="gi-album">MUG</span><span class="gi-tags">#Osu! #初见</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Rizline,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Riz%20Power%20Attack%20%E6%94%B6%20%E6%9C%AA%E7%90%86%E8%AE%BA.png" alt="Power Attack收歌，未理论" loading="lazy" /><figcaption><span class="gi-title">Power Attack收歌，未理论</span><span class="gi-album">MUG</span><span class="gi-tags">#Rizline #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,Siglota,收歌" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/Sig%20ToxicUL%E5%AE%BD%E5%88%A4%E8%87%AA%E5%81%9A%E8%87%AA%E6%94%B610%E5%B0%8F.png" alt="Siglota Toxic UL宽判自做自收，10小" loading="lazy" /><figcaption><span class="gi-title">Siglota Toxic UL宽判自做自收，10小</span><span class="gi-album">MUG</span><span class="gi-tags">#Siglota #收歌</span></figcaption></figure><figure class="gallery-item" data-filter-tags="音游,截图,vivid/stasis,查分" data-album="MUG"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/MUG/vs%E6%9F%A5%E5%88%86%E5%9B%BE.jpg" alt="vivid/stasis的查分图" loading="lazy" /><figcaption><span class="gi-title">vivid/stasis的查分图</span><span class="gi-album">MUG</span><span class="gi-tags">#vivid/stasis #查分</span></figcaption></figure><figure class="gallery-item" data-filter-tags="蔚蓝,IWBTC,截图" data-album="平台跳跃"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/Celeste%207B.png" alt="蔚蓝7B通过" loading="lazy" /><figcaption><span class="gi-title">蔚蓝7B通过</span><span class="gi-album">平台跳跃</span><span class="gi-tags">#蔚蓝</span></figcaption></figure><figure class="gallery-item" data-filter-tags="蔚蓝,IWBTC,截图" data-album="平台跳跃"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/Celeste%20%E6%97%A0%E5%86%B2%E9%87%91.jpg" alt="蔚蓝无冲金获得" loading="lazy" /><figcaption><span class="gi-title">蔚蓝无冲金获得</span><span class="gi-album">平台跳跃</span><span class="gi-tags">#蔚蓝</span></figcaption></figure><figure class="gallery-item" data-filter-tags="蔚蓝,IWBTC,截图" data-album="平台跳跃"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/IWBTC%202023%E6%98%A5%E8%8A%82%E6%8C%91%E6%88%98%E9%80%9A%E8%BF%87.png" alt="IWBTC 2023春节挑战通过" loading="lazy" /><figcaption><span class="gi-title">IWBTC 2023春节挑战通过</span><span class="gi-album">平台跳跃</span><span class="gi-tags">#IWBTC</span></figcaption></figure><figure class="gallery-item" data-filter-tags="蔚蓝,IWBTC,截图" data-album="平台跳跃"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/IWBTC%20Abnegate%E9%80%9A%E8%BF%87.png" alt="IWBTC Abnegate通过" loading="lazy" /><figcaption><span class="gi-title">IWBTC Abnegate通过</span><span class="gi-album">平台跳跃</span><span class="gi-tags">#IWBTC</span></figcaption></figure><figure class="gallery-item" data-filter-tags="蔚蓝,IWBTC,截图" data-album="平台跳跃"><img src="https://gcore.jsdelivr.net/gh/DogEgg-alR/DogEgg-alR.github.io@main/images/gallery/%E5%B9%B3%E5%8F%B0%E8%B7%B3%E8%B7%83/IWBTC%20NANG%E5%A4%8D%E5%88%BB%E9%80%9A%E8%BF%87.png" alt="IWBTC NANG复刻通过" loading="lazy" /><figcaption><span class="gi-title">IWBTC NANG复刻通过</span><span class="gi-album">平台跳跃</span><span class="gi-tags">#IWBTC</span></figcaption></figure></div><div class="gallery-hint"><i class="fa-solid fa-circle-info fa-fw"></i> 点照片可以放大看完整图片</div></div></div>
 
     </div>
     
