@@ -48,7 +48,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv6r1mz0" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mv6rew8t" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -532,10 +532,16 @@
         margin: 0 auto 20px;
         order: -1;              /* 排到 #home-posts（文章列表）前面 */
     }
-    #card-style .avatar img {
-        width: 96px;
-        height: 96px;
+    /* 主题里 #card-style 写死了 width:300px（外框却是 100% 宽），
+       结果卡片内部整体偏左、头像不在中线上。这里让它撑满外框。 */
+    #home-card #card-style {
+        box-sizing: border-box;
+        margin: 0 auto;
+        position: static;
+        top: auto;
+        width: 100%;
     }
+    /* 头像不用跟着屏幕缩（主题里是 140px），保持原样 */
 
     /* ---- 2. 首页大圈里的文字：收进圈里、正常换行 ---- */
     /* 圈本身在窄屏(比如 320px 宽的手机)会超出屏幕，这里让它跟着屏幕缩 */

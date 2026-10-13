@@ -7,6 +7,7 @@ const app = Vue.createApp({
             showMenuItems: false,
             menuColor: false,
             scrollTop: 0,
+            menuScrollAcc: 0,
             renderers: [],
         };
     },
@@ -37,10 +38,30 @@ const app = Vue.createApp({
         handleScroll() {
             let wrap = this.$refs.homePostsWrap;
             let newScrollTop = document.documentElement.scrollTop;
-            if (this.scrollTop < newScrollTop) {
+            let diff = newScrollTop - this.scrollTop;
+
+            /* 导航栏收起/弹出的判断：
+               原来是「只要往下滚了哪怕 1px 就收起」，手机上惯性滚动、
+               地址栏收起都会让 scrollTop 抖 1~2px，于是导航栏一闪一闪
+               ——刚滑出来又被收回去。
+               现在改成带门槛：往下累计 12px 才收，往上累计 4px 就出来，
+               页面最上面 80px 以内永远显示。 */
+            if (diff > 0 && this.menuScrollAcc < 0) this.menuScrollAcc = 0;
+            if (diff < 0 && this.menuScrollAcc > 0) this.menuScrollAcc = 0;
+            this.menuScrollAcc = (this.menuScrollAcc || 0) + diff;
+
+            if (newScrollTop <= 80) {
+                this.hiddenMenu = false;
+                this.menuScrollAcc = 0;
+            } else if (this.menuScrollAcc > 12) {
                 this.hiddenMenu = true;
                 this.showMenuItems = false;
-            } else this.hiddenMenu = false;
+                this.menuScrollAcc = 0;
+            } else if (this.menuScrollAcc < -4) {
+                this.hiddenMenu = false;
+                this.menuScrollAcc = 0;
+            }
+
             if (wrap) {
                 if (newScrollTop <= window.innerHeight - 100) this.menuColor = true;
                 else this.menuColor = false;
