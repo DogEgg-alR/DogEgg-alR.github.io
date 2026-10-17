@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /js/
+Disallow: /css/
+
+# 站点地图
+Sitemap: https://dogegg-alr.github.io/sitemap.xml
