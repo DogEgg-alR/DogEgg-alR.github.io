@@ -69,7 +69,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mvdh79ix" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mvdiehog" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -735,6 +735,7 @@
     text-align: center;
 }
 #projects-page .projects-filter {
+    align-items: center;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -807,35 +808,14 @@
     color: var(--tc-main, #66afef);
     transform: scale(1.15);
 }
-/* 分组（GitHub Pages / 其他项目） */
-#projects-page .project-group + .project-group {
-    margin-top: 30px;
-}
-#projects-page .project-group.hide {
-    display: none;
-}
-#projects-page .project-group-title {
-    align-items: center;
-    color: var(--text);
-    display: flex;
-    font-size: 15px;
-    font-weight: bold;
-    gap: 8px;
-    margin: 0 0 14px;
-    padding-left: 2px;
-}
-#projects-page .project-group-title i {
-    color: var(--tc-main, #66afef);
-    font-size: 16px;
-}
-#projects-page .project-group-title em {
-    background: var(--bg-soft);
-    border-radius: 50px;
+/* 分类 / 状态两排筛选 */
+#projects-page .projects-label {
     color: var(--text-mute);
-    font-size: 12px;
-    font-style: normal;
-    font-weight: normal;
-    padding: 1px 8px;
+    font-size: 12.5px;
+    padding-right: 2px;
+}
+#projects-page .projects-chip i {
+    margin-right: 6px;
 }
 #projects-page .project-top {
     align-items: flex-start;
@@ -884,6 +864,11 @@
     background: #eaf1ff;
     color: #4c7ddb;
 }
+#projects-page .project-status.developing,
+#projects-page .projects-chip[data-style="developing"] {
+    background: #f3ecff;
+    color: #7c4dff;
+}
 #projects-page .project-status.paused,
 #projects-page .projects-chip[data-style="paused"] {
     background: #f1f3f5;
@@ -909,6 +894,11 @@ html[data-mode="dark"] #projects-page .project-status.plan,
 html[data-mode="dark"] #projects-page .projects-chip[data-style="plan"] {
     background: #4c7ddb2e;
     color: #8ab4f8;
+}
+html[data-mode="dark"] #projects-page .project-status.developing,
+html[data-mode="dark"] #projects-page .projects-chip[data-style="developing"] {
+    background: #7c4dff2e;
+    color: #b39ddb;
 }
 html[data-mode="dark"] #projects-page .project-status.paused,
 html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
@@ -1761,6 +1751,21 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
 </script>
 <script>
 (function () {
+    if (window.__imgFallbackStarted) return;
+    window.__imgFallbackStarted = true;
+    document.addEventListener("error", function (e) {
+        var el = e.target;
+        if (!el || el.tagName !== "IMG" || el.__cdnRetried) return;
+        var src = el.currentSrc || el.src || "";
+        if (src.indexOf("/gh/") === -1) return;   // 不是加速地址就不管
+        el.__cdnRetried = true;
+        var local = src.replace(/^https?:\/\/[^/]+\/gh\/[^/]+\/[^@/]+@[^/]+\//, "/");
+        if (local !== src) el.src = local;
+    }, true);
+})();
+</script>
+<script>
+(function () {
     if (window.__giscusThemeStarted) return;
     window.__giscusThemeStarted = true;
 
@@ -1789,21 +1794,6 @@ html[data-mode="dark"] #projects-page .projects-chip[data-style="paused"] {
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", sync);
     else sync();
-})();
-</script>
-<script>
-(function () {
-    if (window.__imgFallbackStarted) return;
-    window.__imgFallbackStarted = true;
-    document.addEventListener("error", function (e) {
-        var el = e.target;
-        if (!el || el.tagName !== "IMG" || el.__cdnRetried) return;
-        var src = el.currentSrc || el.src || "";
-        if (src.indexOf("/gh/") === -1) return;   // 不是加速地址就不管
-        el.__cdnRetried = true;
-        var local = src.replace(/^https?:\/\/[^/]+\/gh\/[^/]+\/[^@/]+@[^/]+\//, "/");
-        if (local !== src) el.src = local;
-    }, true);
 })();
 </script>
 <script>
