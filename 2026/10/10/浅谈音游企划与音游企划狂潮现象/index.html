@@ -81,7 +81,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mvckyxjv" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mvdh79ix" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"none","motion":"full"};
@@ -144,6 +144,57 @@
     window.__appearanceCfg = cfg;
 })();
 </script>
+<style>
+#back-to-top {
+    align-items: center;
+    background: #1f2d2a;
+    border-radius: 50%;
+    bottom: 96px;
+    box-shadow: 0 4px 16px #00000033;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    height: 46px;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 26px;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s, background 0.25s;
+    width: 46px;
+    z-index: 1003;
+}
+#back-to-top.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+#back-to-top:hover {
+    background: var(--tc-main, #66afef);
+    transform: translateY(-3px);
+}
+#back-to-top i {
+    font-size: 17px;
+}
+#back-to-top::after {
+    border-radius: 50%;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+@media (max-width: 900px) {
+    #back-to-top {
+        bottom: 84px;
+        height: 40px;
+        right: 16px;
+        width: 40px;
+    }
+}
+</style>
 <style>
 #friends-page {
     margin: 30px 0 10px;
@@ -220,57 +271,6 @@
 @media (max-width: 900px) {
     #friends-page .friends-grid {
         grid-template-columns: 1fr;
-    }
-}
-</style>
-<style>
-#back-to-top {
-    align-items: center;
-    background: #1f2d2a;
-    border-radius: 50%;
-    bottom: 96px;
-    box-shadow: 0 4px 16px #00000033;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    height: 46px;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    position: fixed;
-    right: 26px;
-    transform: translateY(12px);
-    transition: opacity 0.3s, transform 0.3s, background 0.25s;
-    width: 46px;
-    z-index: 1003;
-}
-#back-to-top.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
-#back-to-top:hover {
-    background: var(--tc-main, #66afef);
-    transform: translateY(-3px);
-}
-#back-to-top i {
-    font-size: 17px;
-}
-#back-to-top::after {
-    border-radius: 50%;
-    content: "";
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-@media (max-width: 900px) {
-    #back-to-top {
-        bottom: 84px;
-        height: 40px;
-        right: 16px;
-        width: 40px;
     }
 }
 </style>
@@ -791,6 +791,7 @@
     display: flex;
     flex-direction: column;
     padding: 16px 18px;
+    position: relative;
     transition: box-shadow 0.25s, transform 0.25s;
 }
 #projects-page .project-card:hover {
@@ -799,6 +800,54 @@
 }
 #projects-page .project-card.hide {
     display: none;
+}
+/* 从 GitHub 抓到的站点：卡片右上角一个小小的 GitHub 图标 */
+#projects-page .project-card.from-github .project-top {
+    padding-right: 26px;
+}
+#projects-page .project-gh {
+    color: var(--text-mute);
+    font-size: 15px;
+    line-height: 1;
+    padding: 2px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    transition: color 0.2s, transform 0.2s;
+}
+#projects-page a.project-gh:hover {
+    color: var(--tc-main, #66afef);
+    transform: scale(1.15);
+}
+/* 分组（GitHub Pages / 其他项目） */
+#projects-page .project-group + .project-group {
+    margin-top: 30px;
+}
+#projects-page .project-group.hide {
+    display: none;
+}
+#projects-page .project-group-title {
+    align-items: center;
+    color: var(--text);
+    display: flex;
+    font-size: 15px;
+    font-weight: bold;
+    gap: 8px;
+    margin: 0 0 14px;
+    padding-left: 2px;
+}
+#projects-page .project-group-title i {
+    color: var(--tc-main, #66afef);
+    font-size: 16px;
+}
+#projects-page .project-group-title em {
+    background: var(--bg-soft);
+    border-radius: 50px;
+    color: var(--text-mute);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    padding: 1px 8px;
 }
 #projects-page .project-top {
     align-items: flex-start;
