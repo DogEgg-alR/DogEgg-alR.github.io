@@ -67,6 +67,9 @@
     <loc>https://dogegg-alr.github.io/pages/</loc>
   </url>
   <url>
+    <loc>https://dogegg-alr.github.io/support/</loc>
+  </url>
+  <url>
     <loc>https://dogegg-alr.github.io/tags/</loc>
   </url>
   <url>
@@ -95,5 +98,8 @@
   </url>
   <url>
     <loc>https://dogegg-alr.github.io/tags/vivid-stasis/</loc>
+  </url>
+  <url>
+    <loc>https://dogegg-alr.github.io/thanks/</loc>
   </url>
 </urlset>

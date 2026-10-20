@@ -81,7 +81,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mvfe9vuf" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mvgucl9p" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"starburst","texv":2,"motion":"full"};
@@ -535,6 +535,27 @@
 }
 </style>
 <style>
+/* 放大看图：支持缩放/拖动 */
+#preview {
+    overscroll-behavior: contain;
+    touch-action: none;
+}
+#preview-content {
+    cursor: zoom-in;
+    touch-action: none;
+    /* 用 translate + scale 来做缩放，原点固定在左上角方便算 */
+    transform-origin: 0 0;
+    transition: transform 0.18s ease-out;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+    will-change: transform;
+}
+#preview-content.is-zoomed {
+    cursor: zoom-out;
+}
+</style>
+<style>
 @media (max-width: 900px) {
     /* ---- 1. 侧栏卡片：显示 + 挪到文章上面 + 居中 ---- */
     #home-posts-wrap {
@@ -611,27 +632,6 @@
 }
 </style>
 
-<style>
-/* 放大看图：支持缩放/拖动 */
-#preview {
-    overscroll-behavior: contain;
-    touch-action: none;
-}
-#preview-content {
-    cursor: zoom-in;
-    touch-action: none;
-    /* 用 translate + scale 来做缩放，原点固定在左上角方便算 */
-    transform-origin: 0 0;
-    transition: transform 0.18s ease-out;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    user-select: none;
-    will-change: transform;
-}
-#preview-content.is-zoomed {
-    cursor: zoom-out;
-}
-</style>
 <style>
 /* 大播放器（单独的 iframe）
    注意：主题的 main.css 里有「.content iframe { max-width: 75% }」，
@@ -1153,6 +1153,185 @@ html[data-mode="dark"] #projects-page .project-tags button:hover {
 #home-posts .post.post-flash {
     animation: postFlash 1.1s ease-out 2;
 }
+</style>
+<style>
+#support-page {
+    margin: 0 auto;
+    max-width: 640px;
+}
+#support-page .support-card {
+    background: var(--card);
+    border-radius: 18px;
+    box-shadow: 0 4px 22px var(--shadow);
+    padding: 38px 30px 30px;
+    text-align: center;
+}
+#support-page .support-heart {
+    align-items: center;
+    animation: support-beat 2.6s ease-in-out infinite;
+    background: hsl(var(--hue, 210), 100%, 93%);
+    border-radius: 50%;
+    color: hsl(var(--hue, 210), 70%, 58%);
+    display: flex;
+    font-size: 28px;
+    height: 70px;
+    justify-content: center;
+    margin: 0 auto 16px;
+    width: 70px;
+}
+@keyframes support-beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+#support-page h2 {
+    color: var(--text);
+    font-size: 27px;
+    margin: 0 0 12px;
+}
+#support-page .support-desc {
+    color: var(--text-dim);
+    font-size: 14px;
+    line-height: 1.9;
+    margin: 0 auto 26px;
+    max-width: 30em;
+}
+#support-page .support-btn {
+    align-items: center;
+    background: linear-gradient(135deg, hsl(var(--hue, 210), 100%, 68%), hsl(calc(var(--hue, 210) + 30), 100%, 68%));
+    border-radius: 50px;
+    box-shadow: 0 6px 18px hsl(var(--hue, 210), 100%, 70%, 0.45);
+    color: #fff;
+    display: inline-flex;
+    font-size: 15px;
+    font-weight: bold;
+    gap: 8px;
+    padding: 12px 32px;
+    transition: box-shadow 0.25s, transform 0.25s;
+}
+#support-page .support-btn:hover {
+    box-shadow: 0 10px 26px hsl(var(--hue, 210), 100%, 70%, 0.6);
+    color: #fff;
+    transform: translateY(-2px) scale(1.02);
+}
+#support-page .support-note {
+    color: var(--text-mute);
+    font-size: 12.5px;
+    line-height: 1.9;
+    margin: 22px auto 0;
+    max-width: 26em;
+}
+
+#thanks-page {
+    margin: 0 auto;
+    max-width: 880px;
+}
+#thanks-page .thanks-list {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+}
+#thanks-page .thanks-item {
+    align-items: flex-start;
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px var(--shadow);
+    display: flex;
+    gap: 12px;
+    padding: 16px 18px;
+    transition: box-shadow 0.25s, transform 0.25s;
+}
+#thanks-page .thanks-item:hover {
+    box-shadow: 0 8px 22px var(--shadow-strong);
+    transform: translateY(-3px);
+}
+#thanks-page .thanks-avatar {
+    align-items: center;
+    background: hsl(var(--hue, 210), 100%, 93%);
+    border-radius: 50%;
+    color: hsl(var(--hue, 210), 60%, 48%);
+    display: flex;
+    flex-shrink: 0;
+    font-size: 17px;
+    font-weight: bold;
+    height: 42px;
+    justify-content: center;
+    width: 42px;
+}
+#thanks-page .thanks-body {
+    min-width: 0;
+}
+#thanks-page .thanks-name {
+    color: var(--text);
+    font-size: 14.5px;
+    font-weight: bold;
+    word-break: break-word;
+}
+#thanks-page a.thanks-name:hover {
+    color: var(--tc-main, #66afef);
+}
+#thanks-page .thanks-amount {
+    background: hsl(var(--hue, 210), 100%, 93%);
+    border-radius: 50px;
+    color: hsl(var(--hue, 210), 60%, 48%);
+    font-size: 12px;
+    margin-left: 8px;
+    padding: 1px 8px;
+    white-space: nowrap;
+}
+#thanks-page .thanks-meta {
+    color: var(--text-mute);
+    font-size: 12px;
+    margin-top: 3px;
+}
+#thanks-page .thanks-msg {
+    color: var(--text-dim);
+    font-size: 13px;
+    line-height: 1.75;
+    margin-top: 6px;
+    word-break: break-word;
+}
+#thanks-page .thanks-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    color: var(--text-dim);
+    padding: 40px 24px;
+    text-align: center;
+}
+#thanks-page .thanks-empty > i {
+    color: hsl(var(--hue, 210), 70%, 70%);
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+#thanks-page .thanks-empty p {
+    margin: 4px 0;
+}
+#thanks-page .thanks-empty .thanks-empty-sub {
+    color: var(--text-mute);
+    font-size: 12.5px;
+}
+html[data-mode="dark"] #support-page .support-heart,
+html[data-mode="dark"] #thanks-page .thanks-avatar,
+html[data-mode="dark"] #thanks-page .thanks-amount {
+    background: hsl(var(--hue, 210), 40%, 24%);
+    color: hsl(var(--hue, 210), 70%, 75%);
+}
+html[data-mode="dark"] #support-page .support-btn {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+@media (prefers-reduced-motion: reduce) {
+    #support-page .support-heart {
+        animation: none;
+    }
+}
+@media (max-width: 900px) {
+    #support-page .support-card {
+        padding: 30px 18px 24px;
+    }
+    #thanks-page .thanks-list {
+        grid-template-columns: 1fr;
+    }
+}
 </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><script defer src="/js/image-zoom.js"></script></head>
 <body>
     <div id="layout">
@@ -1209,6 +1388,16 @@ html[data-mode="dark"] #projects-page .project-tags button:hover {
         <a href="/friends">
             <i class="fa-solid fa-link fa-fw"></i>
             <span>&ensp;友链</span>
+        </a>
+        
+        <a href="/support">
+            <i class="fa-solid fa-heart fa-fw"></i>
+            <span>&ensp;Support</span>
+        </a>
+        
+        <a href="/thanks">
+            <i class="fa-solid fa-hand-holding-heart fa-fw"></i>
+            <span>&ensp;感谢名单</span>
         </a>
         
     </nav>
@@ -1289,6 +1478,24 @@ html[data-mode="dark"] #projects-page .project-tags button:hover {
                             <i class="fa-solid fa-link fa-fw"></i>
                         </div>
                         <div style="min-width: 100px; max-width: 150%; width: 20%">友链</div>
+                    </div>
+                </a>
+                
+                <a href="/support">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-heart fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Support</div>
+                    </div>
+                </a>
+                
+                <a href="/thanks">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-hand-holding-heart fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">感谢名单</div>
                     </div>
                 </a>
                 
