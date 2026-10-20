@@ -78,7 +78,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mvgucl9p" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mvguzo28" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"starburst","texv":2,"motion":"full"};
@@ -1184,6 +1184,9 @@ html[data-mode="dark"] #projects-page .project-tags button:hover {
     color: var(--text);
     font-size: 27px;
     margin: 0 0 12px;
+    /* 「支持我！」有 4 个全角字，居中时中线落在「持」「我」之间；
+       往右挪半个字，让「持」正好在爱心正下方 */
+    transform: translateX(0.5em);
 }
 #support-page .support-desc {
     color: var(--text-dim);
@@ -1302,10 +1305,6 @@ html[data-mode="dark"] #projects-page .project-tags button:hover {
 }
 #thanks-page .thanks-empty p {
     margin: 4px 0;
-}
-#thanks-page .thanks-empty .thanks-empty-sub {
-    color: var(--text-mute);
-    font-size: 12.5px;
 }
 html[data-mode="dark"] #support-page .support-heart,
 html[data-mode="dark"] #thanks-page .thanks-avatar,
@@ -1522,7 +1521,7 @@ html[data-mode="dark"] #support-page .support-btn {
     
     <div class="content" v-pre>
         <p>在爱发电支持时留言「添加到感谢名单」，你的名字就会出现在下面。谢谢每一位支持过我的人。</p>
-<div id="thanks-page"><div class="thanks-empty"><i class="fa-solid fa-heart"></i><p>感谢名单还空着，等第一位支持者。</p><p class="thanks-empty-sub">在<a href="https://afdian.com/a/DE_alR" target="_blank" rel="noopener">爱发电</a>支持时留言「添加到感谢名单」，就会出现在这里。</p></div></div>
+<div id="thanks-page"><div class="thanks-empty"><i class="fa-solid fa-heart"></i><p>暂时是空的，但是会有的。</p></div></div>
 
     </div>
     
