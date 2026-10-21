@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>Support | DE_alR的博客</title>
+    <title>支持我 | DE_alR的博客</title>
     <meta name="author" content="DE_alR" />
     
 <meta name="description" content="支持我！如果这里的文章、工具帮到了你，可以在这里通过爱发电支持我。" />
@@ -14,7 +14,7 @@
 
 <meta property="og:site_name" content="DE_alR的博客" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Support | DE_alR的博客" />
+<meta property="og:title" content="支持我 | DE_alR的博客" />
 <meta property="og:description" content="支持我！如果这里的文章、工具帮到了你，可以在这里通过爱发电支持我。" />
 <meta property="og:url" content="https://dogegg-alr.github.io/support/" />
 <meta property="og:locale" content="zh_CN" />
@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://dogegg-alr.github.io/images/avatar.jpg" />
 
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Support | DE_alR的博客" />
+<meta name="twitter:title" content="支持我 | DE_alR的博客" />
 <meta name="twitter:description" content="支持我！如果这里的文章、工具帮到了你，可以在这里通过爱发电支持我。" />
 
 <meta name="twitter:image" content="https://dogegg-alr.github.io/images/avatar.jpg" />
@@ -78,7 +78,58 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mvi8mx8z" /><script>
+<!-- hexo injector head_end start -->
+<style>
+#back-to-top {
+    align-items: center;
+    background: #1f2d2a;
+    border-radius: 50%;
+    bottom: 96px;
+    box-shadow: 0 4px 16px #00000033;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    height: 46px;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 26px;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s, background 0.25s;
+    width: 46px;
+    z-index: 1003;
+}
+#back-to-top.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+#back-to-top:hover {
+    background: var(--tc-main, #66afef);
+    transform: translateY(-3px);
+}
+#back-to-top i {
+    font-size: 17px;
+}
+#back-to-top::after {
+    border-radius: 50%;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+@media (max-width: 900px) {
+    #back-to-top {
+        bottom: 84px;
+        height: 40px;
+        right: 16px;
+        width: 40px;
+    }
+}
+</style><link rel="stylesheet" href="/css/appearance.css?v=mvia1o7f" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"starburst","texv":2,"motion":"full"};
@@ -145,57 +196,6 @@
     window.__appearanceCfg = cfg;
 })();
 </script>
-<style>
-#back-to-top {
-    align-items: center;
-    background: #1f2d2a;
-    border-radius: 50%;
-    bottom: 96px;
-    box-shadow: 0 4px 16px #00000033;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    height: 46px;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    position: fixed;
-    right: 26px;
-    transform: translateY(12px);
-    transition: opacity 0.3s, transform 0.3s, background 0.25s;
-    width: 46px;
-    z-index: 1003;
-}
-#back-to-top.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
-#back-to-top:hover {
-    background: var(--tc-main, #66afef);
-    transform: translateY(-3px);
-}
-#back-to-top i {
-    font-size: 17px;
-}
-#back-to-top::after {
-    border-radius: 50%;
-    content: "";
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-@media (max-width: 900px) {
-    #back-to-top {
-        bottom: 84px;
-        height: 40px;
-        right: 16px;
-        width: 40px;
-    }
-}
-</style>
 <style>
 #friends-page {
     margin: 30px 0 10px;
@@ -677,6 +677,66 @@
 }
 </style>
 <style>
+/* 标签按钮条：和相册页的标签按钮同一套样子 */
+.tag-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 auto 28px;
+    max-width: 900px;
+}
+.tf-chip {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 50px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 6px 14px;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.tf-chip em {
+    color: var(--text-mute);
+    font-size: 12px;
+    font-style: normal;
+}
+.tf-chip:hover {
+    border-color: var(--tc-main, #66afef);
+    color: var(--tc-main, #66afef);
+    opacity: 1;
+}
+.tf-chip.active {
+    background: var(--tc-main, #66afef);
+    border-color: var(--tc-main, #66afef);
+    color: #fff;
+}
+.tf-chip.active em {
+    color: #ffffffcc;
+}
+/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
+#tag-post-list .tf-link {
+    cursor: pointer;
+}
+#tag-post-list {
+    scroll-margin-top: 90px;
+}
+.tag-filter-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    color: var(--text-dim);
+    font-size: 15px;
+    padding: 48px 24px;
+    text-align: center;
+}
+.tag-page-hint {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin: 20px 0 30px;
+    text-align: center;
+}
+</style>
+<style>
 #projects-page .projects-empty,
 #projects-page .projects-note {
     background: var(--card);
@@ -938,66 +998,6 @@ html[data-mode="dark"] #projects-page .project-tags button:hover {
     #projects-page .projects-grid {
         grid-template-columns: 1fr;
     }
-}
-</style>
-<style>
-/* 标签按钮条：和相册页的标签按钮同一套样子 */
-.tag-filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 0 auto 28px;
-    max-width: 900px;
-}
-.tf-chip {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 50px;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-size: 13.5px;
-    padding: 6px 14px;
-    transition: background 0.25s, color 0.25s, border-color 0.25s;
-}
-.tf-chip em {
-    color: var(--text-mute);
-    font-size: 12px;
-    font-style: normal;
-}
-.tf-chip:hover {
-    border-color: var(--tc-main, #66afef);
-    color: var(--tc-main, #66afef);
-    opacity: 1;
-}
-.tf-chip.active {
-    background: var(--tc-main, #66afef);
-    border-color: var(--tc-main, #66afef);
-    color: #fff;
-}
-.tf-chip.active em {
-    color: #ffffffcc;
-}
-/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
-#tag-post-list .tf-link {
-    cursor: pointer;
-}
-#tag-post-list {
-    scroll-margin-top: 90px;
-}
-.tag-filter-empty {
-    background: var(--card);
-    border: 1px dashed var(--line);
-    border-radius: 14px;
-    color: var(--text-dim);
-    font-size: 15px;
-    padding: 48px 24px;
-    text-align: center;
-}
-.tag-page-hint {
-    color: var(--text-mute);
-    font-size: 13px;
-    margin: 20px 0 30px;
-    text-align: center;
 }
 </style>
 <style>
@@ -1506,7 +1506,7 @@ html[data-mode="dark"] #support-page .support-btn {
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>Support</h1>
+        <h1>支持我</h1>
     </div>
     <div class="info">
         <span class="date">
@@ -1557,6 +1557,40 @@ html[data-mode="dark"] #support-page .support-btn {
     <script src="/js/main.js"></script>
     
 <!-- hexo injector body_end start -->
+<script>
+(function () {
+    if (window.__backToTopStarted) return;
+    window.__backToTopStarted = true;
+
+    var SHOW_AFTER = 400;
+    var btn = document.createElement("div");
+    btn.id = "back-to-top";
+    btn.title = "回到顶部";
+    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
+    document.body.appendChild(btn);
+
+    var shown = false;
+    function scrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+    function update() {
+        var on = scrollTop() > SHOW_AFTER;
+        if (on === shown) return;
+        shown = on;
+        btn.classList.toggle("show", on);
+    }
+    btn.addEventListener("click", function () {
+        try {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (e) {
+            window.scrollTo(0, 0);
+        }
+    });
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+})();
+</script>
 <script>
 (function () {
 
@@ -1969,40 +2003,6 @@ html[data-mode="dark"] #support-page .support-btn {
 
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
     else init();
-})();
-</script>
-<script>
-(function () {
-    if (window.__backToTopStarted) return;
-    window.__backToTopStarted = true;
-
-    var SHOW_AFTER = 400;
-    var btn = document.createElement("div");
-    btn.id = "back-to-top";
-    btn.title = "回到顶部";
-    btn.innerHTML = '<i class="fa-solid fa-arrow-up fa-fw"></i>';
-    document.body.appendChild(btn);
-
-    var shown = false;
-    function scrollTop() {
-        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    }
-    function update() {
-        var on = scrollTop() > SHOW_AFTER;
-        if (on === shown) return;
-        shown = on;
-        btn.classList.toggle("show", on);
-    }
-    btn.addEventListener("click", function () {
-        try {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        } catch (e) {
-            window.scrollTo(0, 0);
-        }
-    });
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
 })();
 </script>
 <script>
