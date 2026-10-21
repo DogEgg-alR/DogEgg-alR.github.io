@@ -78,7 +78,7 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mvgw7tez" /><script>
+<!-- hexo injector head_end start --><link rel="stylesheet" href="/css/appearance.css?v=mvi8mx8z" /><script>
 (function () {
 
     var DEFAULTS = {"hue":210,"scheme":"fidelity","spec":"md3","mode":"light","bg":"banner","layout":"list","texture":"starburst","texv":2,"motion":"full"};
@@ -532,6 +532,27 @@
 }
 </style>
 <style>
+/* 放大看图：支持缩放/拖动 */
+#preview {
+    overscroll-behavior: contain;
+    touch-action: none;
+}
+#preview-content {
+    cursor: zoom-in;
+    touch-action: none;
+    /* 用 translate + scale 来做缩放，原点固定在左上角方便算 */
+    transform-origin: 0 0;
+    transition: transform 0.18s ease-out;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+    will-change: transform;
+}
+#preview-content.is-zoomed {
+    cursor: zoom-out;
+}
+</style>
+<style>
 @media (max-width: 900px) {
     /* ---- 1. 侧栏卡片：显示 + 挪到文章上面 + 居中 ---- */
     #home-posts-wrap {
@@ -609,27 +630,6 @@
 </style>
 
 <style>
-/* 放大看图：支持缩放/拖动 */
-#preview {
-    overscroll-behavior: contain;
-    touch-action: none;
-}
-#preview-content {
-    cursor: zoom-in;
-    touch-action: none;
-    /* 用 translate + scale 来做缩放，原点固定在左上角方便算 */
-    transform-origin: 0 0;
-    transition: transform 0.18s ease-out;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    user-select: none;
-    will-change: transform;
-}
-#preview-content.is-zoomed {
-    cursor: zoom-out;
-}
-</style>
-<style>
 /* 大播放器（单独的 iframe）
    注意：主题的 main.css 里有「.content iframe { max-width: 75% }」，
    不加更具体的选择器盖掉的话，播放器只能占正文宽度的 75%，
@@ -674,66 +674,6 @@
     .content .netease-frame {
         margin: 14px auto;
     }
-}
-</style>
-<style>
-/* 标签按钮条：和相册页的标签按钮同一套样子 */
-.tag-filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 0 auto 28px;
-    max-width: 900px;
-}
-.tf-chip {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 50px;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-size: 13.5px;
-    padding: 6px 14px;
-    transition: background 0.25s, color 0.25s, border-color 0.25s;
-}
-.tf-chip em {
-    color: var(--text-mute);
-    font-size: 12px;
-    font-style: normal;
-}
-.tf-chip:hover {
-    border-color: var(--tc-main, #66afef);
-    color: var(--tc-main, #66afef);
-    opacity: 1;
-}
-.tf-chip.active {
-    background: var(--tc-main, #66afef);
-    border-color: var(--tc-main, #66afef);
-    color: #fff;
-}
-.tf-chip.active em {
-    color: #ffffffcc;
-}
-/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
-#tag-post-list .tf-link {
-    cursor: pointer;
-}
-#tag-post-list {
-    scroll-margin-top: 90px;
-}
-.tag-filter-empty {
-    background: var(--card);
-    border: 1px dashed var(--line);
-    border-radius: 14px;
-    color: var(--text-dim);
-    font-size: 15px;
-    padding: 48px 24px;
-    text-align: center;
-}
-.tag-page-hint {
-    color: var(--text-mute);
-    font-size: 13px;
-    margin: 20px 0 30px;
-    text-align: center;
 }
 </style>
 <style>
@@ -998,6 +938,66 @@ html[data-mode="dark"] #projects-page .project-tags button:hover {
     #projects-page .projects-grid {
         grid-template-columns: 1fr;
     }
+}
+</style>
+<style>
+/* 标签按钮条：和相册页的标签按钮同一套样子 */
+.tag-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 auto 28px;
+    max-width: 900px;
+}
+.tf-chip {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 50px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 13.5px;
+    padding: 6px 14px;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.tf-chip em {
+    color: var(--text-mute);
+    font-size: 12px;
+    font-style: normal;
+}
+.tf-chip:hover {
+    border-color: var(--tc-main, #66afef);
+    color: var(--tc-main, #66afef);
+    opacity: 1;
+}
+.tf-chip.active {
+    background: var(--tc-main, #66afef);
+    border-color: var(--tc-main, #66afef);
+    color: #fff;
+}
+.tf-chip.active em {
+    color: #ffffffcc;
+}
+/* 文章下面那个小标签，点了就地筛选（加下划线提示能点） */
+#tag-post-list .tf-link {
+    cursor: pointer;
+}
+#tag-post-list {
+    scroll-margin-top: 90px;
+}
+.tag-filter-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    color: var(--text-dim);
+    font-size: 15px;
+    padding: 48px 24px;
+    text-align: center;
+}
+.tag-page-hint {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin: 20px 0 30px;
+    text-align: center;
 }
 </style>
 <style>
@@ -1388,7 +1388,7 @@ html[data-mode="dark"] #support-page .support-btn {
         
         <a href="/support">
             <i class="fa-solid fa-heart fa-fw"></i>
-            <span>&ensp;Support</span>
+            <span>&ensp;支持我</span>
         </a>
         
         <a href="/thanks">
@@ -1482,7 +1482,7 @@ html[data-mode="dark"] #support-page .support-btn {
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-heart fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Support</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">支持我</div>
                     </div>
                 </a>
                 
