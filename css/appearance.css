@@ -1025,6 +1025,18 @@ html[data-mode="dark"] #theme-color-panel .tcp-scheme.current {
     text-shadow: 0 1px 3px rgb(0 0 0 / 0.9), 0 0 8px rgb(0 0 0 / 0.6);
 }
 
+/* 播放器本体（白底卡片）里的文字单独定色。
+   曲名原来继承页面文字色，深色模式下就变成浅色、压在白底上看不清；
+   这里固定用深色，亮色/暗色两种模式下都清楚。 */
+.aplayer .aplayer-info .aplayer-music .aplayer-title,
+.aplayer .aplayer-list ol li .aplayer-list-title,
+.aplayer .aplayer-list ol li .aplayer-list-index {
+    color: #333;
+}
+.aplayer .aplayer-list ol li .aplayer-list-author {
+    color: #666;
+}
+
 /* ============================================================
  * 12. 首页大图的淡入
  * ------------------------------------------------------------
